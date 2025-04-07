@@ -1,0 +1,44 @@
+{
+  "id": "4883476",
+  "name": "pcszl",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2578488",
+      "name": "登录",
+      "font_class": "denglu",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "10463901",
+      "name": "小程序",
+      "font_class": "xiaochengxu",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "1217331",
+      "name": "换一换",
+      "font_class": "huanyihuan",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "28943321",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e795",
+      "unicode_decimal": 59285
+    },
+    {
+      "icon_id": "42036470",
+      "name": "向下三箭头-copy",
+      "font_class": "sangejiantou-right",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    }
+  ]
+}

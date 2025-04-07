@@ -1,0 +1,134 @@
+//主题色
+$ThemeColors: #FCDC46;
+
+@for $i from 1 through 5 {
+    .u-line-#{$i} {
+
+        // vue下，单行和多行显示省略号需要单独处理
+        @if $i=="1" {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        @else {
+            display: -webkit-box !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            -webkit-line-clamp: $i;
+            -webkit-box-orient: vertical !important;
+        }
+    }
+}
+
+.f {
+    display: flex;
+}
+
+.f-shrink0 {
+    flex-shrink: 0;
+}
+
+.f-jc {
+    display: flex;
+    justify-content: center;
+}
+
+.f-jc-ac {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-jc-as {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.f-jb-as {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.f-jb-ae {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.f-jc-ae {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.f-as {
+    display: flex;
+    align-items: flex-start;
+}
+
+.f-ac {
+    display: flex;
+    align-items: center;
+}
+
+.f-ae {
+    display: flex;
+    align-items: flex-end;
+}
+
+.f-ac-je {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.f-ja {
+    display: flex;
+    justify-content: space-around;
+}
+
+.f-ja-ac {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.f-jb {
+    display: flex;
+    justify-content: space-between;
+}
+
+.f-jb-ac {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.f-je-ac {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.f-jb-ac-fw {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.f-w {
+    flex-wrap: wrap;
+}
+
+.fd-c {
+    flex-direction: column;
+
+}
+
+.pointer {
+    cursor: pointer;
+}

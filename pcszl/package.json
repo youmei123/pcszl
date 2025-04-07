@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "element-plus": "^2.9.7",
+    "normalize.css": "^8.0.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
@@ -17,10 +18,12 @@
     "@types/node": "^22.14.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
+    "sass": "^1.86.3",
     "typescript": "~5.7.2",
     "unplugin-auto-import": "^19.1.2",
     "unplugin-vue-components": "^28.4.1",
     "vite": "^4.5.12",
+    "vite-plugin-checker": "^0.9.1",
     "vue-tsc": "^2.2.4"
   }
 }
