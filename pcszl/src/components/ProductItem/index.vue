@@ -2,14 +2,14 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:29:45
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-09 15:32:30
+ * @LastEditTime: 2025-04-10 15:27:35
  * @FilePath: \pcszl\src\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="product-item f-ac">
     <div class="product-poster f-shrink0">
-      <img src="@/assets/images/menu1.png" />
+      <img />
     </div>
     <div class="product-info fd-c f-ja">
       <div class="product-title u-line-1">中医外科学</div>
@@ -24,9 +24,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped>
 .product-poster {

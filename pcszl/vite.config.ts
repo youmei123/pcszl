@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-07 16:56:58
+ * @LastEditTime: 2025-04-10 17:14:25
  * @FilePath: \pcszl\vite.config.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -27,6 +27,15 @@ export default defineConfig({
       typescript: true,
     })
   ],
+  build: {
+    // 确保生产环境下不包含调试信息
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
+  },
   server: {
     host: true // 监听所有可用的网络接口
   },

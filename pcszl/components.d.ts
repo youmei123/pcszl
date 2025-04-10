@@ -10,11 +10,16 @@ declare module 'vue' {
   export interface GlobalComponents {
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     FeatureZoneItem: typeof import('./src/components/FeatureZoneItem/index.vue')['default']
     Footer: typeof import('./src/components/Footer/index.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']
+    Loading: typeof import('./src/components/loading/index.vue')['default']
     ProductItem: typeof import('./src/components/ProductItem/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ShrinkRect: typeof import('./src/components/loading/loaders/shrink-rect.vue')['default']
+    SpecialColumn: typeof import('./src/components/SpecialColumn/index.vue')['default']
+    XcxLiveItem: typeof import('./src/components/XcxLiveItem/index.vue')['default']
   }
 }

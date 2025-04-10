@@ -5,18 +5,24 @@
     "strict": true,
     "moduleResolution": "Node",
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny":true,
+    "noImplicitThis": true,
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     },
     "lib": ["ESNext", "DOM"],
   },
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  // "files": [],
+  // "references": [
+  //   { "path": "./tsconfig.app.json" },
+  //   { "path": "./tsconfig.node.json" }
+  // ]
 }
