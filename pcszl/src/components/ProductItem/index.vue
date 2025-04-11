@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:29:45
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-10 15:27:35
+ * @LastEditTime: 2025-04-11 11:21:22
  * @FilePath: \pcszl\src\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,13 +18,19 @@
       </div>
       <div class="product-bottom f-jb-ac">
         <div class="watch-count">播放量940.3万</div>
-        <div class="play-btn pointer">立即播放</div>
+        <div class="play-btn pointer" @click="linkplayvideo">立即播放</div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+const router = useRouter();
+const linkplayvideo = () => {
+  router.push("coursevideo");
+};
+</script>
 
 <style lang="scss" scoped>
 .product-poster {
