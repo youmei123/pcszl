@@ -2,19 +2,19 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 10:41:23
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-10 15:25:49
+ * @LastEditTime: 2025-04-12 17:07:44
  * @FilePath: \pcszl\src\components\XcxLiveItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="live-item f-ac">
     <div class="live-poster-img f-shrink0">
-      <img  />
+      <img :src="data.coverImgUrl" />
     </div>
     <div class="live-info fd-c f-jb">
-      <div class="live-title u-line-1">中医针灸学基础理论及六中医针灸学基础理论及六</div>
-      <div class="live-time">10月18日 20:00</div>
-      <div class="live-tearcher">李老师</div>
+      <div class="live-title u-line-1">{{ data.name }}</div>
+      <div class="live-time">{{ timeFormat(data.startTime, "yyyy-mm-dd hh:MM") }}</div>
+      <div class="live-tearcher">{{ data.anchorName }}</div>
       <div class="xcx-btn f-jc-ac pointer">
         <div class="iconfont icon-xiaochengxu"></div>
         <el-popover class="box-item" width="175" placement="top">
@@ -28,9 +28,21 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { timeFormat } from "@/utiles/public";
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default: {},
+  },
+});
+</script>
 
 <style lang="scss" scoped>
+.live-item{
+  margin-right: 25px;
+}
 .live-poster-img {
   width: 130px;
   height: 130px;

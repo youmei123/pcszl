@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2892820",
+      "name": "订单",
+      "font_class": "dingdan",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "7678930",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "7964498",
+      "name": "课程管理",
+      "font_class": "kechengguanli",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "7594157",
+      "name": "24gf-playCircle",
+      "font_class": "24gf-playCircle",
+      "unicode": "ea83",
+      "unicode_decimal": 60035
+    },
+    {
       "icon_id": "2578488",
       "name": "登录",
       "font_class": "denglu",

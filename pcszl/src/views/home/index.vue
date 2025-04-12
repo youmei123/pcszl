@@ -2,17 +2,9 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 10:06:14
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-10 16:52:26
+ * @LastEditTime: 2025-04-12 17:23:50
  * @FilePath: \pcszl\src\views\home\index.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
-<!--
- * @Author: Lzx 924807479@qq.com
- * @Date: 2025-04-07 10:06:14
- * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-09 15:54:23
- * @FilePath: \pcszl\src\views\home\index.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEim
 -->
 <template>
   <div class="page-cont">
@@ -41,9 +33,13 @@
       moretext="查看更多"
       moreicon="icon-sangejiantou-right"
     >
-      <div class="block-box f-jb-ac">
-        <XcxLiveItem v-for="() in 3" />
-        <!-- <loading :translateY="50" color="#FCDC46" active text="正在加载中..." /> -->
+      <div class="block-box f-ac">
+        <XcxLiveItem
+          v-for="(item, index) in livelist"
+          :data="item"
+          v-if="!live_loading && livelist.length > 0"
+        />
+        <loading v-else :translateY="50" color="#FCDC46" active text="正在加载中..." />
       </div>
     </SpecialColumn>
     <SpecialColumn
@@ -80,25 +76,43 @@
 </template>
 
 <script setup lang="ts">
-import { listSzlLiveStreaming } from "@/api/home";
-import { reactive, onMounted } from "vue";
+import { listSzlLiveStreaming, listCourse } from "@/api/home";
+import { ref, reactive, onMounted } from "vue";
 import ProductItem from "@/components/ProductItem/index.vue";
-import FeatureZoneItem from "@/components/FeatureZoneItem/index.vue";
-import XcxLiveItem from "@/components/XcxLiveItem/index.vue";
-import SpecialColumn from "@/components/SpecialColumn/index.vue";
-
+import FeatureZoneItem from "@/views/home/components/FeatureZoneItem/index.vue";
+import XcxLiveItem from "@/views/home/components/XcxLiveItem/index.vue";
+import SpecialColumn from "@/views/home/components/SpecialColumn/index.vue";
+import { LiveListType, CourseListType } from "@/utiles/types";
 onMounted(() => {
   getHomeLiveList();
+  getHomeRecommendedList();
 });
+const live_loading = ref(false); // 加载动画
+const livelist = reactive<LiveListType[]>([]); // 直播列表
+const re_page = ref(1); // 推荐列表页码
+const recommendcourselist = reactive<CourseListType[]>([]); // 推荐课程列表
 
 const getHomeLiveList = async () => {
+  live_loading.value = true;
   const { data } = await listSzlLiveStreaming({
     page: 1,
     pageSize: 3,
     mobile: "",
     userId: "",
   });
+  livelist.splice(0, livelist.length, ...(data || []));
+  live_loading.value = false;
   console.log(data);
+};
+
+const getHomeRecommendedList = async () => {
+  const { data } = await listCourse({
+    page: re_page.value,
+    pageSize: 4,
+    userId: "",
+    types: 1,
+  });
+  recommendcourselist.splice(0, recommendcourselist.length, ...(data || []));
 };
 
 const menuBarList = reactive([

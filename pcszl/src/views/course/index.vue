@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 14:39:12
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-11 11:04:54
+ * @LastEditTime: 2025-04-11 15:35:03
  * @FilePath: \pcszl\src\views\course\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,6 +27,15 @@
             </div>
           </el-tab-pane>
         </el-tabs>
+        <div class="pagination-cont f-jc-ac">
+          <el-pagination
+            size="small"
+            background
+            layout="total, prev, pager, next"
+            :total="50"
+            class="mt-4"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -63,19 +72,11 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 };
 </script>
 
-<style scoped>
-.page-container {
-  width: 100%;
-  height: 100%;
-  background-color: rgb(246, 246, 246);
-}
+<style lang="scss" scoped>
 .course-container {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-}
-:deep(.el-breadcrumb__inner.is-link:hover) {
-  color: #ce9433;
 }
 .breadcrumb-cont {
   padding: 15px 0;
@@ -87,20 +88,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   background-color: white;
   border-radius: 10px;
 }
-:deep(.el-tabs__item) {
-  font-size: 16px;
-  font-weight: bold;
-  padding: 0 37px;
-}
-:deep(.el-tabs__item.is-active, .el-tabs__item:hover) {
-  color: #ce9433;
-}
-:deep(.el-tabs__active-bar) {
-  background-color: #ce9433;
-}
-:deep(.el-tabs__item:hover) {
-  color: #ce9433;
-}
+
 .product-item {
   margin-bottom: 30px;
 }
