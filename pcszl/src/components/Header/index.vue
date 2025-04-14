@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-12 16:10:10
+ * @LastEditTime: 2025-04-14 15:28:59
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -67,7 +67,7 @@
                   </div>
                 </div>
               </div>
-              <div class="user-menu-item f-jb-ac">
+              <div class="user-menu-item f-jb-ac" @click="linusercenter">
                 <div class="menu-icon f-ac">
                   <div class="iconfont icon-kechengguanli"></div>
                   <div class="menu-text">我的课程</div>
@@ -129,6 +129,12 @@ const handmenu = (item: any) => {
   });
 };
 
+const linusercenter = () => {
+  router.push({
+    path: "/usercenter",
+  });
+};
+
 const navMenuList = reactive([
   {
     name: "首页",
@@ -152,6 +158,7 @@ const navMenuList = reactive([
   },
   {
     name: "商城",
+    path: "/mall",
   },
   {
     name: "关于我们",
@@ -281,7 +288,7 @@ const navMenuList = reactive([
   background-size: 100%;
   position: relative;
 }
-.menu-text{
+.menu-text {
   margin-left: 7px;
 }
 .arrow-right-btn {

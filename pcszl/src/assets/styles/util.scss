@@ -191,3 +191,11 @@ $ThemeColors: #FCDC46;
 :deep(.el-tabs__item:hover) {
     color: #ce9433;
 }
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner){
+    background-color:$ThemeColors;
+    border-color:$ThemeColors;
+}
+:deep(.el-checkbox__inner:hover){
+    border-color:$ThemeColors;
+}

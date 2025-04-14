@@ -8,10 +8,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CourseItem: typeof import('./src/components/CourseItem/index.vue')['default']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
+    ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
     ElCollapseItem: typeof import('element-plus/es')['ElCollapseItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
@@ -19,16 +21,15 @@ declare module 'vue' {
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
-    FeatureZoneItem: typeof import('./src/components/FeatureZoneItem/index.vue')['default']
     Footer: typeof import('./src/components/Footer/index.vue')['default']
     Header: typeof import('./src/components/Header/index.vue')['default']
     Loading: typeof import('./src/components/loading/index.vue')['default']
+    Loginpopup: typeof import('./src/components/loginpopup/index.vue')['default']
+    LoginPopup: typeof import('./src/components/LoginPopup/index.vue')['default']
     ProductItem: typeof import('./src/components/ProductItem/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SerachBar: typeof import('./src/components/SerachBar/index.vue')['default']
     ShrinkRect: typeof import('./src/components/loading/loaders/shrink-rect.vue')['default']
-    SpecialColumn: typeof import('./src/components/SpecialColumn/index.vue')['default']
-    XcxLiveItem: typeof import('./src/components/XcxLiveItem/index.vue')['default']
   }
 }

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 10:06:14
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-12 17:23:50
+ * @LastEditTime: 2025-04-14 16:53:20
  * @FilePath: \pcszl\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEim
 -->
@@ -49,7 +49,7 @@
       moreicon="icon-huanyihuan"
     >
       <div class="block-box f-jb-ac f-w">
-        <ProductItem v-for="() in 4" />
+        <CourseItem v-for="() in 4" />
       </div>
     </SpecialColumn>
     <SpecialColumn
@@ -69,7 +69,7 @@
       moreicon="icon-huanyihuan"
     >
       <div class="block-box f-jb-ac f-w">
-        <ProductItem v-for="() in 4" />
+        <CourseItem v-for="() in 4" />
       </div>
     </SpecialColumn>
   </div>
@@ -78,15 +78,21 @@
 <script setup lang="ts">
 import { listSzlLiveStreaming, listCourse } from "@/api/home";
 import { ref, reactive, onMounted } from "vue";
-import ProductItem from "@/components/ProductItem/index.vue";
+import CourseItem from "@/components/CourseItem/index.vue";
 import FeatureZoneItem from "@/views/home/components/FeatureZoneItem/index.vue";
 import XcxLiveItem from "@/views/home/components/XcxLiveItem/index.vue";
 import SpecialColumn from "@/views/home/components/SpecialColumn/index.vue";
 import { LiveListType, CourseListType } from "@/utiles/types";
+
+import { $loginPopup } from "@/utiles/login-popup";
+const loginPopupInstance = $loginPopup();
+// loginPopupInstance.open();
+
 onMounted(() => {
   getHomeLiveList();
   getHomeRecommendedList();
 });
+
 const live_loading = ref(false); // 加载动画
 const livelist = reactive<LiveListType[]>([]); // 直播列表
 const re_page = ref(1); // 推荐列表页码

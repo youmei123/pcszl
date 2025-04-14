@@ -1,0 +1,132 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-04-14 15:15:18
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-04-14 16:50:57
+ * @FilePath: \pcszl\src\views\usercenter\index.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<template>
+  <div class="page-container">
+    <div class="user-center content">
+      <div class="breadcrumb-cont">
+        <el-breadcrumb :separator-icon="DArrowRight">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>个人中心</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <div class="f-jb-as">
+        <div class="left-menu-cont">
+          <div
+            class="menu-item f-ac pointer"
+            v-for="(item, index) in menulist"
+            @click="handswithcmenu(index)"
+            :class="{ active: select_index === index }"
+          >
+            <div class="menu-text">{{ item.name }}</div>
+          </div>
+        </div>
+        <div class="menu-view-cont">
+          <transition name="fade-right" mode="out-in">
+            <router-view></router-view>
+          </transition>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { DArrowRight } from "@element-plus/icons-vue";
+import { ref, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
+const select_index = ref(0);
+const router = useRouter();
+
+const menulist = reactive([
+  {
+    name: "我的订单",
+    path: "/usercenter/myorder",
+  },
+  {
+    path: "/usercenter/mycourse",
+    name: "我的课程",
+  },
+]);
+
+router.push({
+  path: menulist[0].path,
+});
+
+const handswithcmenu = (index: number) => {
+  console.log(index);
+  select_index.value = index;
+  router.push({
+    path: menulist[index].path,
+  });
+};
+</script>
+
+<style lang="scss" scoped>
+.user-center {
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+.breadcrumb-cont {
+  margin-bottom: 20px;
+}
+.left-menu-cont {
+  width: 200px;
+  padding: 15px 0;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 10px;
+}
+.menu-item {
+  width: 100%;
+  height: 48px;
+  background-color: white;
+  transition: background-color 0.3s ease;
+}
+.menu-text {
+  font-size: 16px;
+  color: rgba(33, 41, 48, 1);
+  border-left: 4px solid #dbdbdb;
+  padding-left: 7px;
+  box-sizing: border-box;
+  margin-left: 25px;
+  transition: border-left 0.3s ease;
+}
+.active {
+  background-color: util.$ThemeColors;
+}
+.active .menu-text {
+  border-left: 4px solid #fb2b1e;
+}
+.menu-view-cont {
+  width: 980px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+// 进入后和离开前保持原位
+.fade-right-enter-to,
+.fade-right-leave-from {
+  opacity: 1;
+  transform: none;
+}
+
+// 设置进入和离开过程中的动画时长0.5s
+.fade-right-enter-active,
+.fade-right-leave-active {
+  transition: all 0.5s;
+}
+
+// 进入前和离开后为透明，并在右侧20px位置
+.fade-right-enter-from,
+.fade-right-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+</style>

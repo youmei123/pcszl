@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8655885",
+      "name": "显示密码",
+      "font_class": "xianshimima",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "9509945",
+      "name": "隐藏密码",
+      "font_class": "yincangmima",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
       "icon_id": "2892820",
       "name": "订单",
       "font_class": "dingdan",

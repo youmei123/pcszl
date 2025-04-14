@@ -9,9 +9,13 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import Home from './modules/home';
 import course from './modules/course';
+import usercenter from './modules/usercenter';
+import mall from './modules/mall';
 const routes: Array<RouteRecordRaw> = [
   ...Home,
-  ...course
+  ...course,
+  ...usercenter,
+  ...mall
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
