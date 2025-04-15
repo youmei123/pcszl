@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-14 15:14:21
+ * @LastEditTime: 2025-04-14 17:37:26
  * @FilePath: \pcszl\vite.config.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -28,13 +28,6 @@ export default defineConfig({
     })
   ],
   build: {
-    // 确保生产环境下不包含调试信息
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    },
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -58,7 +51,7 @@ export default defineConfig({
           if (id.includes('node_modules/xgplayer') || id.includes('node_modules/xgplayer-hls')) {
             return 'xgplayer';
           }
-         // 将 pinia 和 pinia-plugin-persistedstate 打包到 pinia 代码块
+          // 将 pinia 和 pinia-plugin-persistedstate 打包到 pinia 代码块
           if (id.includes('node_modules/pinia') || id.includes('node_modules/pinia-plugin-persistedstate')) {
             return 'pinia';
           }

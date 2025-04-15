@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-12 13:51:31
+ * @LastEditTime: 2025-04-14 17:33:15
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,7 +42,7 @@
       </div>
       <div class="recommended-list">
         <div class="recommended-title">推荐课程</div>
-        <ProductItem v-for="() in 4" />
+        <CourseItem v-for="() in 4" />
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@
 import { DArrowRight } from "@element-plus/icons-vue";
 import XgVideo from "../components/Video/index.vue";
 import VideoCatalogue from "../components/VideoCatalogue/index.vue";
-import ProductItem from "@/components/ProductItem/index.vue";
+import CourseItem from "@/components/CourseItem/index.vue";
 import { ref, reactive, onMounted } from "vue";
 </script>
 
