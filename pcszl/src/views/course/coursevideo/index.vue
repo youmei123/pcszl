@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-14 17:33:15
+ * @LastEditTime: 2025-04-24 09:21:48
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -14,7 +14,7 @@
           <el-breadcrumb :separator-icon="DArrowRight">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/course' }">全部课程</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/coursevideo' }">看课</el-breadcrumb-item>
+            <el-breadcrumb-item>看课</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="f-as">

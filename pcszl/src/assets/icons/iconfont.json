@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1487626",
+      "name": "微信支付",
+      "font_class": "weixinzhifu",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "1687285",
+      "name": "地址",
+      "font_class": "ziyuan",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "201525",
+      "name": "礼物 活动",
+      "font_class": "liwuhuodong",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "637450",
+      "name": "安全保障",
+      "font_class": "anquanbaozhang",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
       "icon_id": "8655885",
       "name": "显示密码",
       "font_class": "xianshimima",

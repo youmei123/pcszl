@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 15:15:18
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-14 16:50:57
+ * @LastEditTime: 2025-04-24 14:25:21
  * @FilePath: \pcszl\src\views\usercenter\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,9 +27,11 @@
           </div>
         </div>
         <div class="menu-view-cont">
-          <transition name="fade-right" mode="out-in">
-            <router-view></router-view>
-          </transition>
+          <router-view v-slot="{ Component }">
+            <transition name="fade-right" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view>
         </div>
       </div>
     </div>
@@ -40,20 +42,33 @@
 import { DArrowRight } from "@element-plus/icons-vue";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import usercenterroutelist from "@/router/modules/usercenter";
 const select_index = ref(0);
 const router = useRouter();
+// 创建路由类型
+interface RouteConfig {
+  path: string;
+  name: string;
+  meta: {
+    title: string;
+  };
+  children?: RouteConfig[];
+}
 
-const menulist = reactive([
-  {
-    name: "我的订单",
-    path: "/usercenter/myorder",
-  },
-  {
-    path: "/usercenter/mycourse",
-    name: "我的课程",
-  },
-]);
-
+const  processSingleRouteData = (route: RouteConfig) => {
+  const result: { name: string; path: string }[] = [];
+  if (route.children) {
+    for (const childRoute of route.children) {
+      result.push({
+        name: childRoute.meta.title,
+        path: `${route.path}/${childRoute.path}`,
+      });
+    }
+  }
+  return result;
+}
+const menulist = reactive(processSingleRouteData(usercenterroutelist[0]));
+console.log(menulist);
 router.push({
   path: menulist[0].path,
 });

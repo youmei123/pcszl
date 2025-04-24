@@ -199,3 +199,20 @@ $ThemeColors: #FCDC46;
 :deep(.el-checkbox__inner:hover){
     border-color:$ThemeColors;
 }
+
+
+:deep(.el-input-number__decrease:hover) {
+    color: $ThemeColors;
+  }
+  :deep(.el-input-number__increase:hover) {
+    color:$ThemeColors;
+  }
+  :deep(.el-input__wrapper:hover) {
+    box-shadow: 0 0 0 1px $ThemeColors inset;
+  }
+  :deep(.el-input-number__decrease:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
+    box-shadow: 0 0 0 1px $ThemeColors inset;
+  }
+  :deep(.el-input-number__increase:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
+    box-shadow: 0 0 0 1px $ThemeColors inset;
+  }

@@ -1,6 +1,14 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-04-15 10:33:15
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-04-24 09:23:12
+ * @FilePath: \pcszl\src\views\mall\components\ProductItem\index.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div>
-    <div class="mall-item">
+    <div class="mall-item pointer" @click="linkproductdetail">
       <div class="mall-poster">
         <img />
       </div>
@@ -17,7 +25,12 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const tags = reactive(["好评率98%", "24小时热卖600+", "免费包邮"]);
+const linkproductdetail = () => {
+  router.push("/productDetail");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,5 +82,4 @@ const tags = reactive(["好评率98%", "24小时热卖600+", "免费包邮"]);
   z-index: 1;
   /* 确保阴影在文字下面 */
 }
-
 </style>
