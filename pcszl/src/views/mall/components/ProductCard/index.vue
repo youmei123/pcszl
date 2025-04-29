@@ -49,6 +49,7 @@
 </template>
 
 <script lang="ts" setup>
+import { types } from "util";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 const props = defineProps({
@@ -60,7 +61,12 @@ const props = defineProps({
 const router = useRouter();
 const toBuy = () => {
   console.log("立即购买");
-  router.push("/submitorder");
+  router.push({
+    path:"/submitorder",
+    query:{
+      types:2
+    }
+  });
 };
 </script>
 

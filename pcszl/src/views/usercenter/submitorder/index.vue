@@ -9,7 +9,8 @@
       </div>
       <div class="submit-order-content f-jb-as">
         <div class="submit-order-left">
-          <EntityCreateOrder />
+          <VirtualOrder v-if="types == 1" />
+          <EntityCreateOrder v-else />
         </div>
         <el-affix :offset="145" target=".submit-order-content">
           <div class="submit-order-right">
@@ -46,10 +47,20 @@
 <script lang="ts" setup>
 import { DArrowRight } from "@element-plus/icons-vue";
 import EntityCreateOrder from "../submitorder/components/EntityCreateOrder/index.vue";
+import VirtualOrder from "../submitorder/components/VirtualOrder/index.vue";
+import { useRoute } from "vue-router";
 import { ref, reactive, onMounted } from "vue";
+const route = useRoute();
+const types = Number(route.query.types);
+console.log(types);
 </script>
 
 <style lang="scss" scoped>
+.page-container {
+  min-height: auto !important;
+  padding-bottom: 30px;
+  box-sizing: border-box;
+}
 .breadcrumb-cont {
   padding: 15px 0;
   box-sizing: border-box;

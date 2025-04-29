@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 16:55:10
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 09:13:22
+ * @LastEditTime: 2025-04-29 17:10:34
  * @FilePath: \pcszl\src\views\mall\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -17,6 +17,9 @@
       </div>
       <div class="mall-list f-jb-ac f-w">
         <ProductItem v-for="() in 12" />
+        <div style="width: 100%">
+          <Pagination />
+        </div>
       </div>
     </div>
   </div>
@@ -26,7 +29,7 @@
 import { DArrowRight } from "@element-plus/icons-vue";
 import ProductItem from "./components/ProductItem/index.vue";
 import { ref, reactive, onMounted } from "vue";
-
+import Pagination from "@/components/Pagination/index.vue";
 const tags = reactive(["好评率98%", "24小时热卖600+", "免费包邮"]);
 </script>
 

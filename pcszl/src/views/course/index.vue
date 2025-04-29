@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 14:39:12
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-14 16:54:33
+ * @LastEditTime: 2025-04-29 17:14:38
  * @FilePath: \pcszl\src\views\course\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,15 +27,7 @@
             </div>
           </el-tab-pane>
         </el-tabs>
-        <div class="pagination-cont f-jc-ac">
-          <el-pagination
-            size="small"
-            background
-            layout="total, prev, pager, next"
-            :total="50"
-            class="mt-4"
-          />
-        </div>
+        <Pagination />
       </div>
     </div>
   </div>
@@ -47,6 +39,8 @@ import type { TabsPaneContext } from "element-plus";
 import { DArrowRight } from "@element-plus/icons-vue";
 import { listCourseType } from "@/api/course";
 import CourseItem from "@/components/CourseItem/index.vue";
+import Pagination from "@/components/Pagination/index.vue";
+
 // 定义一个TabItem接口
 interface TabItem {
   id: string;

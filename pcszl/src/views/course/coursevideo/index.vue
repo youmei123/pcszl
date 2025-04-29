@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 09:21:48
+ * @LastEditTime: 2025-04-29 10:34:37
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -31,7 +31,7 @@
           </div>
           <div class="pay-cont f-ac">
             <div class="price"><span>￥</span>99999999</div>
-            <div class="pay-btn pointer">购买</div>
+            <div class="pay-btn pointer" @click="coursepay">购买</div>
           </div>
         </div>
       </div>
@@ -53,7 +53,18 @@ import { DArrowRight } from "@element-plus/icons-vue";
 import XgVideo from "../components/Video/index.vue";
 import VideoCatalogue from "../components/VideoCatalogue/index.vue";
 import CourseItem from "@/components/CourseItem/index.vue";
+import { useRouter } from "vue-router";
 import { ref, reactive, onMounted } from "vue";
+const router = useRouter();
+
+const coursepay = () => {
+  router.push({
+    path: "/submitorder",
+    query: {
+      types: 1,
+    },
+  });
+};
 </script>
 
 <style lang="scss" scoped>
