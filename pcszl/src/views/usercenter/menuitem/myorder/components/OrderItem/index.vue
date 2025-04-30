@@ -7,7 +7,7 @@
         <!-- <div class="order-status-item1">待付款</div> -->
         <div class="order-status-item2">交易成功</div>
       </div>
-      <div class="order-link-detail pointer">订单详情></div>
+      <div class="order-link-detail pointer" @click="linkorderdetail">订单详情></div>
     </div>
     <div class="order-info-bar f-jb-ac">
       <div class="order-product-box f-ac">
@@ -41,6 +41,12 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const linkorderdetail = () => {
+  router.push("/orderdetail");
+};
 </script>
 
 <style lang="scss" scoped>
