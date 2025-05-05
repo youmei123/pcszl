@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 15:13:18
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-30 14:30:48
+ * @LastEditTime: 2025-05-05 10:46:45
  * @FilePath: \pcszl\src\router\modules\usercenter.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -88,6 +88,14 @@ export default [
         component: () => import('@/views/usercenter/menuitem/myorder/orderdetail/index.vue'),
         meta: {
             title: '订单详情'
+        },
+    },
+    {
+        path: '/orderrefund',
+        name: 'orderrefund',
+        component: () => import('@/views/usercenter/menuitem/myorder/orderrefund/index.vue'),
+        meta: {
+            title: '退款页面'
         },
     }
 ];

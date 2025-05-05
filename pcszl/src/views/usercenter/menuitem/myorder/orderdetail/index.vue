@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-30 14:14:25
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-30 15:58:42
+ * @LastEditTime: 2025-05-05 10:24:15
  * @FilePath: \pcszl\src\views\usercenter\menuitem\myorder\orderdetail\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -59,9 +59,10 @@
         </div>
       </div>
       <div class="detail-right">
-        <OrderInfoCard />
+        <OrderInfoCard @handlebtnchange="handlebtnchange" />
       </div>
     </div>
+    <RefundPopuo :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
   </div>
 </template>
 
@@ -69,6 +70,15 @@
 import { ref, reactive, onMounted } from "vue";
 import { DArrowRight } from "@element-plus/icons-vue";
 import OrderInfoCard from "../components/OrderInfoCard/index.vue";
+import RefundPopuo from "../components/RefundPopup/index.vue";
+
+const isshowRefundPopuo = ref(false);
+const handlebtnchange = (type: string) => {
+  console.log(type);
+  if (type == "联系客服") {
+    isshowRefundPopuo.value = true;
+  }
+};
 </script>
 
 <style lang="scss" scoped>

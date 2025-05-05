@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5849194",
+      "name": "退货",
+      "font_class": "tuihuo",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "11239051",
+      "name": "退货",
+      "font_class": "tuihuo1",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
       "icon_id": "1487626",
       "name": "微信支付",
       "font_class": "weixinzhifu",

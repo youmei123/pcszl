@@ -192,27 +192,46 @@ $ThemeColors: #FCDC46;
     color: #ce9433;
 }
 
-:deep(.el-checkbox__input.is-checked .el-checkbox__inner){
-    background-color:$ThemeColors;
-    border-color:$ThemeColors;
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+    background-color: $ThemeColors;
+    border-color: $ThemeColors;
 }
-:deep(.el-checkbox__inner:hover){
-    border-color:$ThemeColors;
+
+:deep(.el-checkbox__inner:hover) {
+    border-color: $ThemeColors;
 }
 
 
 :deep(.el-input-number__decrease:hover) {
     color: $ThemeColors;
-  }
-  :deep(.el-input-number__increase:hover) {
-    color:$ThemeColors;
-  }
-  :deep(.el-input__wrapper:hover) {
+}
+
+:deep(.el-input-number__increase:hover) {
+    color: $ThemeColors;
+}
+
+:deep(.el-input__wrapper:hover) {
     box-shadow: 0 0 0 1px $ThemeColors inset;
-  }
-  :deep(.el-input-number__decrease:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
+}
+
+:deep(.el-input__wrapper.is-focus) {
     box-shadow: 0 0 0 1px $ThemeColors inset;
-  }
-  :deep(.el-input-number__increase:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
+}
+
+:deep(.el-input-number__decrease:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
     box-shadow: 0 0 0 1px $ThemeColors inset;
-  }
+}
+
+:deep(.el-input-number__increase:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
+    box-shadow: 0 0 0 1px $ThemeColors inset;
+}
+
+
+:deep(.el-radio__input.is-checked .el-radio__inner) {
+    background: $ThemeColors;
+    border-color: $ThemeColors;
+}
+
+:deep(.el-radio__input.is-checked+.el-radio__label) {
+    color: #606266;
+}
