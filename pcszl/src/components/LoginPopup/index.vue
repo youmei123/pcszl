@@ -2,12 +2,12 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 10:10:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-14 15:06:41
+ * @LastEditTime: 2025-05-05 16:25:36
  * @FilePath: \pcszl\src\components\loginpopup\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="shad-box" v-if="isopen" >
+  <div class="shad-box" v-if="isopen">
     <div class="login-box">
       <div class="logo-box">
         <img
@@ -140,8 +140,10 @@ const hnadlogin = async () => {
     miniAppType: 1,
     deviceType: 3,
   });
-  if(data){
+  if (data) {
     userStore.setUserInfo(data);
+    userStore.setToken(data.token);
+    userStore.setUserId(data.id);
     isopen.value = false;
     ElMessage({
       message: "登录成功",
@@ -156,9 +158,8 @@ const handswitchtype = () => {
 };
 
 defineExpose({
-  open
+  open,
 });
-
 </script>
 
 <style lang="scss" scoped>

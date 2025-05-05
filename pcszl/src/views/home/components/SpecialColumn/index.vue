@@ -8,7 +8,7 @@
       <div class="m-title-right">{{ desc }}</div>
     </div>
     <slot></slot>
-    <div class="more-btn pointer f-jc-ac">
+    <div class="more-btn pointer f-jc-ac" @click="$emit('btnchange',title)" >
       <div class="f-ac" style="margin-top: 10px">
         {{ moretext }}
         <div class="iconfont" :class="moreicon"></div>

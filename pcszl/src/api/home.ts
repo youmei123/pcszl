@@ -15,3 +15,6 @@ export const listSzlLiveStreaming = (data: any) => {
 export const listCourse = (data: any) => {
     return request.get<any>('/api/szl/listCourse', data);
 };
+export const zonelist = (data: any) => {
+    return request.get<any>('/api/szl/course/zone/list', data);
+};

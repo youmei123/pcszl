@@ -3,7 +3,7 @@
     class="mask"
     v-show="isActive"
     :class="{ 'full-screen': isFullScreen }"
-    :style="{ backgroundColor }"
+    :style="{ backgroundColor, height: heigth + 'px' }"
   >
     <div class="spinner" :style="{ transform: `translate(-50%, -${translateY}%)` }">
       <slot>
@@ -53,6 +53,10 @@ const props = defineProps({
   size: {
     type: Number,
     default: 40,
+  },
+  heigth: {
+    type: Number,
+    default: 150,
   },
 });
 

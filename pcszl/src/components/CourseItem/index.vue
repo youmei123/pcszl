@@ -2,22 +2,20 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:29:45
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-11 11:21:22
+ * @LastEditTime: 2025-05-05 17:26:02
  * @FilePath: \pcszl\src\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="product-item f-ac">
     <div class="product-poster f-shrink0">
-      <img />
+      <img v-if="data.courseCoverImg" :src="data.courseCoverImg" alt="poster" />
     </div>
     <div class="product-info fd-c f-ja">
-      <div class="product-title u-line-1">中医外科学</div>
-      <div class="product-desc u-line-2">
-        中医外科是以中医药理论为指导研究外科疾 病发生、发展及其防
-      </div>
+      <div class="product-title u-line-1">{{ data.courseName }}</div>
+      <div class="product-desc u-line-2"></div>
       <div class="product-bottom f-jb-ac">
-        <div class="watch-count">播放量940.3万</div>
+        <div class="watch-count">播放量{{ transNumberToShort(data.playCount) }}</div>
         <div class="play-btn pointer" @click="linkplayvideo">立即播放</div>
       </div>
     </div>
@@ -26,7 +24,14 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { transNumberToShort } from "@/utiles/public";
 const router = useRouter();
+const props = defineProps({
+  data: {
+    type: Object,
+    default: {},
+  },
+});
 const linkplayvideo = () => {
   router.push("coursevideo");
 };

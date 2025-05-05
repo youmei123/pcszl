@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-29 17:16:39
+ * @LastEditTime: 2025-05-05 16:33:45
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -36,10 +36,10 @@
           <div class="user-util-box">
             <div class="head-bar f-ac">
               <div class="user-head-img">
-                <img />
+                <img v-if="headImg" :src="headImg" alt="" />
               </div>
               <div class="user-info">
-                <div class="user-name e-line-1">小明</div>
+                <div class="user-name e-line-1">{{ nickname }}</div>
                 <div class="vip-end-time">会员至：2024-12-31 ></div>
               </div>
             </div>
@@ -106,6 +106,12 @@ import { ArrowRight } from "@element-plus/icons-vue";
 import SerachBar from "@/components/SerachBar/index.vue";
 import { ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useUserStore } from "@/store/userStore";
+const userStore = useUserStore();
+
+const nickname = userStore.UserInfo.nickname;
+const headImg = userStore.UserInfo.headImg;
+
 defineProps({
   moretext: {
     type: String,
