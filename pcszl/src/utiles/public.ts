@@ -6,6 +6,7 @@
  * @FilePath: \pcszl\src\utiles\public.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+
 export function timeFormat(dateTime: Date | number | string | null = null, formatStr: string = 'yyyy-mm-dd'): string {
     let date: Date;
     // 若传入时间为假值，则取当前时间

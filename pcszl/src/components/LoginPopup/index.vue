@@ -2,13 +2,16 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 10:10:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 16:25:36
+ * @LastEditTime: 2025-05-06 10:48:35
  * @FilePath: \pcszl\src\components\loginpopup\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="shad-box" v-if="isopen">
     <div class="login-box">
+      <div class="close-btn pointer" @click="isopen = false">
+        <el-icon :size="24"><Close /></el-icon>
+      </div>
       <div class="logo-box">
         <img
           src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/14/5090787630086403142/log.png"
@@ -87,12 +90,13 @@ import { ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import { loginUser } from "@/api/login";
 import { useUserStore } from "@/store/userStore";
+import { Close } from "@element-plus/icons-vue";
 const userStore = useUserStore();
 
 const account = ref(""); // 账号
 const password = ref(""); // 密码
 
-const isopen = ref(false);
+const isopen = ref(true);
 const type = ref(0); // 0: 登录 1: 注册
 const checked = ref(false); //是否勾选协议
 const isshowpwd = ref(false); // 是否显示密码
@@ -258,5 +262,10 @@ input {
 .cut-bar div {
   font-size: 16px;
   color: #999999;
+}
+.close-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
 }
 </style>

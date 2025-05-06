@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:29:45
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 17:26:02
+ * @LastEditTime: 2025-05-06 11:20:12
  * @FilePath: \pcszl\src\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,7 +15,7 @@
       <div class="product-title u-line-1">{{ data.courseName }}</div>
       <div class="product-desc u-line-2"></div>
       <div class="product-bottom f-jb-ac">
-        <div class="watch-count">播放量{{ transNumberToShort(data.playCount) }}</div>
+        <div class="watch-count">播放量{{ transNumberToShort(data.playCount || 0) }}</div>
         <div class="play-btn pointer" @click="linkplayvideo">立即播放</div>
       </div>
     </div>
@@ -23,8 +23,14 @@
 </template>
 
 <script setup lang="ts">
+import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
+import { useUserStore } from "@/store/userStore";
+import { getCurrentInstance } from "vue";
+const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
+
+const userStore = useUserStore();
 const router = useRouter();
 const props = defineProps({
   data: {
@@ -32,7 +38,13 @@ const props = defineProps({
     default: {},
   },
 });
-const linkplayvideo = () => {
+
+const linkplayvideo = async () => {
+  console.log(userStore.token);
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    return;
+  }
   router.push("coursevideo");
 };
 </script>
