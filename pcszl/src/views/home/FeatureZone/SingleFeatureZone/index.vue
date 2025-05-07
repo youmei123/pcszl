@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-05-06 16:38:06
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-06 17:12:24
+ * @LastEditTime: 2025-05-07 10:05:16
  * @FilePath: \pcszl\src\views\home\FeatureZone\SingleFeatureZone\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,7 +12,7 @@
       <div class="breadcrumb-cont">
         <el-breadcrumb :separator-icon="DArrowRight">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>111</el-breadcrumb-item>
+          <el-breadcrumb-item>{{zoneName}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </div>
@@ -35,6 +35,8 @@ const router = useRouter();
 const route = useRoute();
 
 const zoneId = route.query.id;
+const zoneName = route.query.name;
+
 
 onMounted(() => {
   getFeatureZoneList();

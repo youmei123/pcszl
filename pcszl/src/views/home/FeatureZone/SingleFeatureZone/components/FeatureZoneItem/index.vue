@@ -2,23 +2,23 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-05-06 16:59:07
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-06 17:08:32
+ * @LastEditTime: 2025-05-07 10:00:56
  * @FilePath: \pcszl\src\views\home\FeatureZone\SingleFeatureZone\components\FeatureZoneItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="feature-zone-item">
     <div class="feature-zone-item-img">
-      <img />
+      <img :src="data.courseCoverImg" />
       <div class="svip-icon">svip专属</div>
     </div>
     <div class="feature-zone-bottom-bar fd-c f-jb">
-      <div class="feature-zone-title">妙手罗老师</div>
+      <div class="feature-zone-title">{{ data.name }}</div>
       <div class="feature-zone-desc u-line-2">
-        师芝林书院院长，中师传承中医药究院名誉院长点穴复位非目创师芝林书院院长，中师传承中医药究院名誉院...
+        {{ data.courseSimpleDescription }}
       </div>
       <div class="f-jb-ac">
-        <div class="watch-num">播放量20万</div>
+        <div class="watch-num">播放量{{ transNumberToShort(data.playCount) }}</div>
         <div class="btn-more pointer">立即了解</div>
       </div>
     </div>
@@ -40,6 +40,7 @@ const props = defineProps({
 .feature-zone-item {
   width: 800px;
   margin: 0 auto;
+  margin-bottom: 30px;
 }
 .feature-zone-item-img {
   width: 100%;
