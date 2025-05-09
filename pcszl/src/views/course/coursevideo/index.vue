@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-29 10:34:37
+ * @LastEditTime: 2025-05-09 17:25:42
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,19 +18,39 @@
           </el-breadcrumb>
         </div>
         <div class="f-as">
-          <XgVideo />
-          <VideoCatalogue />
+          <div v-if="course?.courseCoverImg" >
+            <XGplayer
+              ref="xgPlayer"
+              :poster="course?.courseCoverImg"
+              @timeupdate="(e) => videoCatalogue && videoCatalogue.upldateprogress(e)"
+              @playdefaultvideo="()=>videoCatalogue&&videoCatalogue.playdefaultvideo()"
+            />
+            <VideoActionBar
+              @actionbarserachchange="
+                (e) => videoCatalogue && videoCatalogue.serachvideo(e)
+              "
+            />
+          </div>
+          <VideoCatalogue
+            ref="videoCatalogue"
+            v-if="course"
+            :classifyCount="course?.classifyCount"
+            :courseId="course.id"
+            @ActiveVideo="handleActiveVideo"
+          />
         </div>
         <div class="product-course-bar f-jb-ac">
           <div class="course-info">
             <div class="f-ac">
-              <div class="course-title">罗老师72招</div>
+              <div class="course-title">{{ course?.courseName }}</div>
               <div class="vip-icon">svip免费</div>
             </div>
-            <div class="watch-count">播放量960.1万</div>
+            <div class="watch-count">
+              播放量{{transNumberToShort(course?.playCount!)}}
+            </div>
           </div>
           <div class="pay-cont f-ac">
-            <div class="price"><span>￥</span>99999999</div>
+            <div class="price"><span>￥</span>{{ course?.coursePrice }}</div>
             <div class="pay-btn pointer" @click="coursepay">购买</div>
           </div>
         </div>
@@ -39,6 +59,7 @@
     <div class="product-course-info content f-jb-as">
       <div class="product-html">
         <div class="recommended-title">课程简介</div>
+        <div v-html="course?.courseDescription"></div>
       </div>
       <div class="recommended-list">
         <div class="recommended-title">推荐课程</div>
@@ -50,13 +71,55 @@
 
 <script lang="ts" setup>
 import { DArrowRight } from "@element-plus/icons-vue";
-import XgVideo from "../components/Video/index.vue";
+import XGplayer from "../components/Video/index.vue";
 import VideoCatalogue from "../components/VideoCatalogue/index.vue";
+import VideoActionBar from "../components/VideoActionBar/index.vue";
 import CourseItem from "@/components/CourseItem/index.vue";
-import { useRouter } from "vue-router";
-import { ref, reactive, onMounted } from "vue";
-const router = useRouter();
+import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "@/store/userStore";
+import { singleCourse } from "@/api/course";
+import { CourseListType } from "@/utiles/types";
+import { transNumberToShort } from "@/utiles/public";
+import { ref, reactive, onMounted, nextTick } from "vue";
+import { CourseVideoType } from "@/utiles/types";
+//继承接口
+interface courseType extends CourseListType {
+  classifyCount: number; //有无标签
+}
 
+const userStore = useUserStore();
+
+onMounted(() => {
+  getSingleCourse();
+});
+
+const route = useRoute();
+const courseId = route.query.courseId as string;
+const course = ref<courseType>();
+const currentVideo = ref<CourseVideoType>();
+const xgPlayer = ref<InstanceType<typeof XGplayer> | null>(null);
+const videoCatalogue = ref<InstanceType<typeof VideoCatalogue> | null>(null);
+
+const getSingleCourse = async () => {
+  const { data } = await singleCourse({
+    courseId: courseId,
+    userId: userStore.userId,
+  });
+  const { listVideo, ...singlecourse } = data;
+  course.value = singlecourse as courseType;
+  console.log(course.value);
+};
+
+const handleActiveVideo = async (item: CourseVideoType) => {
+  console.log(item);
+  currentVideo.value = item;
+  console.log(xgPlayer.value);
+  if (xgPlayer.value) {
+    xgPlayer.value.startvideo(item);
+  }
+};
+
+const router = useRouter();
 const coursepay = () => {
   router.push({
     path: "/submitorder",

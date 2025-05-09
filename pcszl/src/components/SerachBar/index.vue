@@ -47,6 +47,10 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits<{
+  (e: "serachchange", event: string): void;
+}>();
+
 const searchQuery = ref("");
 const isFocused = ref(false);
 
@@ -59,7 +63,10 @@ const handserachblur = () => {
   if (!searchQuery.value) isFocused.value = false;
 };
 
-const handserach = () => {};
+const handserach = () => {
+  console.log(searchQuery.value)
+  emit("serachchange", searchQuery.value);
+};
 </script>
 
 <style lang="scss" scoped>

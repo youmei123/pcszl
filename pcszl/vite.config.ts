@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-06 11:27:47
+ * @LastEditTime: 2025-05-08 14:12:33
  * @FilePath: \pcszl\vite.config.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -47,9 +47,11 @@ export default defineConfig({
           if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router')) {
             return 'vue-core';
           }
-          // 将 xgplayer 和 xgplayer-hls 打包到 xgplayer 代码块
-          if (id.includes('node_modules/xgplayer') || id.includes('node_modules/xgplayer-hls')) {
+          if (id.includes('node_modules/xgplayer')) {
             return 'xgplayer';
+          }
+          if (id.includes('node_modules/xgplayer-hls.js')) {
+            return 'xgplayer-hls.js';
           }
           // 将 pinia 和 pinia-plugin-persistedstate 打包到 pinia 代码块
           if (id.includes('node_modules/pinia') || id.includes('node_modules/pinia-plugin-persistedstate')) {
