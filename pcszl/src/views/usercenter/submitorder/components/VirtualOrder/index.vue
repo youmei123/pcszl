@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:34
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 17:08:20
+ * @LastEditTime: 2025-05-12 14:09:30
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\VirtualOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,33 +12,39 @@
     <div class="virtual-product-content f-jb-ac">
       <div class="product-info f-ac" style="flex: 5">
         <div class="product-img">
-          <img />
+          <img :src="course.courseCoverImg" />
         </div>
-        <div class="product-name u-lin-2">砭石按摩锥点按穴位文化用品</div>
+        <div class="product-name u-lin-2">{{ course.courseName }}</div>
       </div>
       <div class="price-info f-ac" style="flex: 5">
         <div class="before-price" style="flex: 3.3">
           <div class="price-label">原价</div>
-          <div>￥168</div>
+          <div>￥{{ course.coursePrice }}</div>
         </div>
         <div class="product-count" style="flex: 3.3">
           <div class="price-label">数量</div>
-          <!-- <div>1</div> -->
-          <el-input-number v-model="num" :min="1" :max="10" @change="handleChange" />
+          <div v-if="type === 1">1</div>
+          <el-input-number
+            v-else
+            v-model="num"
+            :min="1"
+            :max="10"
+            @change="handleChange"
+          />
         </div>
         <div class="all-price" style="flex: 3.3">
           <div class="price-label">商品总价</div>
-          <div class="all-price-txt">￥368</div>
+          <div class="all-price-txt">￥{{ course.coursePrice * num }}</div>
         </div>
       </div>
     </div>
     <div class="virtual-product-bottom f-jb-ac">
-      <div class="Remarks-container f-as">
+      <div class="Remarks-container f-as" style="flex: 1">
         <div>备注:</div>
-        <div>
+        <div style="width: 90%">
           <el-input
             v-model="textarea"
-            style="width: 300px"
+            style="width: 100%"
             :rows="2"
             type="textarea"
             resize="none"
@@ -46,7 +52,11 @@
           />
         </div>
       </div>
-      <div class="Delivery-container Delivery">
+      <div
+        class="Delivery-container Delivery"
+        style="flex: 1; margin-left: 20px"
+        v-if="type != 1"
+      >
         <div>配送服务</div>
         <div class="Delivery-info f-jb-ac">
           <div>快递 包邮</div>
@@ -62,6 +72,19 @@ import { ref, reactive, onMounted } from "vue";
 
 const num = ref(1);
 const textarea = ref("");
+
+const props = defineProps({
+  type: {
+    //1是虚拟   2是实体
+    type: Number,
+    default: 1,
+  },
+  course: {
+    type: Object,
+    default: {},
+  },
+});
+
 const handleChange = (value: number | undefined) => {
   console.log(value);
 };

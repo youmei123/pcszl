@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-09 17:25:02
+ * @LastEditTime: 2025-05-12 11:27:52
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,18 +19,26 @@
           </template>
           <div class="subitem-list">
             <div
-              class="subitem f-as pointer"
+              class="subitem f-jb-ac pointer"
               :class="{ active: activeId == val.id }"
               v-for="(val, ind) in item.videoList"
               @click="handlevideoclick(val, ind, index, item)"
             >
-              <div class="iconfont icon-24gf-playCircle"></div>
-              <div class="subitem-info">
-                <div class="sub-title u-line-1">{{ val.videoName }}</div>
-                <div class="sub-progress" v-if="val.watchTime && val.watchTime > 0">
-                  已看{{ percentage(val) }}%
+              <div class="f-as">
+                <div class="iconfont icon-24gf-playCircle"></div>
+                <div class="subitem-info">
+                  <div class="sub-title u-line-1">{{ val.videoName }}</div>
+                  <div class="sub-progress" v-if="val.watchTime && val.watchTime > 0">
+                    已看{{ percentage(val) }}%
+                  </div>
+                  <div class="sub-progress" v-else>未看</div>
                 </div>
-                <div class="sub-progress" v-else>未看</div>
+              </div>
+              <div v-if="ispay">
+                <div v-if="val.isaudition && val.isaudition == 1" class="free-btn">
+                  免费
+                </div>
+                <div v-else class="iconfont icon-lock"></div>
               </div>
             </div>
           </div>
@@ -43,18 +51,26 @@
     >
       <div class="subitem-list">
         <div
-          class="subitem f-as pointer"
+          class="subitem f-jb-ac pointer"
           :class="{ active: activeId == item.id }"
           v-for="(item, index) in videoList"
           @click="handlevideoclick(item, index)"
         >
-          <div class="iconfont icon-24gf-playCircle"></div>
-          <div class="subitem-info">
-            <div class="sub-title u-line-1">{{ item.videoName }}</div>
-            <div class="sub-progress" v-if="item.watchTime && item.watchTime > 0">
-              已看{{ percentage(item) }}%
+          <div class="f-as">
+            <div class="iconfont icon-24gf-playCircle"></div>
+            <div class="subitem-info">
+              <div class="sub-title u-line-1">{{ item.videoName }}</div>
+              <div class="sub-progress" v-if="item.watchTime && item.watchTime > 0">
+                已看{{ percentage(item) }}%
+              </div>
+              <div class="sub-progress" v-else>未看</div>
             </div>
-            <div class="sub-progress" v-else>未看</div>
+          </div>
+          <div v-if="ispay">
+            <div v-if="item.isaudition && item.isaudition == 1" class="free-btn">
+              免费
+            </div>
+            <div v-else class="iconfont icon-lock"></div>
           </div>
         </div>
       </div>
@@ -80,7 +96,7 @@ import { ref, onMounted, defineEmits } from "vue";
 import { szlCourseVideo, videolist } from "@/api/course";
 import { useUserStore } from "@/store/userStore";
 import { CourseVideoType } from "@/utiles/types";
-
+import { ElMessage } from "element-plus";
 const props = defineProps({
   classifyCount: {
     type: Number,
@@ -93,6 +109,10 @@ const props = defineProps({
   currentTime: {
     type: Number,
     default: 0,
+  },
+  ispay: {
+    type: Boolean,
+    default: true,
   },
 });
 // 定义请求传参类型
@@ -218,6 +238,10 @@ const handlevideoclick = (
   pindex?: number,
   pitem?: classifyvideotype
 ) => {
+  if (item.isaudition != 1 && props.ispay) {
+    ElMessage.warning("请先购买课程");
+    return;
+  }
   activeId.value = item.id;
   activeIndex.value = index;
   console.log(activeId.value);
@@ -231,6 +255,10 @@ const handlevideoclick = (
 };
 
 const playdefaultvideo = async () => {
+  if (props.ispay) {
+    ElMessage.warning("请先购买课程");
+    return;
+  }
   console.log("播放默认视频");
   if (props.classifyCount > 0) {
     if (classifyVideoList.value.length > 0) {
@@ -373,5 +401,16 @@ defineExpose({
 }
 .active {
   color: #d0e1f0 !important;
+}
+.free-btn {
+  width: 35px;
+  height: 18px;
+  background-color: transparent;
+  border-radius: 9px;
+  border: solid 1px #d0e1f0;
+  text-align: center;
+  line-height: 18px;
+  font-size: 12px;
+  color: #d0e1f0;
 }
 </style>

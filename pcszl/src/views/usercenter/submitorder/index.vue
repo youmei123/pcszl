@@ -8,8 +8,8 @@
         </el-breadcrumb>
       </div>
       <div class="submit-order-content f-jb-as">
-        <div class="submit-order-left">
-          <VirtualOrder v-if="types == 1" />
+        <div class="submit-order-left" v-if="course">
+          <VirtualOrder v-if="types == 1" :type="1" :course="course" />
           <EntityCreateOrder v-else />
         </div>
         <el-affix :offset="145" target=".submit-order-content">
@@ -36,7 +36,7 @@
                 </div>
               </div>
             </div>
-            <div class="buy-btn pointer">提交订单</div>
+            <div class="buy-btn pointer" @click="submitorder" >提交订单</div>
           </div>
         </el-affix>
       </div>
@@ -49,15 +49,43 @@ import { DArrowRight } from "@element-plus/icons-vue";
 import EntityCreateOrder from "../submitorder/components/EntityCreateOrder/index.vue";
 import VirtualOrder from "../submitorder/components/VirtualOrder/index.vue";
 import { useRoute } from "vue-router";
+import { singleCourse } from "@/api/course";
+import { useUserStore } from "@/store/userStore";
+import { CourseListType } from "@/utiles/types";
 import { ref, reactive, onMounted } from "vue";
 const route = useRoute();
-const types = Number(route.query.types);
+const userStore = useUserStore();
+const types = Number(route.query.types); // 1课程  2商城
+const courseId = route.query.courseId; // 课程id
+const course = ref<CourseListType>(); //课程对象
+onMounted(() => {
+  if (types == 1) {
+    getSingleCourse();
+  } else {
+  }
+});
+
+const getSingleCourse = async () => {
+  const { data } = await singleCourse({
+    courseId: courseId,
+    userId: userStore.userId,
+  });
+  const { listVideo, ...singlecourse } = data;
+  course.value = singlecourse as CourseListType;
+  console.log(course.value);
+};
+
+const submitorder = () => {
+  
+}
+
+console.log(courseId);
 console.log(types);
 </script>
 
 <style lang="scss" scoped>
 .page-container {
-  min-height: auto !important;
+  min-height: 600px !important;
   padding-bottom: 30px;
   box-sizing: border-box;
 }

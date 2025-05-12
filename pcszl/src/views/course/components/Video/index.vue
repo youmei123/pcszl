@@ -89,6 +89,7 @@ const startvideo = (item: CourseVideoType) => {
   if (xgplayer.value && xgplayer.value.cumulateTime > 0) {
     saveVideoRecord();
   }
+  isshowposter.value = false;
   currentVideo.value = item;
   console.log(item);
   if (item.qualityList && item.qualityList.length > 0) {
@@ -127,7 +128,6 @@ const startvideo = (item: CourseVideoType) => {
 };
 
 const playdefaultvideo = () => {
-  isshowposter.value = false;
   emit("playdefaultvideo", "");
 };
 

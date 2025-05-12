@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "18165266",
+      "name": "锁,密码,锁定",
+      "font_class": "lock",
+      "unicode": "e881",
+      "unicode_decimal": 59521
+    },
+    {
       "icon_id": "5849194",
       "name": "退货",
       "font_class": "tuihuo",

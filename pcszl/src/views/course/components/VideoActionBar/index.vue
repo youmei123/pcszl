@@ -2,14 +2,14 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-12 09:19:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-09 11:24:16
+ * @LastEditTime: 2025-05-12 11:40:58
  * @FilePath: \pcszl\src\views\course\components\VideoActionBar\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="video-action-bar">
     <div class="action-list f-ac">
-      <div class="action-item">
+      <div class="action-item pointer">
         <div class="font-icon">Aa字号</div>
       </div>
       <div class="action-item">
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 const serachchange = (query: string) => {
   console.log(query);
   emit("actionbarserachchange", query);
-}
+};
 </script>
 
 <style lang="scss" scoped>
