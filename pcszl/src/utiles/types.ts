@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-12 16:48:32
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-07 14:26:07
+ * @LastEditTime: 2025-05-12 14:41:22
  * @FilePath: \pcszl\src\utiles\types.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -97,4 +97,24 @@ export interface CourseVideoType {
     }[];
     watchTime?: number;
     isWatermark?: number;
+}
+/**
+ * 商品类型       
+ */
+export interface ProductType {
+    id: string; 
+    name?: string;
+    img?: string;
+    price?: number;
+    priceIOS?: number;
+    originalPrice?: number;
+    labels?: string;
+    isEntity?: number;
+    type?: number;
+    contents?: string;
+    salesVolume?: number;
+    realSalesVolume?: number;
+    bdCostPrice?: number;
+    isShow?: number;
+    description?:string
 }

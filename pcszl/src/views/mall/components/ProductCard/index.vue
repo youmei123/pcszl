@@ -3,17 +3,19 @@
     <div class="product-hint-bar">人气必选商品 资质保障 官方正品</div>
     <div class="title-bar u-line-2">
       <span class="title-tag">官方正品</span>
-      砭石按摩锥点按穴位文化用品
+      {{ data.name }}
     </div>
     <div class="hot-bar f-jb-ac">
       <div>
         <div class="f-ac last-time-bar">
-          <div>最后6小时￥169</div>
-          <div>原价￥899</div>
+          <!-- <div>最后6小时￥169</div> -->
+          <div>原价￥{{ data.originalPrice }}</div>
         </div>
         <div class="f-ac">
-          <div class="rob-count">疯抢1.2万件</div>
-          <div class="rob-txt">快要抢光</div>
+          <div class="rob-count">
+            疯抢{{ transNumberToShort(data.realSalesVolume + data.salesVolume) }}件
+          </div>
+          <!-- <div class="rob-txt">快要抢光</div> -->
         </div>
       </div>
       <div class="hot-right">
@@ -23,16 +25,19 @@
     </div>
     <div class="Label-bar f-ac">
       <div class="double-Label f-ac">
-        <div class="discount">大促享2.8折</div>
-        <div class="remainder-time">还剩6小时</div>
+        <div class="discount">
+          大促享{{ calculateDiscount(data.originalPrice, data.price) }}
+        </div>
+        <div class="remainder-time">快要抢光</div>
       </div>
-      <div class="Label-item">立省600</div>
+      <div class="Label-item" v-if="data.originalPrice != data.price">
+        立省{{ (data.originalPrice - data.price).toFixed(2) }}
+      </div>
     </div>
-    <div class="tags-bar f-ac">
-      <div class="tag-item f-shrink0">好评率98%</div>
-      <div class="tag-item f-shrink0">24小时热卖600+件</div>
-      <div class="tag-item f-shrink0">2千+人买过</div>
-      <div class="tag-item f-shrink0">中医热门课程</div>
+    <div class="tags-bar f-ac" v-if="data.labels">
+      <div class="tag-item f-shrink0" v-for="item in data.labels.split(',')">
+        {{ item }}
+      </div>
     </div>
     <div class="commitment-cont">
       <div class="commitment-item f-ac">
@@ -44,7 +49,7 @@
         <div>新人专区 官方补贴 超低折扣</div>
       </div>
     </div>
-    <div class="buy-btn pointer" @click="toBuy">立即购买￥168</div>
+    <div class="buy-btn pointer" @click="toBuy">立即购买￥{{ data.price }}</div>
   </div>
 </template>
 
@@ -52,20 +57,35 @@
 import { types } from "util";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { transNumberToShort } from "@/utiles/public";
 const props = defineProps({
   isSticky: {
     type: Boolean,
     default: false,
   },
+  data: {
+    type: Object,
+    default: {},
+  },
 });
+
+const calculateDiscount = (originalPrice: number, discountedPrice: number) => {
+  if (originalPrice == discountedPrice) {
+    return "";
+  }
+  const discount = (discountedPrice / originalPrice) * 10;
+  return discount.toFixed(1) + "折"; // 返回几折，保留1位小数
+};
+
 const router = useRouter();
 const toBuy = () => {
   console.log("立即购买");
   router.push({
-    path:"/submitorder",
-    query:{
-      types:2
-    }
+    path: "/submitorder",
+    query: {
+      types: 2,
+      productId: props.data.id,
+    },
   });
 };
 </script>

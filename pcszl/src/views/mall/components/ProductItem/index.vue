@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-15 10:33:15
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 09:23:12
+ * @LastEditTime: 2025-05-12 16:10:09
  * @FilePath: \pcszl\src\views\mall\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,14 +10,16 @@
   <div>
     <div class="mall-item pointer" @click="linkproductdetail">
       <div class="mall-poster">
-        <img />
+        <img :src="data.img" />
       </div>
-      <div class="mall-title u-line-1">人体十二经络穴位图解与病症11111</div>
+      <div class="mall-title u-line-1">{{ data.name }}</div>
       <div class="mall-tags f-ac">
-        <div class="tags-item f-shrink0" v-for="item in tags">{{ item }}</div>
+        <div class="tags-item f-shrink0" v-for="item in data.labels.split(',')">
+          {{ item }}
+        </div>
       </div>
       <div class="mall-bottom-bar">
-        <div class="mall-price"><span>￥</span>199</div>
+        <div class="mall-price"><span>￥</span>{{ data.price }}</div>
       </div>
     </div>
   </div>
@@ -27,9 +29,19 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const tags = reactive(["好评率98%", "24小时热卖600+", "免费包邮"]);
+const props = defineProps({
+  data: {
+    type: Object,
+    default: {},
+  },
+});
 const linkproductdetail = () => {
-  router.push("/productDetail");
+  router.push({
+    path: "/productDetail",
+    query: {
+      productId: props.data.id,
+    },
+  });
 };
 </script>
 
@@ -43,6 +55,10 @@ const linkproductdetail = () => {
   height: 264px;
   border-radius: 10px;
   background-color: util.$ThemeColors;
+}
+.mall-poster img {
+  width: 100%;
+  height: 100%;
 }
 .mall-title {
   font-size: 18px;

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 09:13:38
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 12:11:40
+ * @LastEditTime: 2025-05-12 16:13:38
  * @FilePath: \pcszl\src\views\mall\productdetail\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,15 +19,15 @@
         </div>
         <div class="product-content f-ac">
           <div class="product-img">
-            <img />
+            <img :src="product?.img" />
           </div>
-          <ProductCard />
+          <ProductCard :data="product" />
         </div>
         <div class="product-info-box f-as">
-          <div class="product-html-cont f-shrink0"></div>
+          <div class="product-html-cont f-shrink0" v-html="product?.description"></div>
           <Transition name="slide-fade">
             <el-affix :offset="100" target=".product-info-box" v-if="isSticky">
-              <ProductCard :isSticky="isSticky" />
+              <ProductCard :data="product" :isSticky="isSticky" />
             </el-affix>
           </Transition>
         </div>
@@ -39,10 +39,19 @@
 <script lang="ts" setup>
 import { DArrowRight } from "@element-plus/icons-vue";
 import ProductCard from "@/views/mall/components/ProductCard/index.vue";
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import { singleproduct } from "@/api/mall";
+import { useUserStore } from "@/store/userStore";
+import { useRoute } from "vue-router";
+import { ProductType } from "@/utiles/types";
 
-const isSticky = ref(false);
+const isSticky = ref(false); // 是否吸顶
+const route = useRoute(); // 获取路由参数
+const userStore = useUserStore(); // 获取用户信息
+const productId = route.query.productId; // 获取商品id
+const product = ref<ProductType>(); // 商品详情
 
+console.log(productId);
 const handleScroll = () => {
   const scrollY = window.scrollY;
   console.log(scrollY);
@@ -53,8 +62,18 @@ const handleScroll = () => {
   }
 };
 
+const getSingleProduct = async () => {
+  const { data } = await singleproduct({
+    productId: productId,
+    userId: userStore.userId,
+  });
+  product.value = data;
+  console.log(data);
+};
+
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
+  getSingleProduct();
 });
 
 onUnmounted(() => {
@@ -101,8 +120,8 @@ onUnmounted(() => {
 }
 .product-html-cont {
   width: 750px;
-  background-color: util.$ThemeColors;
-  height: 1800px;
+  // background-color: util.$ThemeColors;
+  min-height: 800px;
 }
 /* 定义进入和离开过渡的活动状态，设置过渡的属性、时间和缓动函数 */
 .slide-fade-enter-active,

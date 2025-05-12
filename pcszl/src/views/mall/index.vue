@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 16:55:10
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-29 17:10:34
+ * @LastEditTime: 2025-05-12 15:23:14
  * @FilePath: \pcszl\src\views\mall\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -15,10 +15,22 @@
           <el-breadcrumb-item>商城</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <div class="mall-list f-jb-ac f-w">
-        <ProductItem v-for="() in 12" />
+      <div class="mall-list">
+        <div v-if="!isloading && productlist.length > 0" class="f-jb-ac f-w">
+          <ProductItem v-for="(item, index) in productlist" :data="item" :key="index" />
+        </div>
+        <div v-else style="height: 400px">
+          <loading
+            v-if="isloading"
+            :translateY="50"
+            color="#FCDC46"
+            active
+            text="正在加载中..."
+          />
+          <el-empty v-else description="暂无数据" />
+        </div>
         <div style="width: 100%">
-          <Pagination />
+          <Pagination @changePage="handlePageChange" :count="total" :currentPage="page" />
         </div>
       </div>
     </div>
@@ -28,9 +40,31 @@
 <script lang="ts" setup>
 import { DArrowRight } from "@element-plus/icons-vue";
 import ProductItem from "./components/ProductItem/index.vue";
-import { ref, reactive, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import Pagination from "@/components/Pagination/index.vue";
-const tags = reactive(["好评率98%", "24小时热卖600+", "免费包邮"]);
+import { listproduct } from "@/api/mall";
+import { ProductType } from "@/utiles/types";
+onMounted(() => {
+  getProductList();
+});
+const page = ref(1);
+const total = ref(0);
+const productlist = ref<ProductType[]>([]);
+const isloading = ref(false);
+const getProductList = async () => {
+  isloading.value = true;
+  const { data, count } = await listproduct({
+    page: page.value,
+  });
+  isloading.value = false;
+  productlist.value = data;
+  total.value = count;
+  console.log(productlist.value);
+};
+const handlePageChange = (currentPage: number) => {
+  page.value = currentPage;
+  getProductList();
+};
 </script>
 
 <style lang="scss" scoped>

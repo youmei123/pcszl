@@ -8,9 +8,9 @@
         </el-breadcrumb>
       </div>
       <div class="submit-order-content f-jb-as">
-        <div class="submit-order-left" v-if="course">
+        <div class="submit-order-left" v-if="course || product">
           <VirtualOrder v-if="types == 1" :type="1" :course="course" />
-          <EntityCreateOrder v-else />
+          <EntityCreateOrder :product="product" v-else />
         </div>
         <el-affix :offset="145" target=".submit-order-content">
           <div class="submit-order-right">
@@ -36,7 +36,7 @@
                 </div>
               </div>
             </div>
-            <div class="buy-btn pointer" @click="submitorder" >提交订单</div>
+            <div class="buy-btn pointer" @click="submitorder">提交订单</div>
           </div>
         </el-affix>
       </div>
@@ -50,18 +50,25 @@ import EntityCreateOrder from "../submitorder/components/EntityCreateOrder/index
 import VirtualOrder from "../submitorder/components/VirtualOrder/index.vue";
 import { useRoute } from "vue-router";
 import { singleCourse } from "@/api/course";
+import { submitSingle } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import { CourseListType } from "@/utiles/types";
+import { ProductType } from "@/utiles/types";
 import { ref, reactive, onMounted } from "vue";
+import { singleproduct } from "@/api/mall";
 const route = useRoute();
 const userStore = useUserStore();
 const types = Number(route.query.types); // 1课程  2商城
 const courseId = route.query.courseId; // 课程id
+const productId = route.query.productId; // 课程id
 const course = ref<CourseListType>(); //课程对象
+const product = ref<ProductType>(); // 商品对象
+
 onMounted(() => {
   if (types == 1) {
     getSingleCourse();
   } else {
+    getSingleProduct();
   }
 });
 
@@ -75,9 +82,16 @@ const getSingleCourse = async () => {
   console.log(course.value);
 };
 
-const submitorder = () => {
-  
-}
+const getSingleProduct = async () => {
+  const { data } = await singleproduct({
+    productId: productId,
+    userId: userStore.userId,
+  });
+  product.value = data as ProductType;
+  console.log(product.value);
+};
+
+const submitorder = () => {};
 
 console.log(courseId);
 console.log(types);

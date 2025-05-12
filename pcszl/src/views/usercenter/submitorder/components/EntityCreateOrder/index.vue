@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:28
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 16:45:54
+ * @LastEditTime: 2025-05-12 16:32:22
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\EntityCreateOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <VirtualCreateOrder />
+    <VirtualCreateOrder :type="2" :data="product" />
   </div>
 </template>
 
@@ -52,6 +52,19 @@
 import { ref, reactive, onMounted } from "vue";
 import VirtualCreateOrder from "../VirtualOrder/index.vue";
 const select_address_index = ref(0);
+
+const props = defineProps({
+  type: {
+    //1是虚拟   2是实体
+    type: Number,
+    default: 1,
+  },
+  product: {
+    type: Object,
+    default: {},
+  },
+});
+
 const switchaddress = (index: number) => {
   select_address_index.value = index;
   console.log(select_address_index.value);
