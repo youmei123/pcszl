@@ -1,19 +1,31 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-04-29 13:47:40
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-05-12 17:31:19
+ * @FilePath: \pcszl\src\views\usercenter\menuitem\mycourse\components\MyCourseItem.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div>
     <div class="my-course-item f-ac">
       <div class="item-poster-box f-shrink0">
-        <img />
+        <img :src="data.courseCoverImg" />
       </div>
       <div class="my-course-info fd-c f-jb">
         <div class="info-bar">
-          <div class="my-course-name">常用穴位真人取穴</div>
-          <div class="my-course-desc">
-            黄帝内经太素详细介绍了人体的构造、五脏六腑、经络关节等。
+          <div class="my-course-name">{{ data.courseName }}</div>
+          <div class="my-course-desc u-line-2">
+            {{ data.courseSimpleDescription }}
           </div>
         </div>
         <div class="f-jb-ac">
-          <div class="progress">已看41%</div>
-          <div class="continue-btn pointer">继续学习</div>
+          <div class="progress" v-if="data.schedule">已看{{ data.schedule }}%</div>
+          <div class="progress" v-else>未看</div>
+          <div class="continue-btn pointer" v-if="data.schedule && data.schedule > 0">
+            继续学习
+          </div>
+          <div class="continue-btn pointer" v-else>开始学习</div>
         </div>
       </div>
     </div>
@@ -22,6 +34,13 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
+import { MyCourseType } from "@/utiles/types";
+const props = defineProps({
+  data: {
+    type: Object,
+    default: {},
+  },
+});
 </script>
 
 <style lang="scss" scoped>

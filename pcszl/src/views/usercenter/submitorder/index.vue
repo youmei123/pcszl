@@ -91,7 +91,9 @@ const getSingleProduct = async () => {
   console.log(product.value);
 };
 
-const submitorder = () => {};
+const submitorder = () => {
+  
+};
 
 console.log(courseId);
 console.log(types);
