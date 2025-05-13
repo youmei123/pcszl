@@ -88,7 +88,7 @@ const getList = async () => {
   }
   const { data, count } = await listOrder(url,params);
   listLoading.value = false
-  if(data.length!=0){
+  if(data && data.length!=0){
     data.forEach((item:any,index:number)=>{
       if(item.aftersaleList && item.aftersaleList.length!=0){
         item.refundStatus=item.aftersaleList[0].refundStatus

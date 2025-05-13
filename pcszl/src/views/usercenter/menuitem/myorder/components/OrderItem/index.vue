@@ -34,7 +34,7 @@
               拒绝退款
             </div>
           </div>
-          <div class="order-link-detail pointer" @click="linkorderdetail">订单详情</div>
+          <div class="order-link-detail pointer" @click="linkorderdetail(item)">订单详情</div>
         </div>
         <div class="order-info-bar f-jb-ac">
           <div class="order-product-box f-ac">
@@ -58,17 +58,17 @@
             <div>￥{{ priceNum(item) }}</div>
           </div>
           <div class="order-switch-cont">
-            <div class="order-pay-btn order-pay-btn-bg pointer" v-if="item.status==0">
+            <div class="order-pay-btn order-pay-btn-bg pointer" @click="submitpay(item)" v-if="item.status==0">
               付款
             </div>
             <div class="order-pay-btn pointer" v-if="(item.status>=1 && item.status!=3) || item.aftersaleId">
               再买一单
             </div>
-            <div class="order-pay-btn pointer" 
+            <div class="order-pay-btn pointer" @click="urge(item)"
               v-if="tabIndex!=5 && item.status==3 && (!item.aftersaleId || item.refundStatus==2 || item.aftersaleStatus==3 || item.aftersaleStatus==4)">
               催发货
             </div>
-            <div class="order-pay-btn pointer" 
+            <div class="order-pay-btn pointer" @click="receivegoods(item)"
               v-if="tabIndex!=5 && item.status==4 && (!item.aftersaleId || item.refundStatus==2 || item.aftersaleStatus==3 || item.aftersaleStatus==4)">
               确认收货
             </div>
@@ -98,17 +98,19 @@
 <script lang="ts" setup>
 import { 
   ordersCancel,
+  aftersaleCancel,
+  updateDeliveryOrder,
  } from "@/api/order";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/store/userStore";
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { defineEmits } from 'vue';
+import { ordersType } from "@/utiles/types";
+import { useUserStore } from "@/store/userStore";
+const userStore = useUserStore();
 const emit = defineEmits(['changeGetList']);
 const router = useRouter();
-const linkorderdetail = () => {
-  router.push("/orderdetail");
-};
+
 const props = defineProps({
   tabIndex: {
     type: Number,
@@ -119,7 +121,7 @@ const props = defineProps({
     default: false,
   },
   orderList: {
-    type: Array,
+    type: Array<ordersType>,
     default: [],
   },
   isopen: {
@@ -127,17 +129,32 @@ const props = defineProps({
     default: 0,
   },
 });
+
+// 订单详情
+const linkorderdetail = (item:any) => {
+  router.push({
+    path:"/orderdetail",
+    query:{
+      orderId:item.id,
+      status:item.status,
+      refundStatus:item.refundStatus,
+      aftersaleStatus:item.aftersaleStatus,
+      tabIndex:props.tabIndex,
+      isopen:props.isopen
+    }
+  });
+};
 // 计算需付金额
 const priceNum=(item:any)=>{
-  let coinNumPrice=0
-  let couponMoney=0
+  let coinNumPrice:any=0
+  let couponMoney:any=0
   if(item.healthcoinCount){
     coinNumPrice=(item.healthcoinCount/10000).toFixed(2)
   }
   if(item.couponMoney){
     couponMoney=item.couponMoney
   }
-  let price=(item.truePrice*item.count).toFixed(2)
+  let price:any=(item.truePrice*item.count).toFixed(2)
   return (price - coinNumPrice - couponMoney).toFixed(2)
 }
 // 判断是否有运费
@@ -148,22 +165,29 @@ const orderPrice = (item:any)=>{
     return 0
   }
 }
+// 催发货
+const urge = (item:any) => {
+  ElMessage({
+    type: 'success',
+    message: '平台已为您跟进！',
+  })
+}
 
 // 取消订单
 const cancelOrder=async(item:any)=>{
    ElMessageBox.confirm(
     '是否要取消订单？',
-    'Warning',
+    '提示',
     {
       confirmButtonText: '确认',
       cancelButtonText: '取消',
       type: 'warning',
     }
   ).then(async() => {
-    const { data } = await ordersCancel({
-      id: item.id
+    const res = await ordersCancel({
+      id:item.id
     });
-    if(data.status==0){
+    if(res.status==0){
       ElMessage({
         type: 'success',
         message: '取消成功',
@@ -171,8 +195,37 @@ const cancelOrder=async(item:any)=>{
       emit('changeGetList')
     }
     
-  })
-  
+  }).catch(() => {})
+}
+
+// 确认收货
+const receivegoods =(item:any)=>{
+  ElMessageBox.confirm(
+    '是否要确认收货？',
+    '提示',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(async() => {
+    const res = await updateDeliveryOrder({
+      userId: userStore.userId,
+      ordersId:item.id
+    });
+    if(res.status==0){
+      ElMessage({
+        type: 'success',
+        message: '确认收货成功!',
+      })
+      emit('changeGetList')
+    }
+    
+  }).catch(() => {})
+}
+// 付款
+const submitpay =(item:any)=>{
+
 }
 </script>
 

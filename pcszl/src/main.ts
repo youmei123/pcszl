@@ -15,6 +15,7 @@ import loading from "@/components/loading/index.vue";
 import LoginPopup from "@/utiles/login-popup"
 import 'element-plus/theme-chalk/el-message.css';
 import 'normalize.css';
+import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 const pinia = createPinia();
