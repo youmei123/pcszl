@@ -58,9 +58,29 @@
             <div>￥{{ priceNum(item) }}</div>
           </div>
           <div class="order-switch-cont">
-            <div class="order-pay-btn pointer">付款</div>
-            <div class="order-none-btn pointer">取消订单</div>
-            <div class="order-none-btn pointer">联系客服</div>
+            <div class="order-pay-btn order-pay-btn-bg pointer" v-if="item.status==0">
+              付款
+            </div>
+            <div class="order-pay-btn pointer" v-if="(item.status>=1 && item.status!=3) || item.aftersaleId">
+              再买一单
+            </div>
+            <div class="order-pay-btn pointer" 
+              v-if="tabIndex!=5 && item.status==3 && (!item.aftersaleId || item.refundStatus==2 || item.aftersaleStatus==3 || item.aftersaleStatus==4)">
+              催发货
+            </div>
+            <div class="order-pay-btn pointer" 
+              v-if="tabIndex!=5 && item.status==4 && (!item.aftersaleId || item.refundStatus==2 || item.aftersaleStatus==3 || item.aftersaleStatus==4)">
+              确认收货
+            </div>
+            <div class="order-none-btn pointer" v-if="item.aftersaleIsShow==1 &&isopen==1">
+              申请售后
+            </div>
+            <div class="order-none-btn pointer" v-if="item.status==0" @click="cancelOrder(item)">
+              取消订单
+            </div>
+            <div class="order-none-btn pointer" v-if="item.status!=4 || item.aftersaleId">
+              联系客服
+            </div>
           </div>
         </div>
       </div>
@@ -76,8 +96,15 @@
 </template>
 
 <script lang="ts" setup>
+import { 
+  ordersCancel,
+ } from "@/api/order";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/store/userStore";
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { defineEmits } from 'vue';
+const emit = defineEmits(['changeGetList']);
 const router = useRouter();
 const linkorderdetail = () => {
   router.push("/orderdetail");
@@ -115,14 +142,37 @@ const priceNum=(item:any)=>{
 }
 // 判断是否有运费
 const orderPrice = (item:any)=>{
-  if(item.consigneeAddress){
-    if(item.consigneeAddress.includes("西藏自治区") || item.consigneeAddress.includes("新疆维吾尔自治区")){
-      return 20
-    }else{
-      return 0
-    }
+  if(item.consigneeAddress && (item.consigneeAddress.includes("西藏自治区") || item.consigneeAddress.includes("新疆维吾尔自治区"))){
+    return 20
+  }else{
+    return 0
   }
- 
+}
+
+// 取消订单
+const cancelOrder=async(item:any)=>{
+   ElMessageBox.confirm(
+    '是否要取消订单？',
+    'Warning',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(async() => {
+    const { data } = await ordersCancel({
+      id: item.id
+    });
+    if(data.status==0){
+      ElMessage({
+        type: 'success',
+        message: '取消成功',
+      })
+      emit('changeGetList')
+    }
+    
+  })
+  
 }
 </script>
 
@@ -212,13 +262,18 @@ const orderPrice = (item:any)=>{
   margin-bottom: 5px;
 }
 
+.order-pay-btn-bg {
+  background: util.$ThemeColors;
+  border: none;
+}
 .order-pay-btn {
   width: 100px;
   height: 40px;
-  background: util.$ThemeColors;
   border-radius: 20px;
   text-align: center;
   line-height: 40px;
+  box-sizing: border-box;
+  border: 1px solid #DDDDDD;
 }
 
 .order-none-btn:hover {

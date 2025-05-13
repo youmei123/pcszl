@@ -7,3 +7,7 @@ export const listOrder = (url: string, data: any) => {
 export const isRefund = (data: any) => {
     return request.get<any>('/api/szl/getIsOpen', data);
 };
+// 取消订单
+export const ordersCancel = (data: any) => {
+    return request.get<any>('/api/szl/orders/cancel', data);
+};

@@ -11,7 +11,7 @@
     <div class="order-tabs-content">
       <el-tabs v-model="activeIndex" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane v-for="(item, index) in tablist" :key="index" :label="item" :name="index">
-          <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading" :isopen="isopen"  />
+          <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading" :isopen="isopen" @changeGetList="getList"  />
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 20px">
@@ -34,7 +34,6 @@ import {
   isRefund,
  } from "@/api/order";
 import { useUserStore } from "@/store/userStore";
-import { orderListType } from "@/utiles/types";
 const userStore = useUserStore();
 const tablist = reactive(["全部", "待付款", "待发货", "待收货", "已完成", "售后"]);
 const activeIndex = ref(0);//当前订单状态
