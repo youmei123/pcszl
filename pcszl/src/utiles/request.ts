@@ -2,12 +2,12 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 16:18:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-10 16:47:43
+ * @LastEditTime: 2025-05-13 14:46:50
  * @FilePath: \pcszl\src\utiles\request.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-
+import { ElMessage } from "element-plus";
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '', // 从环境变量中获取基础 URL
@@ -28,8 +28,7 @@ service.interceptors.request.use(
         return config;
     },
     (error) => {
-        // 处理请求错误
-        console.error('请求错误:', error);
+        
         return Promise.reject(error);
     }
 );
@@ -42,15 +41,57 @@ service.interceptors.response.use(
     },
     (error) => {
         // 处理响应错误
-        console.error('响应错误:', error);
+        // 处理请求错误
+        if (error.response.status != '' && error.response.status != undefined) {
+            switch (error.response.status) {
+                case 400:
+                    ElMessage.error(error.response.status + '错误请求');
+                    break;
+                case 401:
+                    ElMessage.error(error.response.status + '未授权，请重新登录');
+                    break;
+                case 403:
+                    ElMessage.error(error.response.status + '拒绝访问');
+                    break;
+                case 404:
+                    ElMessage.error(error.response.status + '请求错误,未找到该资源');
+                    break;
+                case 405:
+                    ElMessage.error(error.response.status + '请求方法类型错误');
+                    break;
+                case 408:
+                    ElMessage.error(error.response.status + '请求超时');
+                    break;
+                case 500:
+                    ElMessage.error(error.response.status + '服务器端出错');
+                    break;
+                case 501:
+                    ElMessage.error(error.response.status + '网络未实现');
+                    break;
+                case 502:
+                    ElMessage.error(error.response.status + '网络错误');
+                    break;
+                case 503:
+                    ElMessage.error(error.response.status + '服务不可用');
+                    break;
+                case 504:
+                    ElMessage.error(error.response.status + '网络超时');
+                    break;
+                case 505:
+                    ElMessage.error(error.response.status + 'http版本不支持该请求');
+                    break;
+                default:
+                    ElMessage.error(error.response.status + '连接错误');
+            }
+        }
         return Promise.reject(error);
     }
 );
 
 const objectToQueryString = (obj: Record<string, any>): string => {
     return Object.entries(obj)
-       .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-       .join('&');
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
 };
 
 // 封装请求方法

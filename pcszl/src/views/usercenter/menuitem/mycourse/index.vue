@@ -2,13 +2,13 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 16:28:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 17:47:05
+ * @LastEditTime: 2025-05-13 11:05:19
  * @FilePath: \pcszl\src\views\usercenter\menuitem\mycourse\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div>
-    <div class="continue-bar f-jb-ac">
+    <div class="continue-bar f-jb-ac" v-if="mycourseRecord">
       <div class="f-ac">
         <div>上次观看至</div>
         <div class="continue-time">
@@ -17,13 +17,23 @@
         </div>
       </div>
       <div>
-        <div class="continue-btn f-jc-ac pointer">
+        <div class="continue-btn f-jc-ac pointer" @click="continueplaywahtch">
           <el-icon :size="24"><CaretRight /></el-icon>继续观看
         </div>
       </div>
     </div>
-    <div class="my-course-list">
+    <div class="my-course-list" v-if="!isloading && mycourseList.length > 0">
       <MyCourseItem v-for="(item, index) in mycourseList" :data="item" :key="index" />
+    </div>
+    <div v-else style="height: 400px; position: relative">
+      <loading
+        v-if="isloading"
+        :translateY="50"
+        color="#FCDC46"
+        active
+        text="正在加载中..."
+      />
+      <el-empty v-else description="暂无数据" />
     </div>
   </div>
 </template>
@@ -34,6 +44,7 @@ import { CaretRight } from "@element-plus/icons-vue";
 import MyCourseItem from "../mycourse/components/MyCourseItem.vue";
 import { listBuyCourse, getWatchTime } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
+import { useRouter } from "vue-router";
 // 我的课程类型
 interface MyCourseType {
   id: string;
@@ -83,6 +94,8 @@ interface VideoWatchRecord {
 const userStore = useUserStore();
 const mycourseList = ref<MyCourseType[]>([]);
 const mycourseRecord = ref<VideoWatchRecord>();
+const isloading = ref(false);
+const router = useRouter();
 
 onMounted(() => {
   getMyCourseList();
@@ -90,9 +103,11 @@ onMounted(() => {
 });
 
 const getMyCourseList = async () => {
+  isloading.value = true;
   const { data } = await listBuyCourse({
     userId: userStore.userId,
   });
+  isloading.value = false;
   mycourseList.value = data;
   console.log(data);
 };
@@ -113,6 +128,20 @@ const formatDuration = (seconds: number): string => {
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(
     remainingSeconds
   ).padStart(2, "0")}`;
+};
+
+const continueplaywahtch = () => {
+  if (mycourseRecord.value) {
+    router.push({
+      path: "/coursevideo",
+      query: {
+        courseId: mycourseRecord.value.courseId,
+        watchTime: mycourseRecord.value.watchTime,
+        videoId: mycourseRecord.value.videoId,
+        videoClassifyId: mycourseRecord.value.videoClassifyId || 0,
+      },
+    });
+  }
 };
 </script>
 

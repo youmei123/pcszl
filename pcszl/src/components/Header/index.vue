@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 16:33:45
+ * @LastEditTime: 2025-05-13 17:03:23
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -26,7 +26,12 @@
     </div>
     <div class="user-box f-ac">
       <SerachBar bg-color="#F6F6F6" icon-color="#212930" color="#999999" />
-      <el-popover class="box-item" placement="bottom-end" width="380">
+      <el-popover
+        class="box-item"
+        placement="bottom-end"
+        width="380"
+        @before-enter="handleBeforeEnter"
+      >
         <template #reference>
           <div class="user-btn f-shrink0">
             <div class="iconfont icon-denglu"></div>
@@ -40,25 +45,25 @@
               </div>
               <div class="user-info">
                 <div class="user-name e-line-1">{{ nickname }}</div>
-                <div class="vip-end-time">会员至：2024-12-31 ></div>
+                <!-- <div class="vip-end-time">会员至：2024-12-31 ></div> -->
               </div>
             </div>
             <div class="user-record-bar f-jb-ac">
               <div class="record-item">
-                <div class="record-val">375.91</div>
+                <div class="record-val">{{ record.totalWatchTimeMin || "-" }}</div>
                 <div class="record-txt">累计学习(分钟)</div>
               </div>
               <div class="record-item">
-                <div class="record-val">0</div>
+                <div class="record-val">{{ record.todayWatchTime || "-" }}</div>
                 <div class="record-txt">今日学习(分钟)</div>
               </div>
               <div class="record-item">
-                <div class="record-val">160</div>
+                <div class="record-val">{{ record.watchRecordCount || "-" }}</div>
                 <div class="record-txt">已看课程(节)</div>
               </div>
             </div>
             <div class="user-menu-list">
-              <div class="user-menu-item img-menu">
+              <!-- <div class="user-menu-item img-menu">
                 <div>
                   <div class="arrow-right-btn f-jc-ac">
                     <el-icon :size="14">
@@ -66,7 +71,7 @@
                     </el-icon>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="user-menu-item f-jb-ac" @click="linusercenter">
                 <div class="menu-icon f-ac">
                   <div class="iconfont icon-kechengguanli"></div>
@@ -78,7 +83,7 @@
                   </el-icon>
                 </div>
               </div>
-              <div class="user-menu-item f-jb-ac">
+              <div class="user-menu-item f-jb-ac" @click="linmmyorder">
                 <div class="menu-icon f-ac">
                   <div class="iconfont icon-dingdan"></div>
                   <div class="menu-text">我的订单</div>
@@ -90,7 +95,7 @@
                 </div>
               </div>
             </div>
-            <div class="user-out f-ac pointer">
+            <div class="user-out f-ac pointer" @click="hanldoutlogin">
               <div class="iconfont icon-tuichu"></div>
               <div>退出</div>
             </div>
@@ -107,8 +112,10 @@ import SerachBar from "@/components/SerachBar/index.vue";
 import { ref, reactive, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore";
-const userStore = useUserStore();
+import { statisticsWatchRecord } from "@/api/usercenter";
+import { ElMessage, ElMessageBox } from "element-plus";
 
+const userStore = useUserStore();
 const nickname = userStore.UserInfo.nickname;
 const headImg = userStore.UserInfo.headImg;
 
@@ -137,7 +144,13 @@ const handmenu = (item: any) => {
 
 const linusercenter = () => {
   router.push({
-    path: "/usercenter",
+    path: "/usercenter/mycourse",
+  });
+};
+
+const linmmyorder = () => {
+  router.push({
+    path: "/usercenter/myorder",
   });
 };
 
@@ -173,6 +186,42 @@ const navMenuList = reactive([
     name: "联系我们",
   },
 ]);
+
+const record = ref({
+  todayWatchTime: 0,
+  totalWatchTime: 0,
+  totalWatchTimeMin: 0,
+  watchRecordCount: 0,
+});
+
+const handleBeforeEnter = async () => {
+  console.log("before enter");
+  const { data } = await statisticsWatchRecord({
+    userId: userStore.userId,
+  });
+  record.value = data;
+  console.log(data);
+};
+
+const hanldoutlogin = () => {
+  ElMessageBox.confirm("proxy will permanently delete the file. Continue?", "Warning", {
+    confirmButtonText: "OK",
+    cancelButtonText: "Cancel",
+    type: "warning",
+  })
+    .then(() => {
+      ElMessage({
+        type: "success",
+        message: "Delete completed",
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "Delete canceled",
+      });
+    });
+};
 </script>
 
 <style lang="scss" scoped>

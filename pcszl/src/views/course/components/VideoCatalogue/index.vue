@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 11:27:52
+ * @LastEditTime: 2025-05-13 10:54:13
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -99,22 +99,42 @@ import { CourseVideoType } from "@/utiles/types";
 import { ElMessage } from "element-plus";
 const props = defineProps({
   classifyCount: {
+    //当前视频是否有无标签
     type: Number,
     default: 1,
   },
   courseId: {
+    //课程id
     type: String,
     default: "",
   },
   currentTime: {
+    //当前播放时间
     type: Number,
     default: 0,
   },
   ispay: {
+    //是否需要支付购买
     type: Boolean,
     default: true,
   },
+  continue_watchtime: {
+    //继续观看时间
+    type: Number,
+    default: 0,
+  },
+  continue_videoId: {
+    //继续观看视频id
+    type: String,
+    default: "",
+  },
+  continue_videoClassifyId: {
+    //继续观看视频分类id
+    type: String,
+    default: "",
+  },
 });
+
 // 定义请求传参类型
 interface szlCourseVideoParams {
   courseId: string;
@@ -137,9 +157,9 @@ onMounted(() => {
   console.log(props.classifyCount);
   console.log(props.courseId);
   if (props.classifyCount > 0) {
-    getvideolist();
+    getvideolist(0);
   } else {
-    getSzlCourseVideo();
+    getSzlCourseVideo(0);
   }
 });
 
@@ -167,6 +187,17 @@ const getSzlCourseVideo = async (type: number = 0) => {
   const { data } = await szlCourseVideo(params);
   loadingstatus.value = false;
   videoList.value = data;
+  //默认加载时有播放进度参数，则直接播放
+  if (type == 0) {
+    if (props.continue_videoId && props.continue_watchtime > 0) {
+      let videoindex = videoList.value.findIndex(
+        (item) => item.id == props.continue_videoId
+      );
+      activeId.value = props.continue_videoId;
+      activeIndex.value = videoindex;
+      emits("ActiveVideo", videoList.value[videoindex]);
+    }
+  }
   //清空搜索条件后，重置下标
   if (type == 2 || type == 1) {
     console.log("重新赋值");
@@ -189,6 +220,31 @@ const getvideolist = async (type: number = 0) => {
   const { data } = await videolist(params);
   loadingstatus.value = false;
   classifyVideoList.value = data;
+   //默认加载时有播放进度参数，则直接播放
+  if (type == 0) {
+    if (
+      props.continue_videoId &&
+      props.continue_watchtime > 0 &&
+      props.continue_videoClassifyId
+    ) {
+      let classify_Index = classifyVideoList.value.findIndex(
+        (item) => item.id == props.continue_videoClassifyId
+      );
+      if (classifyVideoList.value[classify_Index].videoList) {
+        let video_index = classifyVideoList.value[classify_Index].videoList.findIndex(
+          (item) => item.id == props.continue_videoId
+        );
+        activeId.value = props.continue_videoId;
+        activeIndex.value = video_index;
+        classifyIndex.value = classify_Index;
+        activeNames.value.push(classifyVideoList.value[classify_Index].id);
+        emits(
+          "ActiveVideo",
+          classifyVideoList.value[classify_Index].videoList[video_index]
+        );
+      }
+    }
+  }
   if (type == 2 || type == 1) {
     console.log("重新赋值");
     classifyIndex.value = classifyVideoList.value.findIndex((item) => {

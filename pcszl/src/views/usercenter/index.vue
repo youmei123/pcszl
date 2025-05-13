@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 15:15:18
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-24 14:25:21
+ * @LastEditTime: 2025-05-13 16:41:13
  * @FilePath: \pcszl\src\views\usercenter\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,16 +16,18 @@
         </el-breadcrumb>
       </div>
       <div class="f-jb-as">
-        <div class="left-menu-cont">
-          <div
-            class="menu-item f-ac pointer"
-            v-for="(item, index) in menulist"
-            @click="handswithcmenu(index)"
-            :class="{ active: select_index === index }"
-          >
-            <div class="menu-text">{{ item.name }}</div>
+        <el-affix :offset="155">
+          <div class="left-menu-cont">
+            <div
+              class="menu-item f-ac pointer"
+              v-for="(item, index) in menulist"
+              @click="handswithcmenu(index)"
+              :class="{ active: item.path === route.path }"
+            >
+              <div class="menu-text">{{ item.name }}</div>
+            </div>
           </div>
-        </div>
+        </el-affix>
         <div class="menu-view-cont">
           <router-view v-slot="{ Component }">
             <transition name="fade-right" mode="out-in">
@@ -41,10 +43,11 @@
 <script lang="ts" setup>
 import { DArrowRight } from "@element-plus/icons-vue";
 import { ref, reactive, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import usercenterroutelist from "@/router/modules/usercenter";
-const select_index = ref(0);
 const router = useRouter();
+const route = useRoute();
+console.log(route);
 // 创建路由类型
 interface RouteConfig {
   path: string;
@@ -55,7 +58,7 @@ interface RouteConfig {
   children?: RouteConfig[];
 }
 
-const  processSingleRouteData = (route: RouteConfig) => {
+const processSingleRouteData = (route: RouteConfig) => {
   const result: { name: string; path: string }[] = [];
   if (route.children) {
     for (const childRoute of route.children) {
@@ -66,16 +69,11 @@ const  processSingleRouteData = (route: RouteConfig) => {
     }
   }
   return result;
-}
+};
 const menulist = reactive(processSingleRouteData(usercenterroutelist[0]));
 console.log(menulist);
-router.push({
-  path: menulist[0].path,
-});
 
 const handswithcmenu = (index: number) => {
-  console.log(index);
-  select_index.value = index;
   router.push({
     path: menulist[index].path,
   });

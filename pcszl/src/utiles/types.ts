@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-12 16:48:32
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 17:46:18
+ * @LastEditTime: 2025-05-13 14:34:12
  * @FilePath: \pcszl\src\utiles\types.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -118,4 +118,18 @@ export interface ProductType {
     isShow?: number;
     description?:string
 }
-
+/**
+ * 地址类型       
+ */
+export interface AddressType {
+    id?: string;
+    userId?: string;
+    addtime?: number;
+    updatetime?: number;
+    name?: string;
+    mobile?: string;
+    address?: string;
+    area?: string;
+    isDefault?: number | 1; 
+    arrayCodeList?: string[];
+}

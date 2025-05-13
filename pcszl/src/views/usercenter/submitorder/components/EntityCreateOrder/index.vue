@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:28
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 16:32:22
+ * @LastEditTime: 2025-05-13 16:33:20
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\EntityCreateOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,32 +11,32 @@
     <div class="entity-tile-bar f-jb-ac">
       <div class="title-txt">确认收货地址</div>
       <div class="f-ac address-btn-group">
-        <div class="add-address-btn pointer">新建地址</div>
+        <div class="add-address-btn pointer" @click="handleaddress">新建地址</div>
         <div class="manage-address-btn pointer">管理地址</div>
       </div>
     </div>
     <div class="address-select-list f-jb-ac f-w">
       <div
-        class="address-item f-jb-ac pointer"
-        v-for="(item, index) in 3"
-        @click="switchaddress(index)"
-        :class="{ active: select_address_index == index }"
+        class="address-item f-ac pointer"
+        v-for="(item, ind) in tableData"
+        @click="switchaddress(ind)"
+        :class="{ active: select_address_index == ind }"
       >
         <div class="iconfont icon-ziyuan f-shrink0"></div>
         <div class="address-info">
           <div class="address-top-bar f-ac">
-            <div class="address-name">小明</div>
+            <div class="address-name">{{ item.name }}</div>
             <div class="address-phone f-ac">
-              <div class="phone-txt">13500100203</div>
-              <div v-if="index == 0" class="address-default">默认</div>
+              <div class="phone-txt">{{ item.mobile }}</div>
+              <div v-if="item.isDefault == 1" class="address-default">默认</div>
             </div>
           </div>
           <div class="address-text u-line-2">
-            山东省济南市历城区王舍人街(济南东站地 铁站出口步行120米)
+            {{ item.area + " " + item.address }}
           </div>
         </div>
         <div
-          v-if="select_address_index == index"
+          v-if="select_address_index == ind"
           @click.stop=""
           class="edit-address-btn pointer"
         >
@@ -44,14 +44,22 @@
         </div>
       </div>
     </div>
-    <VirtualCreateOrder :type="2" :data="product" />
+    <VirtualCreateOrder :type="2" :data="product" />el-cascader 根据文字回显
+    <AddressPopup ref="addressPopup" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import VirtualCreateOrder from "../VirtualOrder/index.vue";
-const select_address_index = ref(0);
+import { addresslist } from "@/api/usercenter";
+import { useUserStore } from "@/store/userStore";
+import { AddressType } from "@/utiles/types";
+import AddressPopup from "@/views/usercenter/menuitem/addressmanagement/components/AddressPopup/index.vue";
+
+onMounted(() => {
+  getAddressList();
+});
 
 const props = defineProps({
   type: {
@@ -64,6 +72,27 @@ const props = defineProps({
     default: {},
   },
 });
+
+const addressPopup = ref<InstanceType<typeof AddressPopup>>();
+const select_address_index = ref(0);
+const page = ref(1);
+const tableData = ref<AddressType[]>([]);
+const userStore = useUserStore();
+
+const getAddressList = async () => {
+  const { data, count } = await addresslist({
+    userId: userStore.userId,
+    page: page.value,
+  });
+  tableData.value = data.slice(0, 4);
+  console.log(tableData.value);
+};
+
+const handleaddress = () => {
+  if (addressPopup.value) {
+    addressPopup.value.addopen();
+  }
+};
 
 const switchaddress = (index: number) => {
   select_address_index.value = index;

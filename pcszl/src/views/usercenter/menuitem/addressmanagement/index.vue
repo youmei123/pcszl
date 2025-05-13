@@ -2,117 +2,80 @@
   <div>
     <div class="address-management-bar f-jb-ac">
       <div class="title">收货地址管理</div>
-      <div class="add-address-btn pointer" @click="addressDialogVisible = true">
-        添加地址
-      </div>
+      <div class="add-address-btn pointer" @click="hanldaddress">添加地址</div>
     </div>
     <div class="address-table">
       <el-table :data="tableData" border style="width: 100%" :table-layout="tableLayout">
         <el-table-column prop="name" label="收货人" width="180" align="center" />
         <el-table-column prop="mobile" label="手机号" width="180" align="center" />
-        <el-table-column prop="address" label="所在地区" align="center" />
-        <el-table-column prop="detailaddress" label="详细地址" align="center" />
+        <el-table-column prop="area" label="所在地区" align="center" />
+        <el-table-column prop="address" label="详细地址" align="center" />
         <el-table-column label="操作" align="center">
-          <template #default="{ row }"> 操作。。。 </template>
+          <template #default="{ row }">
+            <div class="btns-bar f-jb-ac pointer">
+              <div>编辑</div>
+              <div>删除</div>
+              <div :class="{ default: row.isDefault == 1 }">
+                {{ row.isDefault == 1 ? "默认地址" : "设为默认" }}
+              </div>
+            </div>
+          </template>
         </el-table-column>
       </el-table>
-    </div>
-    <el-dialog
-      v-model="addressDialogVisible"
-      title="添加收货地址"
-      width="470"
-      align-center
-    >
-      <div class="dialog-content">
-        <el-form
-          :model="addressform"
-          :rules="rules"
-          label-width="auto"
-          style="max-width: 400px"
-        >
-          <el-form-item label="地址信息" prop="address">
-            <!-- <el-input v-model="form.name" /> -->
-            <el-cascader
-              size="large"
-              :options="regionData"
-              ref="cascaderRef"
-              v-model="addressform.address"
-              @change="handleChange"
-              placeholder="请选择省市区"
-            ></el-cascader>
-          </el-form-item>
-          <el-form-item label="详细地址" prop="detailaddress">
-            <el-input v-model="addressform.detailaddress" />
-          </el-form-item>
-          <el-form-item label="收货人信息" prop="name">
-            <el-input v-model="addressform.name" />
-          </el-form-item>
-          <el-form-item label="手机号码" prop="mobile">
-            <el-input v-model="addressform.mobile" />
-          </el-form-item>
-        </el-form>
+      <div style="padding-top: 30px">
+        <Pagination
+          @changePage="handlePageChange"
+          :count="totalcount"
+          :currentPage="page"
+        />
       </div>
-      <template #footer>
-        <div class="save-btn pointer">保存</div>
-      </template>
-    </el-dialog>
+    </div>
+    <AddressPopup ref="addressPopup" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import type { TableInstance } from "element-plus";
-import { regionData } from "element-china-area-data";
+import { addresslist } from "@/api/usercenter";
+import { useUserStore } from "@/store/userStore";
+import { AddressType } from "@/utiles/types";
+import AddressPopup from "./components/AddressPopup/index.vue";
 
 const tableLayout = ref<TableInstance["tableLayout"]>("fixed");
 const addressDialogVisible = ref(false);
 
-const addressform = reactive({
-  name: "",
-  mobile: "",
-  address: "",
-  detailaddress: "",
+const page = ref(1);
+const tableData = ref<AddressType[]>([]);
+const totalcount = ref(0);
+const userStore = useUserStore();
+
+const addressPopup = ref<InstanceType<typeof AddressPopup>>();
+
+onMounted(() => {
+  getAddressList();
 });
 
-const tableData = ref([
-  {
-    mobile: "18766169804",
-    name: "小明",
-    address: "山东省 济南市 天桥区 宝华街道",
-    detailaddress: "堤口路68号名泉广场C座1904",
-  },
-]);
+const getAddressList = async () => {
+  const { data, count } = await addresslist({
+    userId: userStore.userId,
+    page: page.value,
+  });
+  tableData.value = data;
+  totalcount.value = count;
+  console.log(tableData.value);
+};
 
-const rules = reactive({
-  name: [{ required: true, message: "请输入收货人姓名", trigger: "blur" }],
-  address: [
-    {
-      required: true,
-      message: "请选择省/市/区/街道",
-      trigger: "blur",
-    },
-  ],
-  detailaddress: [
-    {
-      required: true,
-      message: "请输入详细地址信息",
-      trigger: "blur",
-    },
-  ],
-  mobile: [
-    {
-      required: true,
-      message: "请输入手机号码",
-      trigger: "blur",
-    },
-  ],
-});
+const hanldaddress = () => {
+  if (addressPopup.value) {
+    addressPopup.value.addopen();
+  }
+};
 
-const cascaderRef = ref<any>();
-
-const handleChange = (value: any) => {
-  const checkedNodes = cascaderRef.value.getCheckedNodes(false) || [];
-  console.log(checkedNodes[0].pathLabels.join(""));
+const handlePageChange = (p: number) => {
+  console.log(page);
+  page.value = p;
+  getAddressList();
 };
 </script>
 
@@ -142,13 +105,13 @@ const handleChange = (value: any) => {
 :deep(.el-cascader) {
   width: 318px;
 }
-.save-btn {
-  width: 200px;
-  height: 50px;
-  background: #fcdc46;
-  border-radius: 25px;
-  text-align: center;
-  line-height: 50px;
-  margin: 0 auto;
+
+.btns-bar div {
+  padding: 4px 4px;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+.default {
+  background-color: util.$ThemeColors;
 }
 </style>

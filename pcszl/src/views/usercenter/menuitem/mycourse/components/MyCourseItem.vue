@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-29 13:47:40
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 17:31:19
+ * @LastEditTime: 2025-05-13 10:51:33
  * @FilePath: \pcszl\src\views\usercenter\menuitem\mycourse\components\MyCourseItem.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -22,10 +22,14 @@
         <div class="f-jb-ac">
           <div class="progress" v-if="data.schedule">已看{{ data.schedule }}%</div>
           <div class="progress" v-else>未看</div>
-          <div class="continue-btn pointer" v-if="data.schedule && data.schedule > 0">
+          <div
+            class="continue-btn pointer"
+            @click="playcourse()"
+            v-if="data.schedule && data.schedule > 0"
+          >
             继续学习
           </div>
-          <div class="continue-btn pointer" v-else>开始学习</div>
+          <div class="continue-btn pointer" @click="playcourse()" v-else>开始学习</div>
         </div>
       </div>
     </div>
@@ -34,13 +38,34 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
-import { MyCourseType } from "@/utiles/types";
+import { useRouter } from "vue-router";
 const props = defineProps({
   data: {
     type: Object,
     default: {},
   },
 });
+const router = useRouter();
+const playcourse = () => {
+  if (props.data.szlWatchRecord) {
+    router.push({
+      path: "/coursevideo",
+      query: {
+        courseId: props.data.courseId,
+        watchTime: props.data.szlWatchRecord.watchTime,
+        videoId: props.data.szlWatchRecord.videoId,
+        videoClassifyId: props.data.szlWatchRecord.videoClassifyId||0,
+      },
+    });
+  } else {
+    router.push({
+      path: "/coursevideo",
+      query: {
+        courseId: props.data.courseId,
+      },
+    });
+  }
+};
 </script>
 
 <style lang="scss" scoped>

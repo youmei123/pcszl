@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 13:44:30
+ * @LastEditTime: 2025-05-13 10:58:22
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -38,6 +38,9 @@
             :ispay="ispay"
             :classifyCount="course?.classifyCount"
             :courseId="course.id"
+            :continue_watchtime="continue_watchtime"
+            :continue_videoId="continue_videoId"
+            :continue_videoClassifyId="continue_videoClassifyId"
             @ActiveVideo="handleActiveVideo"
           />
         </div>
@@ -123,6 +126,10 @@ const videoCatalogue = ref<InstanceType<typeof VideoCatalogue> | null>(null); //
 const ispay = ref(false); //是否需要付费
 const RecommendedCourseList = ref<CourseListType[]>([]); //推荐课程列表
 const re_loading = ref(false); //推荐课程列表加载状态
+
+const continue_watchtime: number = Number(route.query.watchTime) || 0; //继续观看时长
+const continue_videoId: string = (route.query.videoId as string) || ""; //继续观看的视频id
+const continue_videoClassifyId: string = (route.query.videoClassifyId as string) || ""; //继续观看的视频分类id
 
 const getSingleCourse = async () => {
   const { data } = await singleCourse({
