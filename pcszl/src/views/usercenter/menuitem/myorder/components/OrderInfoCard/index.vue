@@ -12,59 +12,110 @@
     <div class="order-info-list">
       <div class="item-bar f-jb-ac">
         <div class="order-label">商品总价:</div>
-        <div class="order-value">￥336</div>
+        <div class="order-value">￥{{(order.truePrice - orderPrice).toFixed(2)}}</div>
       </div>
       <div class="item-bar f-jb-ac">
         <div class="order-label">订单运费:</div>
-        <div class="order-value">￥0</div>
+        <div class="order-value">￥{{ orderPrice }}</div>
       </div>
       <div class="item-bar f-jb-ac">
-        <div class="order-label">实付款:</div>
-        <div class="order-value" style="color: #fb2b1e">￥336</div>
+        <div class="order-label">{{order.status==0?'需付款：':'实付款：'}}</div>
+        <div class="order-value" style="color: #fb2b1e">￥{{ priceNum }}</div>
       </div>
     </div>
     <div class="other-info-list">
       <div class="other-item f-jb-ac">
         <div class="other-label">订单编号：</div>
-        <div class="other-value">20031023301</div>
+        <div class="other-value">{{order.orderNo}}</div>
       </div>
       <div class="other-item f-jb-ac">
         <div class="other-label">下单时间：</div>
-        <div class="other-value">2025-1-10 10:56:13</div>
+        <div class="other-value">{{order.addtime}}</div>
       </div>
-      <div class="other-item f-jb-ac">
+      <div class="other-item f-jb-ac" v-if="order.payTime">
         <div class="other-label">付款时间：</div>
-        <div class="other-value">2025-1-10 10:56:18</div>
+        <div class="other-value">{{order.payTime}}</div>
       </div>
       <div class="other-item f-jb-ac">
         <div class="other-label">支付方式：</div>
-        <div class="other-value">微信支付</div>
+        <div class="other-value">{{order.payType==0?'微信支付':order.payType==1?'APP支付':'快手支付'}}</div>
       </div>
-      <div class="other-item f-jb-ac">
+      <div class="other-item f-jb-ac" v-if="order.deliveryTime">
         <div class="other-label">发货时间：</div>
-        <div class="other-value">2025-1-10 10:56:18</div>
+        <div class="other-value">{{order.deliveryTime}}</div>
       </div>
-      <div class="other-item f-jb-ac">
+      <div class="other-item f-jb-ac" v-if="order.deliveryName" >
         <div class="other-label">物流公司：</div>
-        <div class="other-value">邮政</div>
+        <div class="other-value">{{order.deliveryName}}</div>
       </div>
-      <div class="other-item f-jb-ac">
+      <div class="other-item f-jb-ac" v-if="order.deliveryNumber">
         <div class="other-label">快递单号：</div>
-        <div class="other-value">20031023301</div>
+        <div class="other-value">{{order.deliveryNumber}}</div>
       </div>
-      <div class="other-item f-jb-ac">
+      <div class="other-item f-jb-ac" v-if="order.remark">
         <div class="other-label">备注：</div>
-        <div class="other-value">无</div>
+        <div class="other-value">{{order.remark}}</div>
       </div>
     </div>
     <div class="switch-bar f-je-ac">
-      <div class="none-btn pointer" @click="$emit('handlebtnchange','联系客服')" >联系客服</div>
+      <div class="none-btn pointer" @click="$emit('handlebtnchange','取消订单')" v-if="order.status==0">
+        取消订单
+      </div>
+      <div class="none-btn order-pay-btn-bg pointer" @click="$emit('handlebtnchange','付款')" v-if="order.status==0">
+        付款
+      </div>
+      <div class="none-btn pointer" @click="$emit('handlebtnchange','联系客服')" v-if="order.status!=0">
+        联系客服
+      </div>
+      <div class="none-btn pointer" @click="$emit('handlebtnchange','取消退款')" 
+        v-if="aftersaleList.refundStatus==0 && !aftersaleList.deliveryNumber">
+        取消退款
+      </div>
+      <div class="none-btn pointer" @click="urge()" 
+        v-if="order.status==3 && (!aftersaleList.id || aftersaleList.refundStatus==2 || tabIndex!=5)">
+        催发货
+      </div>
+      <div class="none-btn pointer" @click="$emit('handlebtnchange','确认收货')" 
+        v-if="order.status==4 && (!aftersaleList.id || aftersaleList.refundStatus==2 || aftersaleList.refundStatus==1) && tabIndex!=5">
+        确认收货
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
+import { ElMessage, ElMessageBox } from 'element-plus'
+const props = defineProps({
+  order:{
+    type: Object,
+    default: {}
+  },
+  aftersaleList:{
+    type:Object,
+    default:{}
+  },
+  orderPrice:{
+    type:Number,
+    default:0
+  },
+  priceNum:{
+    type:String,
+    default:""
+  },
+  tabIndex:{
+    type:Number,
+    default:0
+  }
+});
+
+// 催发货
+const urge = () => {
+  ElMessage({
+    type: 'success',
+    message: '平台已为您跟进！',
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -107,5 +158,13 @@ import { ref, reactive, onMounted } from "vue";
   text-align: center;
   line-height: 50px;
   margin-top: 20px;
+  margin-left: 15px;
+}
+.order-pay-btn-bg {
+  background: util.$ThemeColors;
+  border: none;
+}
+.switch-bar :first-child{
+  margin-left: 0 !important;
 }
 </style>

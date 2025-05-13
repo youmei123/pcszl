@@ -119,3 +119,40 @@ export interface ProductType {
     description?:string
 }
 
+/**
+ * 订单类型      
+ */
+export interface ordersType {
+    id: string; 
+    productId:string;
+    productName:string;
+    productImg:string;
+    status:number;
+    orderType:number;
+    orderNo:string;
+    productPrice:number;
+    truePrice:number;
+    isEntity:number;
+    healthcoinCount:number;
+    couponMoney:number;
+    count:number;
+    addtime:number;
+    aftersaleIsShow:number;
+    refundStatus:number;
+    aftersaleId:string;
+    deliveryNumber:string;
+    aftersaleStatus:number;
+    consignee:string;
+    consigneeAddress:string;
+    consigneeMobile:string;
+    aftersaleList:Array<aftersale>;
+    deliveryName:string;
+    payTime:number;
+}
+// 售后类型
+export interface aftersale{
+    id:string;
+    refundStatus:number;
+    status:number;
+}
+
