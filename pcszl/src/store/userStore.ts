@@ -25,6 +25,9 @@ export const useUserStore = defineStore('user', {
         setUserId(userId: string) {
             this.userId = userId;
         },
+        resetState(){
+            this.$reset()
+        }
     },
     // 开启持久化
     persist: {

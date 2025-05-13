@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 17:03:23
+ * @LastEditTime: 2025-05-13 17:29:10
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,9 +42,17 @@
             <div class="head-bar f-ac">
               <div class="user-head-img">
                 <img v-if="headImg" :src="headImg" alt="" />
+                <img
+                  v-else
+                  src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2023/4/26/8589512583855728879/tx.png"
+                  alt=""
+                />
               </div>
               <div class="user-info">
-                <div class="user-name e-line-1">{{ nickname }}</div>
+                <div class="user-name e-line-1" v-if="nickname">{{ nickname }}</div>
+                <div class="user-name e-line-1 pointer" v-else @click="handlelogin">
+                  点击登录
+                </div>
                 <!-- <div class="vip-end-time">会员至：2024-12-31 ></div> -->
               </div>
             </div>
@@ -114,10 +122,12 @@ import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore";
 import { statisticsWatchRecord } from "@/api/usercenter";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { getCurrentInstance } from "vue";
+const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
 
 const userStore = useUserStore();
-const nickname = userStore.UserInfo.nickname;
-const headImg = userStore.UserInfo.headImg;
+const nickname = ref(userStore.UserInfo.nickname);
+const headImg = ref(userStore.UserInfo.headImg);
 
 defineProps({
   moretext: {
@@ -143,12 +153,28 @@ const handmenu = (item: any) => {
 };
 
 const linusercenter = () => {
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    ElMessage({
+      type: "warning",
+      message: "请先登录",
+    });
+    return;
+  }
   router.push({
     path: "/usercenter/mycourse",
   });
 };
 
 const linmmyorder = () => {
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    ElMessage({
+      type: "warning",
+      message: "请先登录",
+    });
+    return;
+  }
   router.push({
     path: "/usercenter/myorder",
   });
@@ -195,6 +221,7 @@ const record = ref({
 });
 
 const handleBeforeEnter = async () => {
+  if (!userStore.userId) return;
   console.log("before enter");
   const { data } = await statisticsWatchRecord({
     userId: userStore.userId,
@@ -203,23 +230,39 @@ const handleBeforeEnter = async () => {
   console.log(data);
 };
 
+const handlelogin = () => {
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    return;
+  }
+};
+
 const hanldoutlogin = () => {
-  ElMessageBox.confirm("proxy will permanently delete the file. Continue?", "Warning", {
-    confirmButtonText: "OK",
-    cancelButtonText: "Cancel",
+  ElMessageBox.confirm("是否要退出登录？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
     type: "warning",
   })
     .then(() => {
+      userStore.resetState();
+      nickname.value = "";
+      headImg.value = "";
+      record.value = {
+        todayWatchTime: 0,
+        totalWatchTime: 0,
+        totalWatchTimeMin: 0,
+        watchRecordCount: 0,
+      };
       ElMessage({
         type: "success",
-        message: "Delete completed",
+        message: "已退出登录",
       });
     })
     .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "Delete canceled",
-      });
+      // ElMessage({
+      //   type: "info",
+      //   message: "Delete canceled",
+      // });
     });
 };
 </script>
