@@ -12,20 +12,15 @@
       <div class="breadcrumb-cont">
         <el-breadcrumb :separator-icon="DArrowRight">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/usercenter/myorder' }"
-            >我的订单</el-breadcrumb-item
-          >
+          <el-breadcrumb-item :to="{ path: '/usercenter/myorder' }">我的订单</el-breadcrumb-item>
           <el-breadcrumb-item>订单详情</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div class="refund-content f-jb-as">
         <div class="refund-left">
           <div class="refund-status-cont f-jb-ac">
-            <div
-              class="refund-status-item"
-              :class="{ active: currentstatus > index }"
-              v-for="(item, index) in refundstatuslist"
-            >
+            <div class="refund-status-item" v-for="(item, index) in refundstatuslist" :key="index"
+              :class="{ active: currentstatus > index }">
               {{ item }}
             </div>
           </div>
@@ -69,6 +64,7 @@ const currentstatus = ref(3);
   padding: 15px 0;
   box-sizing: border-box;
 }
+
 .refund-left {
   width: 810px;
   background: #ffffff;
@@ -76,6 +72,7 @@ const currentstatus = ref(3);
   padding: 30px;
   box-sizing: border-box;
 }
+
 .refund-status-item {
   width: 180px;
   height: 50px;
@@ -84,9 +81,11 @@ const currentstatus = ref(3);
   text-align: center;
   line-height: 50px;
 }
+
 .active {
   background: util.$ThemeColors;
 }
+
 .refund-form-cont {
   padding-top: 20px;
   box-sizing: border-box;
