@@ -52,17 +52,18 @@
           <div class="none-btn pointer">再买一单</div>
           <div class="none-btn pointer" @click="handlebtnchange('联系客服')" v-if="order.status==0">联系客服</div>
           <div class="none-btn pointer" @click="afterSales()" v-if="order.aftersaleIsShow==1 && isopen==1">申请售后</div>
-          <div class="color-btn pointer" v-if="aftersaleList.refundStatus==0 && tabIndex==5">退款中</div>
-          <div class="color-btn pointer" v-if="aftersaleList.refundStatus==1 && (aftersaleList.status!=3 && aftersaleList.status!=4) && tabIndex==5">退款完成</div>
+          <div class="color-btn pointer" @click="linkToRefundPage()" v-if="aftersaleList.refundStatus==0 && tabIndex==5">退款中</div>
+          <div class="color-btn pointer" @click="linkToRefundPage()" v-if="aftersaleList.refundStatus==1 && (aftersaleList.status!=3 && aftersaleList.status!=4) && tabIndex==5">退款完成</div>
           <div class="none-btn pointer" v-if="aftersaleList.refundStatus==2">已取消</div>
           <div class="none-btn pointer" v-if="(aftersaleList.status==3 || aftersaleList.status==4) && tabIndex==5">拒绝退款</div>
         </div>
       </div>
       <div class="detail-right">
-        <OrderInfoCard :order="order" :aftersaleList="aftersaleList" :orderPrice="orderPrice" :priceNum="priceTotal" :tabIndex="tabIndex" @handlebtnchange="handlebtnchange" />
+        <OrderInfoCard :order="order" :aftersaleList="aftersaleList" :orderPrice="orderPrice" :priceNum="priceTotal" :tabIndex="tabIndex" :isbutton="true" 
+          @handlebtnchange="handlebtnchange" />
       </div>
     </div>
-    <RefundPopuo :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
+    <RefundPopuo :order="order" :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
   </div>
 </template>
 
@@ -70,7 +71,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { DArrowRight } from "@element-plus/icons-vue";
 import OrderInfoCard from "../components/OrderInfoCard/index.vue";
-import RefundPopuo from "../components/RefundPopup/index.vue";
+import RefundPopuo from "@/views/usercenter/menuitem/myorder/components/RefundPopup/index.vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   singleOrdersById,
@@ -79,11 +80,12 @@ import {
   updateDeliveryOrder,
   aftersaleCancel,
  } from "@/api/order";
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 import { ordersType,aftersale } from "@/utiles/types";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
 const route = useRoute();
+const router = useRouter();
 const isshowRefundPopuo = ref(false);//是否显示退款弹窗
 const orderId = ref(route.query.orderId);//订单id
 const tabIndex = ref(Number(route.query.tabIndex));//当前tab索引
@@ -122,7 +124,7 @@ const handlebtnchange = (type: string) => {
 
   }
   if(type == "联系客服"){
-    isshowRefundPopuo.value = true;
+    
   }
   if(type == "取消退款"){
     revoke()
@@ -131,6 +133,7 @@ const handlebtnchange = (type: string) => {
     receivegoods()
   }
 };
+// 申请售后
 const afterSales = ()=>{
   if(isOverOneMonth(order.value.payTime)){
     return
@@ -141,10 +144,18 @@ const afterSales = ()=>{
   if(order.value.isEntity==1){
     isshowRefundPopuo.value = true;
   }else{
-
+   linkToRefundPage()
   }
 }
-
+// 售后跳转
+const linkToRefundPage = () => {
+  router.push({
+    path:"/orderrefund",
+    query:{
+      orderId:order.value.id,
+    }
+  });
+};
 // 取消订单
 const cancelOrder=async()=>{
    ElMessageBox.confirm(

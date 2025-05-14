@@ -20,22 +20,25 @@
         <div class="refund-left">
           <div class="refund-status-cont f-jb-ac">
             <div class="refund-status-item" v-for="(item, index) in refundstatuslist" :key="index"
-              :class="{ active: currentstatus > index }">
+              :class="{ 'active': currentstatus > index }">
               {{ item }}
             </div>
           </div>
-          <div class="refund-form-cont" v-if="false">
-            <RefundForm />
+          <div class="refund-form-cont" v-show="currentstatus==1">
+            <RefundForm ref="RefundForms" :order="order" :type="type" @Refund="Refund" />
           </div>
-          <div class="refund-Steps-cont">
-            <RefundSteps />
+          <div class="refund-Steps-cont" v-show="currentstatus!=1">
+            <RefundSteps  :order="order" :single="single" @Steps="Steps" />
           </div>
-          <div class="refun-info-box-cont">
+          <div class="refun-info-box-cont" v-show="currentstatus!=1">
             <RefunInfoBox />
+          </div>
+          <div v-if="SingleLoading">
+            <loading :translateY="50"  color="#FCDC46" active text="正在加载中..." :height="400" />
           </div>
         </div>
         <div class="refund-right">
-          <OrderInfoCard />
+          <OrderInfoCard :order="order" :aftersaleList="aftersaleList" :orderPrice="orderPrice" :priceNum="priceTotal" />
         </div>
       </div>
     </div>
@@ -49,14 +52,118 @@ import OrderInfoCard from "../components/OrderInfoCard/index.vue";
 import RefundForm from "../components/RefundForm/index.vue";
 import RefunInfoBox from "../components/RefundInfoBox/index.vue";
 import RefundSteps from "../components/RefundSteps/index.vue";
-
-const refundstatuslist = reactive([
+import { useRoute,useRouter } from 'vue-router';
+import { ordersType,aftersale } from "@/utiles/types";
+import {
+  singleOrdersById,
+  postage,
+  aftersaleSingle
+ } from "@/api/order";
+import { useUserStore } from "@/store/userStore";
+const userStore = useUserStore();
+const refundstatuslist = ref([
   "1买家申请退款",
   "2卖家处理退款申请",
   "3寄回商品",
   "4退款完毕",
 ]);
-const currentstatus = ref(3);
+const RefundForms=ref(<any>null)
+const currentstatus = ref(1);//当前进度
+const route = useRoute();
+const orderId = ref(route.query.orderId)
+const order = ref(<ordersType>{})
+const orderPrice = ref(0)//运费
+const aftersaleList = ref(<aftersale>{})//售后信息
+const priceTotal =ref("")//需付款
+const type=ref(<number>1)//1仅退款 2退货退款
+const SingleLoading = ref(false);//加载
+const single=ref(<aftersale>{})
+// 订单详情
+const singleOrders=async ()=>{
+  const res = await singleOrdersById({
+    orderId:orderId.value,
+  });
+  if(res.status==0){
+    order.value=res.data
+    type.value=order.value.isEntity==1?Number(route.query.type):1
+    priceNum()
+    if(order.value.isEntity==1){
+      refundstatuslist.value=["1买家申请退款","2卖家处理退款申请","3寄回商品","4退款完毕"]
+    }else{
+      refundstatuslist.value=["1买家申请退款","2卖家处理退款申请","4退款完毕"]
+    }
+    if(order.value.consigneeAddress){
+      getOrderPrice()
+    }
+    if(order.value.aftersaleList && order.value.aftersaleList.length!=0){
+      aftersaleList.value=order.value.aftersaleList[0]
+      getSingle()
+    }else{
+      aftersaleList.value=<aftersale>{}
+      currentstatus.value=1
+      RefundForms.value.onMountedClick()
+    }
+  }
+}
+// 获取售后详情
+const getSingle =async ()=>{
+  SingleLoading.value=true
+  const res = await aftersaleSingle({
+    id:aftersaleList.value.id,
+    userId: userStore.userId,
+    token: userStore.token,
+  });
+  SingleLoading.value=false
+  if(res.status==0){
+    currentstatus.value=2
+    single.value=res.data
+  }
+}
+// 退款申请返回
+const Refund = ()=>{
+  currentstatus.value=2
+  singleOrders()
+}
+// 退款步骤返回
+const Steps = ()=>{
+  singleOrders()
+}
+// 获取运费
+const getOrderPrice= async ()=>{
+  if(!order.value.consigneeAddress || 
+    (!order.value.consigneeAddress.includes("西藏自治区") && !order.value.consigneeAddress.includes("新疆维吾尔自治区"))){
+    orderPrice.value=0
+    return
+  }
+  let text=''
+  if(order.value.consigneeAddress.includes("西藏自治区")){
+    text='西藏'
+  }else if(order.value.consigneeAddress.includes("新疆维吾尔自治区")){
+    text='新疆'
+  }
+   const res = await postage({
+    address:text
+  });
+  if (res.status == '0') {
+   orderPrice.value=Number(res.data)
+  }
+}
+// 计算需付金额
+const priceNum=()=>{
+  let coinNumPrice:any=0
+  let couponMoney:any=0
+  if(order.value.healthcoinCount){
+    coinNumPrice=(order.value.healthcoinCount/10000).toFixed(2)
+  }
+  if(order.value.couponMoney){
+    couponMoney=order.value.couponMoney
+  }
+  let price:any=(order.value.truePrice*order.value.count).toFixed(2)
+  priceTotal.value=(price - coinNumPrice - couponMoney).toFixed(2)
+}
+onMounted(() => {
+  singleOrders()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -71,6 +178,7 @@ const currentstatus = ref(3);
   border-radius: 10px;
   padding: 30px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .refund-status-item {

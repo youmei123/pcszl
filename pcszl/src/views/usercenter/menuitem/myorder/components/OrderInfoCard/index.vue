@@ -23,18 +23,18 @@
         <div class="order-value" style="color: #fb2b1e">￥{{ priceNum }}</div>
       </div>
     </div>
-    <div class="other-info-list">
+    <div class="other-info-list" :class="{'falseBorder':!isbutton}">
       <div class="other-item f-jb-ac">
         <div class="other-label">订单编号：</div>
         <div class="other-value">{{order.orderNo}}</div>
       </div>
       <div class="other-item f-jb-ac">
         <div class="other-label">下单时间：</div>
-        <div class="other-value">{{order.addtime}}</div>
+        <div class="other-value">{{ timeFormat(order.addtime,'yyyy-mm-dd hh:MM:ss')}}</div>
       </div>
       <div class="other-item f-jb-ac" v-if="order.payTime">
         <div class="other-label">付款时间：</div>
-        <div class="other-value">{{order.payTime}}</div>
+        <div class="other-value">{{ timeFormat(order.payTime,'yyyy-mm-dd hh:MM:ss') }}</div>
       </div>
       <div class="other-item f-jb-ac">
         <div class="other-label">支付方式：</div>
@@ -42,7 +42,7 @@
       </div>
       <div class="other-item f-jb-ac" v-if="order.deliveryTime">
         <div class="other-label">发货时间：</div>
-        <div class="other-value">{{order.deliveryTime}}</div>
+        <div class="other-value">{{ timeFormat(order.deliveryTime,'yyyy-mm-dd hh:MM:ss')}}</div>
       </div>
       <div class="other-item f-jb-ac" v-if="order.deliveryName" >
         <div class="other-label">物流公司：</div>
@@ -57,7 +57,7 @@
         <div class="other-value">{{order.remark}}</div>
       </div>
     </div>
-    <div class="switch-bar f-je-ac">
+    <div class="switch-bar f-je-ac" v-if="isbutton">
       <div class="none-btn pointer" @click="$emit('handlebtnchange','取消订单')" v-if="order.status==0">
         取消订单
       </div>
@@ -86,6 +86,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { timeFormat } from "@/utiles/public"
 const props = defineProps({
   order:{
     type: Object,
@@ -106,6 +107,10 @@ const props = defineProps({
   tabIndex:{
     type:Number,
     default:0
+  },
+  isbutton:{
+    type:Boolean,
+    default:false
   }
 });
 
@@ -145,6 +150,10 @@ const urge = () => {
   padding: 15px 0;
   box-sizing: border-box;
   border-bottom: 1px solid #dddddd;
+}
+.falseBorder{
+  border-bottom: none;
+  padding: 15px 0 0;
 }
 .other-item {
   line-height: 35px;

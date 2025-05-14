@@ -169,5 +169,12 @@ export interface aftersale{
     id:string;
     refundStatus:number;
     status:number;
+    aftersaleCompanyAddress:{
+        name:string;
+        mobile:string;
+        address:string;
+        id:string;
+    },
+    statusText:string;
 }
 

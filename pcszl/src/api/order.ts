@@ -27,3 +27,23 @@ export const singleOrdersById = (data: any) => {
 export const postage = (data: any) => {
     return request.get<any>('/api/express/postage', data);
 };
+//退款理由
+export const reasonList = (data: any) => {
+    return request.get<any>('/api/szl/orders/aftersale/reason/list', data);
+};
+//申请退款
+export const aftersaleSubmit = (data: any) => {
+    return request.post<any>('/api/szl/orders/aftersale/submit', data);
+};
+//售后详情
+export const aftersaleSingle = (data: any) => {
+    return request.get<any>('/api/szl/orders/aftersale/single', data);
+};
+//实货退款 地址
+export const aftersaleAddress = (data: any) => {
+    return request.post<any>('/api/szl/orders/aftersale/update', data);
+};
+//快递公司
+export const companyCodeList = (data: any) => {
+    return request.get<any>('/api/express/companyCodeList', data);
+};

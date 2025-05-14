@@ -10,12 +10,14 @@
   <div class="shad-box" v-if="visible" @click="$emit('close')">
     <div @click.stop class="popup-content">
       <div class="title-bar f-jb-ac">
-        <div class="title-txt">商品已发货，邮政快递包裹：9805708781267</div>
-        <div class="pointer">
+        <div class="title-txt" v-if="order.status==1">商品已确认收货，{{order.deliveryName}}包裹:{{order.deliveryNumber}}</div>
+        <div class="title-txt" v-if="order.status==3">商品还未发货</div>
+        <div class="title-txt" v-if="order.status==4">商品已发货，{{order.deliveryName}}包裹:{{order.deliveryNumber}}</div>
+        <div class="pointer" v-if="order.status==4">
           <el-icon :size="24" color="#B1B1B1"><ArrowRight /></el-icon>
         </div>
       </div>
-      <div class="refund-bar f-jb-ac">
+      <div class="refund-bar f-jb-ac"  @click="linkToRefundPage(1)">
         <div class="f-ac">
           <div class="iconfont icon-tuihuo"></div>
           <div class="refund-txt">
@@ -23,11 +25,11 @@
             <div>未收到货，或与商家协商之后申请</div>
           </div>
         </div>
-        <div class="pointer" @click="linkToRefundPage">
+        <div class="pointer">
           <el-icon :size="24" color="#B1B1B1"><ArrowRight /></el-icon>
         </div>
       </div>
-      <div class="refund-bar f-jb-ac">
+      <div class="refund-bar f-jb-ac" @click="linkToRefundPage(2)">
         <div class="f-ac">
           <div class="iconfont icon-tuihuo1"></div>
           <div class="refund-txt">
@@ -47,15 +49,39 @@
 import { ref, reactive, onMounted } from "vue";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
-defineProps({
+import { ElMessage, ElMessageBox } from 'element-plus'
+const props = defineProps({
   visible: {
     type: Boolean,
     default: false,
   },
+  order:{
+    type: Object,
+    default: {}
+  }
 });
 const router = useRouter();
-const linkToRefundPage = () => {
-  router.push("/orderrefund");
+const linkToRefundPage = (type: number) => {
+  if(props.order.value.status==1 && type==1){
+      ElMessage({
+        type: 'warning',
+        message: '当前已确认收货，请选择退货退款！',
+      })
+      return
+  }else if(props.order.value.status==3 && type==2){
+      ElMessage({
+        type: 'warning',
+        message: '暂未发货，请选择退款！',
+      })
+      return
+  }
+  router.push({
+    path:"/orderrefund",
+    query:{
+      orderId:props.order.value.id,
+      type:type
+    }
+  });
 };
 </script>
 

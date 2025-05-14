@@ -11,7 +11,8 @@
     <div class="order-tabs-content">
       <el-tabs v-model="activeIndex" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane v-for="(item, index) in tablist" :key="index" :label="item" :name="index">
-          <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading" :isopen="isopen" @changeGetList="getList"  />
+          <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading" :isopen="isopen" 
+            @changeGetList="getList" @Popup="Popup"  />
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 20px">
@@ -21,6 +22,7 @@
           :currentPage="pageNo" />
       </div>
     </div>
+    <RefundPopup :order="itemData" :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
   </div>
 </template>
 
@@ -34,6 +36,8 @@ import {
   isRefund,
  } from "@/api/order";
 import { useUserStore } from "@/store/userStore";
+import RefundPopup from "@/views/usercenter/menuitem/myorder/components/RefundPopup/index.vue";
+import { ordersType } from "@/utiles/types";
 const userStore = useUserStore();
 const tablist = reactive(["全部", "待付款", "待发货", "待收货", "已完成", "售后"]);
 const activeIndex = ref(0);//当前订单状态
@@ -42,6 +46,8 @@ const totalcount = ref(0); // 总条数
 const listLoading = ref(false);//加载
 const orderList = reactive([]); // 订单列表
 const isopen = ref(0)//是否有售后权限
+const isshowRefundPopuo = ref(false);//是否显示退款弹窗
+const itemData =ref(<ordersType>{})
 
 // tab切换
 const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -109,7 +115,10 @@ const getIsOpen = async ()=>{
   });
   isopen.value = data || 0;
 }
-
+const Popup = (item:any)=>{
+  itemData.value=item
+  isshowRefundPopuo.value=true
+}
 onMounted(() => {
   getList()
   getIsOpen()

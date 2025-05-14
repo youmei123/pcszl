@@ -72,7 +72,7 @@
               v-if="tabIndex!=5 && item.status==4 && (!item.aftersaleId || item.refundStatus==2 || item.aftersaleStatus==3 || item.aftersaleStatus==4)">
               确认收货
             </div>
-            <div class="order-none-btn pointer" v-if="item.aftersaleIsShow==1 &&isopen==1">
+            <div class="order-none-btn pointer" @click="afterSales(item)" v-if="item.aftersaleIsShow==1 &&isopen==1">
               申请售后
             </div>
             <div class="order-none-btn pointer" v-if="item.status==0" @click="cancelOrder(item)">
@@ -92,13 +92,11 @@
       <el-empty v-else description="暂无数据" />
     </div>
   </div>
-
 </template>
 
 <script lang="ts" setup>
 import { 
   ordersCancel,
-  aftersaleCancel,
   updateDeliveryOrder,
  } from "@/api/order";
 import { ref, reactive, onMounted } from "vue";
@@ -108,9 +106,8 @@ import { defineEmits } from 'vue';
 import { ordersType } from "@/utiles/types";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
-const emit = defineEmits(['changeGetList']);
+const emit = defineEmits(['changeGetList','Popup']);
 const router = useRouter();
-
 const props = defineProps({
   tabIndex: {
     type: Number,
@@ -226,6 +223,36 @@ const receivegoods =(item:any)=>{
 // 付款
 const submitpay =(item:any)=>{
 
+}
+// 申请售后
+const afterSales = (item:any)=>{
+  if(isOverOneMonth(item.payTime)){
+    return
+  }
+  if(!item.payTime && isOverOneMonth(item.addtime)){
+    return
+  }
+  if(item.isEntity==1){
+    emit('Popup',item)
+  }else{
+   linkToRefundPage(item)
+  }
+}
+// 售后跳转
+const linkToRefundPage = (item:any) => {
+  router.push({
+    path:"/orderrefund",
+    query:{
+      orderId:item.id,
+    }
+  });
+};
+// 订单从支付时间开始是否超过一个月
+const isOverOneMonth = (payTime:any)=>{
+  let currentTime = Date.now(); // 当前时间戳，单位是毫秒
+  let oneMonthInMillis = 30 * 24 * 60 * 60 * 1000; // 30天的毫秒数
+  // 比较当前时间与给定时间戳差值是否超过一个月
+  return (currentTime - payTime) > oneMonthInMillis;
 }
 </script>
 
