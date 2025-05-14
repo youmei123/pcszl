@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:34
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 16:40:01
+ * @LastEditTime: 2025-05-14 16:09:48
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\VirtualOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,13 +27,7 @@
         <div class="product-count" style="flex: 3.3">
           <div class="price-label">数量</div>
           <div v-if="type === 1">1</div>
-          <el-input-number
-            v-else
-            v-model="num"
-            :min="1"
-            :max="10"
-            @change="handleChange"
-          />
+          <el-input-number v-else v-model="num" :min="1" @change="handleChange" />
         </div>
         <div class="all-price" style="flex: 3.3">
           <div class="price-label">商品总价</div>
@@ -63,8 +57,8 @@
       >
         <div>配送服务</div>
         <div class="Delivery-info f-jb-ac">
-          <div>快递 包邮</div>
-          <div class="Delivery-price">￥0</div>
+          <div>快递</div>
+          <div class="Delivery-price">￥{{freightcharges}}</div>
         </div>
       </div>
     </div>
@@ -77,6 +71,10 @@ import { ref, reactive, onMounted } from "vue";
 const num = ref(1);
 const textarea = ref("");
 
+const emits = defineEmits<{
+  (event: "productchange", {}): void;
+}>();
+
 const props = defineProps({
   type: {
     //1是虚拟   2是实体
@@ -87,11 +85,31 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  freightcharges:{ //运费
+    type: Number,
+    default: 0,
+  }
 });
-
+console.log(props.data);
 const handleChange = (value: number | undefined) => {
   console.log(value);
+  emits("productchange", {
+    count: value,
+    remake: textarea.value,
+    price: props.data.price,
+  });
 };
+const getInfo = () => {
+  return {
+    remake: textarea.value,
+    count: num.value,
+    price: props.data.price,
+  };
+};
+
+defineExpose({
+  getInfo,
+});
 </script>
 
 <style lang="scss" scoped>

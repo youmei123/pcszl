@@ -9,8 +9,24 @@
       </div>
       <div class="submit-order-content f-jb-as">
         <div class="submit-order-left" v-if="course || product">
-          <VirtualOrder v-if="types == 1" :type="1" :course="course" />
-          <EntityCreateOrder :product="product" v-else />
+          <div v-if="types == 1">
+            <VirtualOrder
+              ref="virtualOrder"
+              :type="types"
+              :data="course"
+              @productchange="productchange"
+            />
+          </div>
+          <div v-else>
+            <EntityCreateOrder :product="product" @addresschange="addresschange" />
+            <VirtualOrder
+              ref="virtualOrder"
+              :type="types"
+              :data="product"
+              :freightcharges="freightcharges"
+              @productchange="productchange"
+            />
+          </div>
         </div>
         <el-affix :offset="145" target=".submit-order-content">
           <div class="submit-order-right">
@@ -18,18 +34,20 @@
             <div class="row-list">
               <div class="row-item f-jb-ac">
                 <div>商品总价:</div>
-                <div>￥336</div>
+                <div v-if="types == 1">￥{{ course?.coursePrice }}</div>
+                <div v-else>￥{{ product?.price }}</div>
               </div>
               <div class="row-item f-jb-ac">
                 <div>订单运费:</div>
-                <div>￥0</div>
+                <div>￥{{ freightcharges }}</div>
               </div>
               <div class="row-item f-jb-ac">
                 <div>需付款:</div>
-                <div class="price">￥336</div>
+                <div class="price" v-if="types == 1">￥{{ course?.coursePrice }}</div>
+                <div class="price" v-else>￥{{ paycount * (product?.price || 0) }}</div>
               </div>
               <div class="row-item f-jb-ac">
-                <div>商品总价:</div>
+                <div>支付方式:</div>
                 <div class="f-ac">
                   <div class="iconfont icon-weixinzhifu"></div>
                   <div>微信支付</div>
@@ -41,6 +59,20 @@
         </el-affix>
       </div>
     </div>
+    <el-dialog
+      v-model="PayQrcodeDialogVisible"
+      title="支付二维码"
+      width="350"
+      align-center
+      :close-on-click-modal="false"
+    >
+      <div class="dialog-content f-jc-ac">
+        <qrcode-vue :value="qrcodeurl" :size="300" class="qrcode-container" />
+      </div>
+      <template #footer>
+        <div class="buy-btn pointer" @click="paysuccess">已完成支付</div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -48,21 +80,37 @@
 import { DArrowRight } from "@element-plus/icons-vue";
 import EntityCreateOrder from "../submitorder/components/EntityCreateOrder/index.vue";
 import VirtualOrder from "../submitorder/components/VirtualOrder/index.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { singleCourse } from "@/api/course";
 import { submitSingle } from "@/api/usercenter";
+import { postage } from "@/api/order";
 import { useUserStore } from "@/store/userStore";
 import { CourseListType } from "@/utiles/types";
 import { ProductType } from "@/utiles/types";
-import { ref, reactive, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { singleproduct } from "@/api/mall";
+import { ElMessage } from "element-plus";
+import QrcodeVue from "qrcode.vue";
+import { AddressType } from "@/utiles/types";
+
 const route = useRoute();
+const router = useRouter();
+
+const virtualOrder = ref<InstanceType<typeof VirtualOrder>>();
+
 const userStore = useUserStore();
 const types = Number(route.query.types); // 1课程  2商城
 const courseId = route.query.courseId; // 课程id
 const productId = route.query.productId; // 课程id
 const course = ref<CourseListType>(); //课程对象
 const product = ref<ProductType>(); // 商品对象
+const PayQrcodeDialogVisible = ref(false); // 支付二维码弹窗
+const qrcodeurl = ref("");
+const paycount = ref(1);
+const freightcharges = ref(0);
+const address = ref<AddressType>();
+
+console.log(types);
 
 onMounted(() => {
   if (types == 1) {
@@ -91,12 +139,79 @@ const getSingleProduct = async () => {
   console.log(product.value);
 };
 
-const submitorder = () => {
-  
+const getPostage = async (text: string) => {
+  const { status, data } = await postage({
+    address: text,
+  });
+  if (status == 0) {
+    freightcharges.value = data;
+  }
 };
 
-console.log(courseId);
-console.log(types);
+const addresschange = (item: AddressType) => {
+  address.value = item;
+  if (!item.area) return;
+  if (!item.area.includes("西藏自治区") && !item.area.includes("新疆维吾尔自治区")) {
+    freightcharges.value = 0;
+  } else {
+    let text = "";
+    if (item.area!.includes("西藏自治区")) {
+      text = "西藏";
+    } else if (item.area!.includes("新疆维吾尔自治区")) {
+      text = "新疆";
+    }
+    getPostage(text);
+  }
+};
+
+const productchange = ({ count }: any) => {
+  paycount.value = count;
+};
+
+const submitorder = async () => {
+  const { remake } = virtualOrder.value!.getInfo();
+
+  let params: any = {
+    userId: userStore.userId,
+    payType: 4,
+    deviceType: 4,
+    payTypeCode: "WXPAY",
+    remark: remake || "",
+    orderType: types == 1 ? 1 : 7,
+  };
+  if (types == 1) {
+    params.courseId = course.value?.id;
+    params.productName = course.value?.courseName;
+    params.truePrice = course.value?.coursePrice;
+  }
+  if (types == 2) {
+    params.truePrice = (product.value?.price || 0) * paycount.value;
+    params.productId = product.value?.id;
+    params.consignee = address.value?.name || "";
+    params.consigneeMobile = address.value?.mobile || "";
+    params.consigneeAddress =
+      (address.value?.area || "") + (address.value?.address || "");
+  }
+  const { status, data, message } = await submitSingle(params);
+  if (status == "0") {
+    qrcodeurl.value = data.qrCode;
+    console.log(data);
+    PayQrcodeDialogVisible.value = true;
+  } else {
+    if (message) {
+      ElMessage.warning(message);
+    }
+  }
+};
+
+const paysuccess = () => {
+  PayQrcodeDialogVisible.value = false;
+  if (types == 1) {
+    router.push("/usercenter/mycourse");
+  } else {
+    router.push("/usercenter/myorder");
+  }
+};
 </script>
 
 <style lang="scss" scoped>

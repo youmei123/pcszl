@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 10:06:14
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-06 15:05:34
+ * @LastEditTime: 2025-05-14 15:06:42
  * @FilePath: \pcszl\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEim
 -->
@@ -20,7 +20,7 @@
     <div class="content">
       <MenuBar />
     </div>
-    <SpecialColumn
+    <!-- <SpecialColumn
       title="直播"
       desc="直播课程，老师精讲"
       moretext="查看更多"
@@ -34,7 +34,7 @@
         />
         <loading v-else :translateY="50" color="#FCDC46" active text="正在加载中..." />
       </div>
-    </SpecialColumn>
+    </SpecialColumn> -->
     <SpecialColumn
       title="校长推荐"
       desc="小黑校长推荐课程，拓展认知边界~"
@@ -97,8 +97,9 @@ import XcxLiveItem from "@/views/home/components/XcxLiveItem/index.vue";
 import SpecialColumn from "@/views/home/components/SpecialColumn/index.vue";
 import { LiveListType, CourseListType } from "@/utiles/types";
 import { useRouter } from "vue-router";
+
 onMounted(() => {
-  getHomeLiveList(); //直播
+  // getHomeLiveList(); //直播
   getHomeRecommendedList(); //推荐课程
   getPrecinctList(); //专区
   getFreecourse(); //免费课程

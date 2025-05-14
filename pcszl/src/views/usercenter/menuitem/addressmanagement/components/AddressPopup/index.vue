@@ -57,6 +57,10 @@ import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import { useUserStore } from "@/store/userStore";
 
+const emit = defineEmits<{
+  (e: "editsuccess"): void;
+}>();
+
 const cascaderRef = ref<any>();
 const addressDialogVisible = ref(false);
 const userStore = useUserStore();
@@ -71,7 +75,7 @@ const addressform = ref<AddressType>({
 });
 const rules = reactive({
   name: [{ required: true, message: "请输入收货人姓名", trigger: "blur" }],
-  area: [
+  arrayCodeList: [
     {
       required: true,
       message: "请选择省/市/区/街道",
@@ -121,11 +125,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 };
 
 const editaddress = async () => {
-  const { data } = addressform.value.id
+  const { status, message } = addressform.value.id
     ? await addressupdate({ ...addressform.value, userId: userStore.userId })
     : await addresssave({ ...addressform.value, userId: userStore.userId });
   addressDialogVisible.value = false;
-  if (data.status == "0") {
+  if (status == "0") {
     if (addressform.value.id) {
       ElMessage({
         message: "修改地址成功",
@@ -137,11 +141,14 @@ const editaddress = async () => {
         type: "success",
       });
     }
+    emit("editsuccess");
   } else {
-    ElMessage({
-      message: data.message,
-      type: "warning",
-    });
+    if (message) {
+      ElMessage({
+        message: message,
+        type: "warning",
+      });
+    }
   }
 };
 const handleChange = (value: any) => {
@@ -155,8 +162,14 @@ const addopen = () => {
   addressDialogVisible.value = true;
 };
 
+const editopen = (item: AddressType) => {
+  addressform.value = item;
+  addressDialogVisible.value = true;
+};
+
 defineExpose({
   addopen,
+  editopen,
 });
 </script>
 
