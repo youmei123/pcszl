@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 17:29:10
+ * @LastEditTime: 2025-05-14 14:33:33
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -49,7 +49,9 @@
                 />
               </div>
               <div class="user-info">
-                <div class="user-name e-line-1" v-if="nickname">{{ nickname }}</div>
+                <div class="user-name e-line-1" v-if="userStore.userId">
+                  {{ nickname || formatPhoneNumber(mobile) }}
+                </div>
                 <div class="user-name e-line-1 pointer" v-else @click="handlelogin">
                   点击登录
                 </div>
@@ -128,6 +130,7 @@ const instance = getCurrentInstance()?.appContext.config.globalProperties; // �
 const userStore = useUserStore();
 const nickname = ref(userStore.UserInfo.nickname);
 const headImg = ref(userStore.UserInfo.headImg);
+const mobile = ref(userStore.UserInfo.mobile);
 
 defineProps({
   moretext: {
@@ -150,6 +153,14 @@ const handmenu = (item: any) => {
   router.push({
     path: item.path,
   });
+};
+
+const formatPhoneNumber = (phoneNumber: string): string => {
+  if (!phoneNumber || phoneNumber.length !== 11) {
+    return phoneNumber; // 如果不是11位，直接返回原字符串
+  }
+
+  return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1****$3");
 };
 
 const linusercenter = () => {

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:28
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 16:33:20
+ * @LastEditTime: 2025-05-14 16:11:25
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\EntityCreateOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,10 +12,13 @@
       <div class="title-txt">确认收货地址</div>
       <div class="f-ac address-btn-group">
         <div class="add-address-btn pointer" @click="handleaddress">新建地址</div>
-        <div class="manage-address-btn pointer">管理地址</div>
+        <div class="manage-address-btn pointer" @click="handleaddressmg">管理地址</div>
       </div>
     </div>
-    <div class="address-select-list f-jb-ac f-w">
+    <div
+      class="address-select-list f-jb-ac f-w"
+      v-if="!isloading && tableData.length > 0"
+    >
       <div
         class="address-item f-ac pointer"
         v-for="(item, ind) in tableData"
@@ -37,26 +40,34 @@
         </div>
         <div
           v-if="select_address_index == ind"
-          @click.stop=""
+          @click.stop="editaddress(item)"
           class="edit-address-btn pointer"
         >
           编辑
         </div>
       </div>
     </div>
-    <VirtualCreateOrder :type="2" :data="product" />el-cascader 根据文字回显
-    <AddressPopup ref="addressPopup" />
+    <div v-else style="height: 400px; position: relative">
+      <loading
+        v-if="isloading"
+        :translateY="50"
+        color="#FCDC46"
+        active
+        text="正在加载中..."
+      />
+      <el-empty v-else description="暂无数据" />
+    </div>
+    <AddressPopup ref="addressPopup" @editsuccess="editsuccess" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
-import VirtualCreateOrder from "../VirtualOrder/index.vue";
 import { addresslist } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import { AddressType } from "@/utiles/types";
 import AddressPopup from "@/views/usercenter/menuitem/addressmanagement/components/AddressPopup/index.vue";
-
+import { useRouter } from "vue-router";
 onMounted(() => {
   getAddressList();
 });
@@ -73,11 +84,17 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits<{
+  (event: "addresschange", data: AddressType): void;
+}>();
+
+const router = useRouter();
 const addressPopup = ref<InstanceType<typeof AddressPopup>>();
 const select_address_index = ref(0);
 const page = ref(1);
 const tableData = ref<AddressType[]>([]);
 const userStore = useUserStore();
+const isloading = ref(false);
 
 const getAddressList = async () => {
   const { data, count } = await addresslist({
@@ -85,6 +102,9 @@ const getAddressList = async () => {
     page: page.value,
   });
   tableData.value = data.slice(0, 4);
+  if(tableData.value.length>0){
+    emits("addresschange", tableData.value[select_address_index.value]);
+  }
   console.log(tableData.value);
 };
 
@@ -94,8 +114,23 @@ const handleaddress = () => {
   }
 };
 
+const editsuccess = () => {
+  getAddressList();
+};
+
+const editaddress = (item: AddressType) => {
+  if (addressPopup.value) {
+    addressPopup.value.editopen(item);
+  }
+};
+
+const handleaddressmg = () => {
+  router.push("/usercenter/addressmanagement");
+};
+
 const switchaddress = (index: number) => {
   select_address_index.value = index;
+  emits("addresschange", tableData.value[select_address_index.value]);
   console.log(select_address_index.value);
 };
 </script>

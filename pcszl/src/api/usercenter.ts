@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-05-12 14:15:31
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 16:51:28
+ * @LastEditTime: 2025-05-14 10:50:28
  * @FilePath: \pcszl\src\api\usercenter.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,7 +10,7 @@ import request from "@/utiles/request";
 
 // 支付接口
 export const submitSingle = (data: any) => {
-    return request.post<any>('/api/orders/submitSingle', data);
+    return request.post<any>('/api/szl/submitOrders', data);
 };
 //学习记录
 export const statisticsWatchRecord = (data: any) => {
@@ -35,4 +35,12 @@ export const addresssave = (data: any) => {
 //修改地址
 export const addressupdate = (data: any) => {
     return request.post<any>('/api/express/user/address/update', data);
+};
+//删除地址
+export const addressdelete = (data: any) => {
+    return request.delete<any>('/api/express/user/address/delete', data);
+};
+//兑换码兑换
+export const redeemuse = (data: any) => {
+    return request.get<any>('/api/szl/redeem/use', data);
 };

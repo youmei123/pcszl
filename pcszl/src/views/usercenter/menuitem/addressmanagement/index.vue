@@ -13,9 +13,9 @@
         <el-table-column label="操作" align="center">
           <template #default="{ row }">
             <div class="btns-bar f-jb-ac pointer">
-              <div>编辑</div>
-              <div>删除</div>
-              <div :class="{ default: row.isDefault == 1 }">
+              <div @click="handleeditaddress(row)">编辑</div>
+              <div @click="handledeleteaddress(row)">删除</div>
+              <div :class="{ default: row.isDefault == 1 }" @click="handleisDefault(row)">
                 {{ row.isDefault == 1 ? "默认地址" : "设为默认" }}
               </div>
             </div>
@@ -30,17 +30,18 @@
         />
       </div>
     </div>
-    <AddressPopup ref="addressPopup" />
+    <AddressPopup ref="addressPopup" @editsuccess="editsuccess" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import type { TableInstance } from "element-plus";
-import { addresslist } from "@/api/usercenter";
+import { addresslist, addressdelete, addressupdate } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import { AddressType } from "@/utiles/types";
 import AddressPopup from "./components/AddressPopup/index.vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const tableLayout = ref<TableInstance["tableLayout"]>("fixed");
 const addressDialogVisible = ref(false);
@@ -65,10 +66,63 @@ const getAddressList = async () => {
   totalcount.value = count;
   console.log(tableData.value);
 };
+// 修改或添加完成 回调
+const editsuccess = () => {
+  getAddressList();
+};
 
 const hanldaddress = () => {
   if (addressPopup.value) {
     addressPopup.value.addopen();
+  }
+};
+
+const handleeditaddress = (row: AddressType) => {
+  if (addressPopup.value) {
+    addressPopup.value.editopen(row);
+  }
+};
+
+const handledeleteaddress = async (row: AddressType) => {
+  const result = await ElMessageBox.confirm("是否要删除当前地址？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  });
+  if (result == "confirm") {
+    const { status, message } = await addressdelete({
+      id: row.id,
+    });
+    if (status == "0") {
+      ElMessage.success("删除成功");
+      getAddressList();
+    } else {
+      if (!message) return;
+      ElMessage.error(message);
+    }
+  }
+};
+
+const handleisDefault = async (row: AddressType) => {
+  if (row.isDefault == 1) {
+    ElMessage.info("至少有一个默认地址!");
+    return;
+  }
+  const result = await ElMessageBox.confirm("是否要把当前地址设置为默认？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  });
+  if (result == "confirm") {
+    row.isDefault = 1;
+    const { status, message } = await addressupdate(row);
+    if (status == "0") {
+      ElMessage.success("设置成功");
+      getAddressList();
+    } else {
+      if (!message) return;
+      ElMessage.error(message);
+    }
   }
 };
 

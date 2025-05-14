@@ -154,7 +154,7 @@ defineExpose({
   left: 0;
   bottom: 0;
   background-color: #fff;
-  z-index: 9999;
+  z-index: 99;
 }
 .poster-conter img {
   width: 100%;

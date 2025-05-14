@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 16:18:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 14:46:50
+ * @LastEditTime: 2025-05-14 10:32:40
  * @FilePath: \pcszl\src\utiles\request.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -28,7 +28,7 @@ service.interceptors.request.use(
         return config;
     },
     (error) => {
-        
+
         return Promise.reject(error);
     }
 );
@@ -109,7 +109,11 @@ const request = {
     put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         return service.put(url, data, config);
     },
-    delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    delete<T>(url: string, data?: Record<string, any>, config?: AxiosRequestConfig): Promise<T> {
+        if (data) {
+            const queryString = objectToQueryString(data);
+            url = `${url}?${queryString}`;
+        }
         return service.delete(url, config);
     },
 };

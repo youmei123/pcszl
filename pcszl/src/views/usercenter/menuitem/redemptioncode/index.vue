@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 13:43:32
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-04-29 14:56:36
+ * @LastEditTime: 2025-05-14 10:29:17
  * @FilePath: \pcszl\src\views\usercenter\menuitem\redemptioncode\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,16 +11,18 @@
     <div class="redemption-code-title">兑换码兑换</div>
     <div class="redemption-code-content">
       <div class="redemption-code-input input">
-        <input type="text" placeholder="请输入兑换码" />
+        <input type="text" v-model="redeemCode" placeholder="请输入兑换码" />
       </div>
       <div class="redemption-code-pwd-input input">
-        <input type="text" placeholder="请输入兑换码密码" />
+        <input type="text" v-model="redeemPassword" placeholder="请输入兑换码密码" />
       </div>
-      <div class="redemption-code-btn pointer">立即兑换</div>
+      <div class="redemption-code-btn pointer" @click="handredeem">立即兑换</div>
     </div>
     <div class="redemption-code-hint-bar f-jc-ac">
       <div>如您已兑换过，可直接点击</div>
-      <div class="go-study-btn pointer">立即学习>></div>
+      <div class="go-study-btn pointer" @click="router.push('/usercenter/mycourse')">
+        立即学习>>
+      </div>
     </div>
     <div class="redemption-code-tips">
       <div class="tips-title">兑换规则</div>
@@ -37,7 +39,42 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref } from "vue";
+import { redeemuse } from "@/api/usercenter";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/store/userStore";
+
+const redeemCode = ref("");
+const redeemPassword = ref("");
+const router = useRouter();
+const userStore = useUserStore();
+const handredeem = async () => {
+  if (!redeemCode.value) {
+    ElMessage.warning("请输入兑换码");
+    return;
+  }
+  if (!redeemPassword.value) {
+    ElMessage.warning("请输入兑换码密码");
+    return;
+  }
+  if (!userStore.userId) {
+    ElMessage.warning("请先登录");
+    return;
+  }
+  const { data } = await redeemuse({
+    redeemCode: redeemCode.value,
+    redeemPassword: redeemPassword.value,
+    userId: userStore.userId,
+  });
+  if (data.status == "0") {
+    ElMessage.success("兑换成功,请前往我的课程进行学习");
+    redeemCode.value = "";
+    redeemPassword.value = "";
+  } else {
+    ElMessage.info(data.message);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
