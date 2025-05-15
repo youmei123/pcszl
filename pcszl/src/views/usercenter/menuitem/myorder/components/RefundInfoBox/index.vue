@@ -5,12 +5,14 @@
         <div class="info-label">退货商品</div>
         <div class="info-cont">
           <div class="form-product-bar f-ac">
-            <div class="product-img-box"></div>
+            <div class="product-img-box">
+              <img :src="order.productImg" />
+            </div>
             <div class="product-info">
-              <div class="u-line-1">砭石按摩锥点按穴位文化用品</div>
+              <div class="u-line-1">{{order.productName}}</div>
               <div class="f-ac">
-                <div style="margin-right: 20px">￥168</div>
-                <div>X1</div>
+                <div style="margin-right: 20px">￥{{order.productPrice}}</div>
+                <div>X{{order.count}}</div>
               </div>
             </div>
           </div>
@@ -22,7 +24,7 @@
           <div class="icon">*</div>
         </div>
         <div class="info-cont">
-          <div style="color: #fb2b1e">￥336</div>
+          <div style="color: #fb2b1e">￥{{single.refundMoney}}</div>
         </div>
       </div>
       <div class="info-item f-ac">
@@ -31,20 +33,20 @@
           <div class="icon">*</div>
         </div>
         <div class="info-cont">
-          <div>不想要了</div>
+          <div>{{single.refundReason}}</div>
         </div>
       </div>
-      <div class="info-item f-ac">
+      <div class="info-item f-ac" v-if="single.refundRemark">
         <div class="info-label">退款说明</div>
         <div class="info-cont">
-          <div>买多了</div>
+          <div>{{single.refundRemark}}</div>
         </div>
       </div>
-      <div class="info-item f-ac">
+      <div class="info-item f-ac" v-if="single.refundImg">
         <div class="info-label">上传凭证</div>
         <div class="info-cont">
           <div class="img-box">
-            <img />
+            <img :src="single.refundImg" />
           </div>
         </div>
       </div>
@@ -54,6 +56,21 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
+import { aftersale } from "@/utiles/types";
+const props = defineProps({
+  order:{
+    type: Object,
+    default: {}
+  },
+  single:{
+    type: Object,
+    default:<aftersale>{}
+  },
+  priceNum:{
+    type:String,
+    default:""
+  },
+});
 </script>
 
 <style lang="scss" scoped>

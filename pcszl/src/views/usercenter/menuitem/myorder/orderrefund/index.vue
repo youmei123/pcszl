@@ -18,20 +18,14 @@
       </div>
       <div class="refund-content f-jb-as">
         <div class="refund-left">
-          <div class="refund-status-cont f-jb-ac">
-            <div class="refund-status-item" v-for="(item, index) in refundstatuslist" :key="index"
-              :class="{ 'active': currentstatus > index }">
-              {{ item }}
-            </div>
-          </div>
           <div class="refund-form-cont" v-show="currentstatus==1">
-            <RefundForm ref="RefundForms" :order="order" :type="type" @Refund="Refund" />
+            <RefundForm ref="RefundForms" :order="order" :type="type" @Refund="Refund" :priceNum="priceTotal" />
           </div>
           <div class="refund-Steps-cont" v-show="currentstatus!=1">
-            <RefundSteps  :order="order" :single="single" @Steps="Steps" />
+            <RefundSteps ref="RefundStepss"  :order="order" :single="single" @Steps="Steps" />
           </div>
           <div class="refun-info-box-cont" v-show="currentstatus!=1">
-            <RefunInfoBox />
+            <RefunInfoBox :order="order" :single="single" :priceNum="priceTotal" />
           </div>
           <div v-if="SingleLoading">
             <loading :translateY="50"  color="#FCDC46" active text="正在加载中..." :height="400" />
@@ -61,13 +55,9 @@ import {
  } from "@/api/order";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
-const refundstatuslist = ref([
-  "1买家申请退款",
-  "2卖家处理退款申请",
-  "3寄回商品",
-  "4退款完毕",
-]);
+const refundstatuslist = ref([]);
 const RefundForms=ref(<any>null)
+const RefundStepss=ref(<any>null)
 const currentstatus = ref(1);//当前进度
 const route = useRoute();
 const orderId = ref(route.query.orderId)
@@ -80,23 +70,21 @@ const SingleLoading = ref(false);//加载
 const single=ref(<aftersale>{})
 // 订单详情
 const singleOrders=async ()=>{
+  SingleLoading.value=true
   const res = await singleOrdersById({
     orderId:orderId.value,
   });
+  SingleLoading.value=false
   if(res.status==0){
     order.value=res.data
     type.value=order.value.isEntity==1?Number(route.query.type):1
     priceNum()
-    if(order.value.isEntity==1){
-      refundstatuslist.value=["1买家申请退款","2卖家处理退款申请","3寄回商品","4退款完毕"]
-    }else{
-      refundstatuslist.value=["1买家申请退款","2卖家处理退款申请","4退款完毕"]
-    }
     if(order.value.consigneeAddress){
       getOrderPrice()
     }
     if(order.value.aftersaleList && order.value.aftersaleList.length!=0){
       aftersaleList.value=order.value.aftersaleList[0]
+      currentstatus.value=2
       getSingle()
     }else{
       aftersaleList.value=<aftersale>{}
@@ -117,6 +105,7 @@ const getSingle =async ()=>{
   if(res.status==0){
     currentstatus.value=2
     single.value=res.data
+    RefundStepss.value.onMountedClick(single.value,order.value)
   }
 }
 // 退款申请返回
@@ -176,23 +165,11 @@ onMounted(() => {
   width: 810px;
   background: #ffffff;
   border-radius: 10px;
-  padding: 30px;
+  padding: 20px 30px 30px;
   box-sizing: border-box;
   position: relative;
 }
 
-.refund-status-item {
-  width: 180px;
-  height: 50px;
-  background: #f6f6f6;
-  border-radius: 4px;
-  text-align: center;
-  line-height: 50px;
-}
-
-.active {
-  background: util.$ThemeColors;
-}
 
 .refund-form-cont {
   padding-top: 20px;

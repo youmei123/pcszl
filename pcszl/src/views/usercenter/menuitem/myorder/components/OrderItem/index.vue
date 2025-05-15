@@ -78,7 +78,7 @@
             <div class="order-none-btn pointer" v-if="item.status==0" @click="cancelOrder(item)">
               取消订单
             </div>
-            <div class="order-none-btn pointer" v-if="item.status!=4 || item.aftersaleId">
+            <div class="order-none-btn pointer" v-if="item.status!=4 || item.aftersaleId" @click="emit('kfPopup')">
               联系客服
             </div>
           </div>
@@ -91,6 +91,7 @@
       </div>
       <el-empty v-else description="暂无数据" />
     </div>
+    
   </div>
 </template>
 
@@ -99,6 +100,7 @@ import {
   ordersCancel,
   updateDeliveryOrder,
  } from "@/api/order";
+
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -106,7 +108,7 @@ import { defineEmits } from 'vue';
 import { ordersType } from "@/utiles/types";
 import { useUserStore } from "@/store/userStore";
 const userStore = useUserStore();
-const emit = defineEmits(['changeGetList','Popup']);
+const emit = defineEmits(['changeGetList','Popup','kfPopup','zfPopup']);
 const router = useRouter();
 const props = defineProps({
   tabIndex: {
@@ -156,6 +158,9 @@ const priceNum=(item:any)=>{
 }
 // 判断是否有运费
 const orderPrice = (item:any)=>{
+  if(item.isEntity!=1){
+    return 0
+  }
   if(item.consigneeAddress && (item.consigneeAddress.includes("西藏自治区") || item.consigneeAddress.includes("新疆维吾尔自治区"))){
     return 20
   }else{
@@ -221,15 +226,17 @@ const receivegoods =(item:any)=>{
   }).catch(() => {})
 }
 // 付款
-const submitpay =(item:any)=>{
-
+const submitpay = async (item:any)=>{
+   emit('zfPopup',item)
 }
 // 申请售后
 const afterSales = (item:any)=>{
   if(isOverOneMonth(item.payTime)){
+    ElMessage.success("订单已超过1个月，无法申请售后")
     return
   }
   if(!item.payTime && isOverOneMonth(item.addtime)){
+    ElMessage.success("订单已超过1个月，无法申请售后")
     return
   }
   if(item.isEntity==1){
@@ -359,4 +366,5 @@ const isOverOneMonth = (payTime:any)=>{
 .order-none-btn:hover {
   color: util.$ThemeColors;
 }
+
 </style>

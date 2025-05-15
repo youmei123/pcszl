@@ -17,7 +17,7 @@
           <el-icon :size="24" color="#B1B1B1"><ArrowRight /></el-icon>
         </div>
       </div>
-      <div class="refund-bar f-jb-ac"  @click="linkToRefundPage(1)">
+      <div class="refund-bar f-jb-ac pointer"  @click="linkToRefundPage(1)">
         <div class="f-ac">
           <div class="iconfont icon-tuihuo"></div>
           <div class="refund-txt">
@@ -29,7 +29,7 @@
           <el-icon :size="24" color="#B1B1B1"><ArrowRight /></el-icon>
         </div>
       </div>
-      <div class="refund-bar f-jb-ac" @click="linkToRefundPage(2)">
+      <div class="refund-bar f-jb-ac pointer" @click="linkToRefundPage(2)">
         <div class="f-ac">
           <div class="iconfont icon-tuihuo1"></div>
           <div class="refund-txt">
@@ -62,13 +62,13 @@ const props = defineProps({
 });
 const router = useRouter();
 const linkToRefundPage = (type: number) => {
-  if(props.order.value.status==1 && type==1){
+  if(props.order.status==1 && type==1){
       ElMessage({
         type: 'warning',
         message: '当前已确认收货，请选择退货退款！',
       })
       return
-  }else if(props.order.value.status==3 && type==2){
+  }else if(props.order.status==3 && type==2){
       ElMessage({
         type: 'warning',
         message: '暂未发货，请选择退款！',
@@ -78,7 +78,7 @@ const linkToRefundPage = (type: number) => {
   router.push({
     path:"/orderrefund",
     query:{
-      orderId:props.order.value.id,
+      orderId:props.order.id,
       type:type
     }
   });
