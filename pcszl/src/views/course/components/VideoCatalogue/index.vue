@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 14:42:08
+ * @LastEditTime: 2025-05-15 17:43:09
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,14 +13,14 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item :name="item.id" v-for="(item, index) in classifyVideoList">
           <template #title
-            ><div class="item-title"  :style="{ 'font-size': userStore.FontSize + 'px' }" >
+            ><div class="item-title" :style="{ 'font-size': userStore.FontSize + 'px' }">
               {{ item.classifyName }}
             </div>
           </template>
           <div class="subitem-list">
             <div
               class="subitem f-jb-ac pointer"
-               :style="{ 'font-size': userStore.FontSize + 'px' }"
+              :style="{ 'font-size': userStore.FontSize + 'px' }"
               :class="{ active: activeId == val.id }"
               v-for="(val, ind) in item.videoList"
               @click="handlevideoclick(val, ind, index, item)"
@@ -101,6 +101,8 @@ import { szlCourseVideo, videolist } from "@/api/course";
 import { useUserStore } from "@/store/userStore";
 import { CourseVideoType } from "@/utiles/types";
 import { ElMessage } from "element-plus";
+import { getCurrentInstance } from "vue";
+const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
 const props = defineProps({
   classifyCount: {
     //当前视频是否有无标签
@@ -298,6 +300,10 @@ const handlevideoclick = (
   pindex?: number,
   pitem?: classifyvideotype
 ) => {
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    return;
+  }
   if (item.isaudition != 1 && props.ispay) {
     ElMessage.warning("请先购买课程");
     return;
@@ -315,6 +321,10 @@ const handlevideoclick = (
 };
 
 const playdefaultvideo = async () => {
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    return;
+  }
   if (props.ispay) {
     ElMessage.warning("请先购买课程");
     return;

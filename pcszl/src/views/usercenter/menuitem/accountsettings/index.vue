@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 13:44:36
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 10:32:07
+ * @LastEditTime: 2025-05-15 16:45:18
  * @FilePath: \pcszl\src\views\usercenter\menuitem\accountsettings\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -26,7 +26,8 @@
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
           <div class="header-img" v-else>
-            <img src="@/assets/images/none_header.png" />
+            <img v-if="user.headImg" :src="user.headImg" />
+            <img v-else src="@/assets/images/none_header.png" />
           </div>
         </el-form-item>
         <el-form-item label="账号">
@@ -118,6 +119,7 @@ const getSingleUser = async () => {
     id: userStore.userId,
   });
   user.value = data;
+  userStore.setUserInfo(data);
   console.log(user.value);
 };
 

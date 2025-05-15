@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 10:06:14
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 15:01:11
+ * @LastEditTime: 2025-05-15 17:14:03
  * @FilePath: \pcszl\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEim
 -->
@@ -97,7 +97,7 @@ import { LiveListType, CourseListType } from "@/utiles/types";
 import { useRouter } from "vue-router";
 
 onMounted(() => {
-  getBanner(); //banners
+  //getBanner(); //banners
   // getHomeLiveList(); //直播
   getHomeRecommendedList(); //推荐课程
   getPrecinctList(); //专区
@@ -107,7 +107,18 @@ onMounted(() => {
 const userStore = useUserStore();
 const router = useRouter();
 
-const bannerList = ref<any[]>([]); // 轮播图列表
+const bannerList = ref<any[]>([
+  {
+    id: "1",
+    imgurl:
+      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/15/7243095221545083702/1.jpg",
+  },
+  {
+    id: "2",
+    imgurl:
+      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/15/5511654677825041644/2.jpg",
+  },
+]); // 轮播图列表
 
 const live_loading = ref(false); // 直播列表加载动画
 const livelist = reactive<LiveListType[]>([]); // 直播列表

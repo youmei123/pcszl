@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     CourseItem: typeof import('./src/components/CourseItem/index.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
+    ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
