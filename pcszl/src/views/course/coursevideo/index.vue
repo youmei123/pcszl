@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 10:58:22
+ * @LastEditTime: 2025-05-15 17:44:17
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -105,6 +105,8 @@ import { transNumberToShort } from "@/utiles/public";
 import { ref, onMounted } from "vue";
 import { CourseVideoType } from "@/utiles/types";
 import { listCourse } from "@/api/home";
+import { getCurrentInstance } from "vue";
+const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
 //继承接口
 interface courseType extends CourseListType {
   classifyCount: number; //有无标签
@@ -167,6 +169,10 @@ const handleActiveVideo = async (item: CourseVideoType) => {
 
 const router = useRouter();
 const coursepay = () => {
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    return;
+  }
   router.push({
     path: "/submitorder",
     query: {
@@ -258,7 +264,7 @@ const coursepay = () => {
   height: 174px;
 }
 :deep(.product-info) {
-  height: 104px;
+  height: 60px;
   margin-top: 12px;
   margin-bottom: 20px;
 }

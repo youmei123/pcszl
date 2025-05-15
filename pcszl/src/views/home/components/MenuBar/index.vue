@@ -89,7 +89,7 @@ const handlemenuitemclick = (item: menuItem) => {
   width: 100%;
   margin: 0 auto;
   padding-top: 40px;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   box-sizing: border-box;
 }
 .menu-list {
@@ -99,5 +99,8 @@ const handlemenuitemclick = (item: menuItem) => {
   margin-top: 15px;
   color: #212930;
   font-size: 18px;
+}
+.menu-item:hover .menu-text{
+  color: #ce9433 !important;
 }
 </style>

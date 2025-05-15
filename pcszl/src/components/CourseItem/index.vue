@@ -2,12 +2,12 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:29:45
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-07 10:23:19
+ * @LastEditTime: 2025-05-15 17:41:56
  * @FilePath: \pcszl\src\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="product-item f-ac">
+  <div class="product-item f-as">
     <div class="product-poster f-shrink0">
       <img v-if="data.courseCoverImg" :src="data.courseCoverImg" alt="poster" />
     </div>
@@ -27,8 +27,6 @@ import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
 import { useUserStore } from "@/store/userStore";
-import { getCurrentInstance } from "vue";
-const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -41,10 +39,7 @@ const props = defineProps({
 
 const linkplayvideo = async () => {
   console.log(userStore.token);
-  if (!userStore.token) {
-    instance?.$openLoginPopup();
-    return;
-  }
+
   router.push({
     path: "/coursevideo",
     query: {
