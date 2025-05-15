@@ -12,7 +12,7 @@
       <el-tabs v-model="activeIndex" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane v-for="(item, index) in tablist" :key="index" :label="item" :name="index">
           <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading" :isopen="isopen" 
-            @changeGetList="getList" @Popup="Popup"  />
+            @changeGetList="getList" @Popup="Popup" @kfPopup="linkcustomerservice" @zfPopup="submitpay" />
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 20px">
@@ -23,6 +23,21 @@
       </div>
     </div>
     <RefundPopup :order="itemData" :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
+    <customerPopup ref="customerPopups" :mobile="mobile" :qrCode="qrCode" />
+    <el-dialog
+      v-model="PayQrcodeDialogVisible"
+      title="支付二维码"
+      width="350"
+      align-center
+      :close-on-click-modal="false"
+    >
+      <div class="dialog-content f-jc-ac">
+        <qrcode-vue :value="qrcodeurl" :size="300" class="qrcode-container" />
+      </div>
+      <template #footer>
+        <div class="buy-btn pointer" @click="paysuccess">已完成支付</div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,10 +49,15 @@ import Pagination from "@/components/Pagination/index.vue";
 import { 
   listOrder,
   isRefund,
+  customerServiceMobile,
  } from "@/api/order";
+  import { submitSingle } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import RefundPopup from "@/views/usercenter/menuitem/myorder/components/RefundPopup/index.vue";
 import { ordersType } from "@/utiles/types";
+import customerPopup from './components/customerPopup/index.vue'
+import { ElMessage } from 'element-plus'
+import QrcodeVue from "qrcode.vue";
 const userStore = useUserStore();
 const tablist = reactive(["全部", "待付款", "待发货", "待收货", "已完成", "售后"]);
 const activeIndex = ref(0);//当前订单状态
@@ -48,7 +68,11 @@ const orderList = reactive([]); // 订单列表
 const isopen = ref(0)//是否有售后权限
 const isshowRefundPopuo = ref(false);//是否显示退款弹窗
 const itemData =ref(<ordersType>{})
-
+const mobile =ref("")//联系电话
+const qrCode =ref("")//联系二维码
+const customerPopups = ref<any>()
+const qrcodeurl = ref("");
+const PayQrcodeDialogVisible = ref(false); // 支付二维码弹窗
 // tab切换
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   activeIndex.value = tab.paneName as number;
@@ -119,10 +143,58 @@ const Popup = (item:any)=>{
   itemData.value=item
   isshowRefundPopuo.value=true
 }
+// 获取客服信息
+const linkcustomerservice = async ()=>{
+  const res = await customerServiceMobile({});
+  if(res.status==0){
+    mobile.value=res.data.mobile
+    qrCode.value=res.data.qrCode || ''
+    customerPopups.value.linkcustomerservice();
+  }
+}
+const submitpay = async (item:any)=>{
+   let params: any = {
+    userId: userStore.userId,
+    payTypeCode: "WXPAY",
+    truePrice:item.truePrice,
+    productPrice:item.productPrice,
+    count:item.count,
+    orderType:7,
+    productId:item.productId,
+    payType:4,
+    id:item.id
+  };
+  listLoading.value = true
+  const { status, data, message } = await submitSingle(params);
+  listLoading.value = false
+  if (status == "0") {
+    qrcodeurl.value = data.qrCode;
+    PayQrcodeDialogVisible.value = true;
+  } else {
+    if (message) {
+      ElMessage.warning(message);
+    }
+  }
+}
+// 支付弹窗 点击已完成支付
+const paysuccess = () => {
+  PayQrcodeDialogVisible.value = false;
+  getList()
+};
 onMounted(() => {
   getList()
   getIsOpen()
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.buy-btn {
+  width: 100%;
+  height: 50px;
+  background: #fcdc46;
+  border-radius: 25px;
+  text-align: center;
+  line-height: 50px;
+  margin-top: 20px;
+}
+</style>

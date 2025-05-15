@@ -176,5 +176,6 @@ export interface aftersale{
         id:string;
     },
     statusText:string;
+    logs:[{}]
 }
 

@@ -13,17 +13,17 @@
       <div class="detail-left">
         <div class="status-title">{{ statusTitle }}</div>
         <div v-if="order.isEntity==1 && (!aftersaleList.id || aftersaleList.refundStatus==2 || (tabIndex!=5 && (aftersaleList.status==3 || aftersaleList.status==4)))">
-          <div class="delivery-bar f-ac">
-            <div class="delivery-status" v-if="order.status==4">运送中</div>
-            <div class="delivery-status"  v-if="order.status==1">已签收</div>
-            <div class="delivery-info">您已在安农大北二门新菜鸟驿站完成取件</div>
-            <div class="look-delivery pointer">查看物流详情></div>
+          <div class="delivery-bar" v-if="order.deliveryName">
+            <text class="delivery-status" v-if="order.status==4">运送中</text>
+            <text class="delivery-status"  v-if="order.status==1">已签收</text>
+            <text class="delivery-info" v-if="stepData && stepData[0]?.desc">{{ stepData[0].desc }}</text>
+            <text class="look-delivery pointer" @click="openPopup()">查看物流详情></text>
           </div>
           <div class="user-address-info f-as">
             <div class="address-icon">
               <div class="iconfont icon-ziyuan"></div>
             </div>
-            <div class="user-address-info">
+            <div>
               <div class="user-address-text">
                 {{order.consigneeAddress}}
               </div>
@@ -62,8 +62,27 @@
         <OrderInfoCard :order="order" :aftersaleList="aftersaleList" :orderPrice="orderPrice" :priceNum="priceTotal" :tabIndex="tabIndex" :isbutton="true" 
           @handlebtnchange="handlebtnchange" />
       </div>
+      <div v-if="pageLoading">
+        <loading :translateY="50"  color="#FCDC46" active text="正在加载中..." :height="400" />
+      </div>
     </div>
     <RefundPopuo :order="order" :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
+    <customerPopup ref="customerPopups" :mobile="mobile" :qrCode="qrCode" />
+    <defineStep ref="defineSteps" :order="order" :expressdelivery="expressdelivery" :stepData="stepData" />
+     <el-dialog
+      v-model="PayQrcodeDialogVisible"
+      title="支付二维码"
+      width="350"
+      align-center
+      :close-on-click-modal="false"
+    >
+      <div class="dialog-content f-jc-ac">
+        <qrcode-vue :value="qrcodeurl" :size="300" class="qrcode-container" />
+      </div>
+      <template #footer>
+        <div class="buy-btn pointer" @click="paysuccess">已完成支付</div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -73,16 +92,23 @@ import { DArrowRight } from "@element-plus/icons-vue";
 import OrderInfoCard from "../components/OrderInfoCard/index.vue";
 import RefundPopuo from "@/views/usercenter/menuitem/myorder/components/RefundPopup/index.vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
+import customerPopup from '../components/customerPopup/index.vue'
 import {
   singleOrdersById,
   postage,
   ordersCancel,
   updateDeliveryOrder,
   aftersaleCancel,
+  customerServiceMobile,
+  companyCodeList,
+  expressRouts,
  } from "@/api/order";
+ import { submitSingle } from "@/api/usercenter";
 import { useRoute,useRouter } from 'vue-router';
 import { ordersType,aftersale } from "@/utiles/types";
 import { useUserStore } from "@/store/userStore";
+import defineStep from '../components/defineStep/index.vue'
+import QrcodeVue from "qrcode.vue";
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
@@ -95,11 +121,22 @@ const order = ref(<ordersType>{})
 const orderPrice = ref(0)//运费
 const aftersaleList = ref(<aftersale>{})//售后信息
 const priceTotal =ref("")//需付款
+const mobile =ref("")//联系电话
+const qrCode =ref("")//联系二维码
+const customerPopups = ref<any>()
+const expressdelivery =ref(<any>{})
+const stepData = ref(<any>[])
+const defineSteps = ref<any>()
+const pageLoading = ref(false)
+const qrcodeurl = ref("");
+const PayQrcodeDialogVisible = ref(false); // 支付二维码弹窗
 // 订单详情
 const singleOrders=async ()=>{
+  pageLoading.value=true
   const res = await singleOrdersById({
     orderId:orderId.value,
   });
+  pageLoading.value=false
   if(res.status==0){
     order.value=res.data
     priceNum()
@@ -112,7 +149,12 @@ const singleOrders=async ()=>{
     }else{
       aftersaleList.value=<aftersale>{}
     }
+    if (order.value.deliveryName) {
+      getexpressdeliveryinfo();
+      
+    }
   }
+  
 }
 // 右边点击返回
 const handlebtnchange = (type: string) => {
@@ -121,10 +163,10 @@ const handlebtnchange = (type: string) => {
     cancelOrder()
   }
   if(type == "付款"){
-
+    submitpay()
   }
   if(type == "联系客服"){
-    
+    linkcustomerservice()
   }
   if(type == "取消退款"){
     revoke()
@@ -136,9 +178,11 @@ const handlebtnchange = (type: string) => {
 // 申请售后
 const afterSales = ()=>{
   if(isOverOneMonth(order.value.payTime)){
+    ElMessage.success("订单已超过1个月，无法申请售后")
     return
   }
   if(!order.value.payTime && isOverOneMonth(order.value.addtime)){
+    ElMessage.success("订单已超过1个月，无法申请售后")
     return
   }
   if(order.value.isEntity==1){
@@ -230,6 +274,33 @@ const revoke =()=>{
     
   }).catch(() => {})
 }
+// 付款
+const submitpay = async ()=>{
+   let params: any = {
+    userId: userStore.userId,
+    payTypeCode: "WXPAY",
+    truePrice:order.value.truePrice,
+    productPrice:order.value.productPrice,
+    count:order.value.count,
+    orderType:7,
+    productId:order.value.productId,
+    payType:4,
+    id:order.value.id
+  };
+  const { status, data, message } = await submitSingle(params);
+  if (status == "0") {
+    qrcodeurl.value = data.qrCode;
+    PayQrcodeDialogVisible.value = true;
+  } else {
+    if (message) {
+      ElMessage.warning(message);
+    }
+  }
+}
+// 支付弹窗 点击已完成支付
+const paysuccess = () => {
+  PayQrcodeDialogVisible.value = false;
+};
 // 判断标题状态
 const upStatusTitle = (status: any,refundStatus: any,aftersaleStatus: any)=>{
   if(tabIndex.value==5){
@@ -260,6 +331,9 @@ const upStatusTitle = (status: any,refundStatus: any,aftersaleStatus: any)=>{
 }
 // 获取运费
 const getOrderPrice= async ()=>{
+  if(order.value.isEntity!=1){
+    return 0
+  }
   if(!order.value.consigneeAddress || 
     (!order.value.consigneeAddress.includes("西藏自治区") && !order.value.consigneeAddress.includes("新疆维吾尔自治区"))){
     orderPrice.value=0
@@ -298,6 +372,58 @@ const isOverOneMonth = (payTime:any)=>{
   // 比较当前时间与给定时间戳差值是否超过一个月
   return (currentTime - payTime) > oneMonthInMillis;
 }
+// 获取客服信息
+const linkcustomerservice = async ()=>{
+  const res = await customerServiceMobile({});
+  if(res.status==0){
+    mobile.value=res.data.mobile
+    qrCode.value=res.data.qrCode || ''
+    customerPopups.value.linkcustomerservice();
+  }
+}
+// 打开物流弹窗
+const openPopup = ()=>{
+  if(order.value.deliveryName){
+    defineSteps.value.linkcustomerservice()
+  }else{
+    ElMessage.error("暂无物流信息")
+  }
+}
+// 获取物流数据
+const getexpressdeliveryinfo = async ()=>{
+  if(!order.value.deliveryName){
+    ElMessage.error("暂无物流信息")
+    return
+  }
+  pageLoading.value=true
+  const res = await companyCodeList({
+    name:order.value.deliveryName
+  });
+  expressdelivery.value = res.data[0] || ''
+  if (expressdelivery) {
+    materialflow();
+  }
+}
+const materialflow = async ()=>{
+  const res = await expressRouts({
+    expressCompanyCode: expressdelivery.value.code,
+    expressNumber: order.value.deliveryNumber,
+    checkPhoneNo: order.value.consigneeMobile
+  });
+  pageLoading.value=false
+  if (res.data && res.data.length > 0) {
+    stepData.value = res.data.map((item:any, index:number) => {
+      return {
+        name: item.status,
+        time: item.acceptTime,
+        type: 1,
+        isNow: index <= 0 ? 1 : 0,
+        desc: item.remark
+      }
+    })
+   
+  }
+}
 onMounted(()=>{
   if(route.query.orderId){
     upStatusTitle(route.query.status,route.query.refundStatus,route.query.aftersaleStatus)
@@ -310,6 +436,9 @@ onMounted(()=>{
 .breadcrumb-cont {
   padding: 15px 0;
   box-sizing: border-box;
+}
+.detail-cont{
+  position: relative;
 }
 .detail-left {
   width: 810px;
@@ -324,7 +453,8 @@ onMounted(()=>{
   font-weight: bold;
 }
 .delivery-bar {
-  margin: 15px 0;
+  margin: 15px 0 0;
+  display: inline-block;
 }
 .delivery-info {
   color: #000;
@@ -399,5 +529,17 @@ onMounted(()=>{
   line-height: 40px;
   color: #ce9433;
   margin-left: 15px;
+}
+.user-address-info{
+  margin-top: 15px;
+}
+.buy-btn {
+  width: 100%;
+  height: 50px;
+  background: #fcdc46;
+  border-radius: 25px;
+  text-align: center;
+  line-height: 50px;
+  margin-top: 20px;
 }
 </style>

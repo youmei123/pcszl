@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="position: relative;">
-       <el-form :model="form" label-width="auto" style="max-width: 500px">
+      <el-form :model="form" :rules="rules" label-width="auto" style="max-width: 500px">
       <el-form-item label="退货商品">
         <div class="form-product-bar f-ac">
           <div class="product-img-box">
@@ -28,7 +28,10 @@
           <el-radio :value="1">未收到货</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="退款理由">
+      <el-form-item label="退款金额">
+        <div style="color:red;">￥{{ priceNum }}</div>
+      </el-form-item>
+      <el-form-item label="退款理由" prop="refundReason">
         <el-select v-model="form.refundReason" placeholder="请选择退款理由">
           <el-option :label="item" :value="item" v-for="(item,index) in refundReasonList" :key="index" />
         </el-select>
@@ -79,7 +82,11 @@ const props = defineProps({
   type:{
     type:Number,
     default:1
-  }
+  },
+  priceNum:{
+    type:String,
+    default:""
+  },
 });
 //声明 uploadFile的类型
 interface UploadFile {
@@ -93,6 +100,11 @@ const form = reactive({
   refundRemark: "",//退款说明
   refundImg: "",
 });
+const rules = reactive({
+  refundReason: [
+    { required: true, message: '请选择退款理由', trigger: 'change' },
+  ],
+})
 const refundReasonList=ref([])
 const submitLoading=ref(false)
 // 提交退款申请

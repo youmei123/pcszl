@@ -47,3 +47,11 @@ export const aftersaleAddress = (data: any) => {
 export const companyCodeList = (data: any) => {
     return request.get<any>('/api/express/companyCodeList', data);
 };
+//客服信息
+export const customerServiceMobile = (data: any) => {
+    return request.get<any>('/api/szl/customerServiceMobile', data);
+};
+//物流数据
+export const expressRouts = (data: any) => {
+    return request.post<any>('/api/express/routs', data);
+};
