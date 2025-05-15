@@ -163,6 +163,7 @@ export interface ordersType {
     aftersaleList:Array<aftersale>;
     deliveryName:string;
     payTime:number;
+    courseId:string;
 }
 // 售后类型
 export interface aftersale{

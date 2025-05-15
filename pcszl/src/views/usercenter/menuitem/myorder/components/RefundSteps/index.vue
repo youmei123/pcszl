@@ -1,18 +1,7 @@
 <template>
   <div class="refund-steps-container">
-    <!-- <div class="refund-title">{{ single.statusText }}</div>
-    <div class="refund-last-time" v-if="logs.endtime">
-      <span v-if="times.days>0">剩余{{times.days}}天</span>
-      <span class="active">
-        <el-countdown
-          format="HH:mm:ss"
-          :value="times.Timestamp"
-          @finish="finish"
-        />
-      </span>
-    </div> -->
     <div>
-      <div class="step">
+      <div class="step" v-if="single.logs.length>0">
         <div class="step_box">
           <!-- 左侧进度线 -->
           <div class="step_left"></div>
@@ -219,7 +208,7 @@ const formatTimeDifference = (targetTimestamp: number) => {
   times.value.Timestamp = (hours * 3600 + minutes * 60 + seconds) * 1000
   console.log(times.value, 'times')
 }
-const onMountedClick = (singleData: any,orderData:any) => {
+const onMountedClick = (singleData: any, orderData: any) => {
   // 判断是否需要快递公司信息
   if (orderData.isEntity == 1 && singleData.status == 5) {
     getCodeList()

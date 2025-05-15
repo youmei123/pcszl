@@ -11,26 +11,18 @@
     <div class="order-tabs-content">
       <el-tabs v-model="activeIndex" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane v-for="(item, index) in tablist" :key="index" :label="item" :name="index">
-          <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading" :isopen="isopen" 
-            @changeGetList="getList" @Popup="Popup" @kfPopup="linkcustomerservice" @zfPopup="submitpay" />
+          <OrderItem ref="refOrderItem" :orderList="orderList" :tabIndex="activeIndex" :listLoading="listLoading"
+            :isopen="isopen" @changeGetList="getList" @Popup="Popup" @kfPopup="linkcustomerservice"
+            @zfPopup="submitpay" />
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 20px">
-        <Pagination 
-        @changePage="handlePageChange"
-          :count="totalcount"
-          :currentPage="pageNo" />
+        <Pagination @changePage="handlePageChange" :count="totalcount" :currentPage="pageNo" />
       </div>
     </div>
-    <RefundPopup :order="itemData" :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false"  />
+    <RefundPopup :order="itemData" :visible="isshowRefundPopuo" @close="isshowRefundPopuo = false" />
     <customerPopup ref="customerPopups" :mobile="mobile" :qrCode="qrCode" />
-    <el-dialog
-      v-model="PayQrcodeDialogVisible"
-      title="支付二维码"
-      width="350"
-      align-center
-      :close-on-click-modal="false"
-    >
+    <el-dialog v-model="PayQrcodeDialogVisible" title="支付二维码" width="350" align-center :close-on-click-modal="false">
       <div class="dialog-content f-jc-ac">
         <qrcode-vue :value="qrcodeurl" :size="300" class="qrcode-container" />
       </div>
@@ -46,12 +38,12 @@ import { ref, reactive, onMounted } from "vue";
 import type { TabsPaneContext } from "element-plus";
 import OrderItem from "./components/OrderItem/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
-import { 
+import {
   listOrder,
   isRefund,
   customerServiceMobile,
- } from "@/api/order";
-  import { submitSingle } from "@/api/usercenter";
+} from "@/api/order";
+import { submitSingle } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import RefundPopup from "@/views/usercenter/menuitem/myorder/components/RefundPopup/index.vue";
 import { ordersType } from "@/utiles/types";
@@ -67,16 +59,16 @@ const listLoading = ref(false);//加载
 const orderList = reactive([]); // 订单列表
 const isopen = ref(0)//是否有售后权限
 const isshowRefundPopuo = ref(false);//是否显示退款弹窗
-const itemData =ref(<ordersType>{})
-const mobile =ref("")//联系电话
-const qrCode =ref("")//联系二维码
+const itemData = ref(<ordersType>{})
+const mobile = ref("")//联系电话
+const qrCode = ref("")//联系二维码
 const customerPopups = ref<any>()
 const qrcodeurl = ref("");
 const PayQrcodeDialogVisible = ref(false); // 支付二维码弹窗
 // tab切换
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   activeIndex.value = tab.paneName as number;
-  pageNo.value=1
+  pageNo.value = 1
   getList()
 };
 // 翻页
@@ -87,13 +79,14 @@ const handlePageChange = (page: number) => {
 // 获取订单列表
 const getList = async () => {
   listLoading.value = true
-  let params:any = {
+  let params: any = {
     page: pageNo.value,
     userId: userStore.userId,
     token: userStore.token,
-    status:'',
+    status: '',
+    deviceType:4,
   }
-  let url='/api/szl/listOrders'
+  let url = '/api/szl/listOrders'
   if (activeIndex.value == 0) {
     params.status = ''
   }
@@ -113,56 +106,57 @@ const getList = async () => {
   if (activeIndex.value == 4) {
     params.status = '1'
   }
-  if(activeIndex.value == 5){
-    url='/api/szl/orders/aftersale/list'
+  if (activeIndex.value == 5) {
+    url = '/api/szl/orders/aftersale/list'
   }
-  const { data, count } = await listOrder(url,params);
+  const { data, count } = await listOrder(url, params);
   listLoading.value = false
-  if(data && data.length!=0){
-    data.forEach((item:any,index:number)=>{
-      if(item.aftersaleList && item.aftersaleList.length!=0){
-        item.refundStatus=item.aftersaleList[0].refundStatus
-        item.aftersaleId=item.aftersaleList[0].id
-        item.deliveryNumber=item.aftersaleList[0].deliveryNumber
-        item.aftersaleStatus=item.aftersaleList[0].status
+  if (data && data.length != 0) {
+    data.forEach((item: any, index: number) => {
+      if (item.aftersaleList && item.aftersaleList.length != 0) {
+        item.refundStatus = item.aftersaleList[0].refundStatus
+        item.aftersaleId = item.aftersaleList[0].id
+        item.deliveryNumber = item.aftersaleList[0].deliveryNumber
+        item.aftersaleStatus = item.aftersaleList[0].status
       }
     })
   }
   orderList.splice(0, orderList.length, ...(data || []));
   totalcount.value = count;
-  
+
 }
 // 是否有售后权限
-const getIsOpen = async ()=>{
+const getIsOpen = async () => {
   const { data } = await isRefund({
     token: userStore.token,
   });
   isopen.value = data || 0;
 }
-const Popup = (item:any)=>{
-  itemData.value=item
-  isshowRefundPopuo.value=true
+const Popup = (item: any) => {
+  itemData.value = item
+  isshowRefundPopuo.value = true
 }
 // 获取客服信息
-const linkcustomerservice = async ()=>{
+const linkcustomerservice = async () => {
   const res = await customerServiceMobile({});
-  if(res.status==0){
-    mobile.value=res.data.mobile
-    qrCode.value=res.data.qrCode || ''
+  if (res.status == 0) {
+    mobile.value = res.data.mobile
+    qrCode.value = res.data.qrCode || ''
     customerPopups.value.linkcustomerservice();
   }
 }
-const submitpay = async (item:any)=>{
-   let params: any = {
+const submitpay = async (item: any) => {
+  let params: any = {
     userId: userStore.userId,
     payTypeCode: "WXPAY",
-    truePrice:item.truePrice,
-    productPrice:item.productPrice,
-    count:item.count,
-    orderType:7,
-    productId:item.productId,
-    payType:4,
-    id:item.id
+    truePrice: item.truePrice,
+    productPrice: item.productPrice,
+    count: item.count,
+    orderType: 7,
+    productId: item.productId,
+    payType: 4,
+    id: item.id,
+    deviceType:4,
   };
   listLoading.value = true
   const { status, data, message } = await submitSingle(params);
