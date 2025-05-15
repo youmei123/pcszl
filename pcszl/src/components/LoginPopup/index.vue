@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 10:10:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 17:26:12
+ * @LastEditTime: 2025-05-15 14:20:41
  * @FilePath: \pcszl\src\components\loginpopup\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,12 +25,25 @@
             <input type="text" v-model="account" placeholder="请输入手机号" />
           </div>
           <div>
-            <div v-if="type == 1" class="get-code-btn pointer">获取验证码</div>
+            <div
+              v-if="type == 1 && time == 60"
+              @click="getVerifyCode"
+              class="get-code-btn pointer"
+            >
+              {{ sendMsg }}
+            </div>
+            <div
+              v-if="type == 1 && time != 60"
+              style="background-color: #999999; color: white"
+              class="get-code-btn pointer"
+            >
+              {{ sendMsg }}
+            </div>
           </div>
         </div>
         <div class="label-item f-jb-ac" v-if="type == 1">
           <div>
-            <input type="text" placeholder="请输入验证码" />
+            <input type="text" v-model="code" placeholder="请输入验证码" />
           </div>
           <div></div>
         </div>
@@ -57,21 +70,28 @@
         </div>
         <div class="label-item f-jb-ac" v-if="type == 1">
           <div>
-            <input type="text" placeholder="再次输入密码" />
+            <input type="text" v-model="newpassword" placeholder="再次输入密码" />
           </div>
           <div></div>
         </div>
       </div>
       <div class="submit-btn pointer" @click="loginsubmit">确认</div>
-      <div class="agreement f-ac" v-if="type == 0">
+      <!-- <div class="agreement f-ac" v-if="type == 0">
         <el-checkbox v-model="checked" size="large" />
         <div style="margin-left: 5px">
           我已阅读并同意<span class="pointer">《用户协议》</span
           ><span class="pointer">《隐私协议》</span>
         </div>
-      </div>
+      </div> -->
       <div class="cut-bar f-jc-ac">
-        <div v-if="type == 0" class="pointer" @click="handswitchtype">忘记密码</div>
+        <div
+          v-if="type == 0"
+          style="margin-top: 15px"
+          class="pointer"
+          @click="handswitchtype"
+        >
+          忘记密码
+        </div>
         <div
           v-if="type == 1"
           class="pointer"
@@ -88,9 +108,12 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
-import { loginUser } from "@/api/login";
+import { loginUser, sendmobile } from "@/api/login";
+import { updateUser } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import { Close } from "@element-plus/icons-vue";
+import { md5 } from "js-md5";
+
 const userStore = useUserStore();
 
 const account = ref(""); // 账号
@@ -100,6 +123,11 @@ const isopen = ref(true);
 const type = ref(0); // 0: 登录 1: 注册
 const checked = ref(false); //是否勾选协议
 const isshowpwd = ref(false); // 是否显示密码
+const newpassword = ref("");
+const time = ref(60);
+const sendMsg = ref("获取验证码");
+const timer = ref<NodeJS.Timeout | null>(null);
+const code = ref("");
 
 const open = () => {
   isopen.value = true;
@@ -107,17 +135,9 @@ const open = () => {
 
 const loginsubmit = () => {
   if (type.value == 0) {
-    if (checked.value) {
-      hnadlogin();
-    } else {
-      ElMessage({
-        message: "请阅读并同意协议！",
-        grouping: true,
-        type: "warning",
-      });
-    }
+    hnadlogin();
   } else {
-    console.log("注册");
+    hnadregister();
   }
 };
 
@@ -157,6 +177,70 @@ const hnadlogin = async () => {
     setTimeout(() => {
       window.location.reload();
     }, 600);
+  }
+};
+
+const getVerifyCode = async () => {
+  if (!account.value) {
+    ElMessage.warning("请输入手机号");
+    return;
+  }
+  if (time.value != 60) {
+    ElMessage.warning("请稍等" + time.value + "秒");
+    return;
+  }
+  const rexp = /^[1][0-9][0-9]{9}$/;
+  if (!rexp.test(account.value)) {
+    ElMessage.warning("请输入正确的手机号");
+    return;
+  }
+  const { status, message } = await sendmobile({
+    mobile: account.value,
+    types: 2,
+    companyId: "xiaohei",
+    timestamp: new Date().getTime(),
+    sign: md5(account.value + new Date().getTime()),
+  });
+  if (status == "0") {
+    timer.value = setInterval(() => {
+      time.value--;
+      if (time.value == 0) {
+        clearInterval(timer.value!);
+        sendMsg.value = "获取验证码";
+        time.value = 60;
+      } else {
+        sendMsg.value = time.value + "秒";
+      }
+    }, 1000);
+    ElMessage.success("验证码发送成功");
+  } else {
+    ElMessage.info(message);
+  }
+};
+
+const hnadregister = async () => {
+  if (newpassword.value != password.value) {
+    ElMessage.warning("两次密码输入不一致");
+    return;
+  }
+  if (!code.value) {
+    ElMessage.warning("请输入验证码");
+    return;
+  }
+  const { status, message } = await updateUser({
+    mobile: account.value,
+    password: password.value,
+    code: code.value,
+  });
+  if (status == "0") {
+    type.value = 0;
+    account.value = "";
+    password.value = "";
+    code.value = "";
+    newpassword.value = "";
+    ElMessage.success("修改密码成功！");
+  } else {
+    ElMessage.warning(message);
   }
 };
 

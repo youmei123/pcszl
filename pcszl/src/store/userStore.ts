@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 14:43:24
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 16:25:43
+ * @LastEditTime: 2025-05-15 14:30:44
  * @FilePath: \pcszl\src\store\userStore.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,8 +12,9 @@ import { UserInfo } from '@/utiles/types';
 export const useUserStore = defineStore('user', {
     state: () => ({
         UserInfo: {} as UserInfo,
-        token:'',
-        userId:''
+        token: '',
+        userId: '',
+        FontSize: 16
     }),
     actions: {
         setUserInfo(info: UserInfo) {
@@ -25,7 +26,10 @@ export const useUserStore = defineStore('user', {
         setUserId(userId: string) {
             this.userId = userId;
         },
-        resetState(){
+        setFontSize(FontSize: number) {
+            this.FontSize = FontSize;
+        },
+        resetState() {
             this.$reset()
         }
     },

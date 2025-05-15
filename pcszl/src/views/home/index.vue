@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 10:06:14
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-14 15:06:42
+ * @LastEditTime: 2025-05-15 15:01:11
  * @FilePath: \pcszl\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEim
 -->
@@ -10,10 +10,8 @@
   <div class="page-cont">
     <div class="banner-cont">
       <el-carousel height="600px">
-        <el-carousel-item>
-          <img
-            src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/7/4046943659715620117/banner.png"
-          />
+        <el-carousel-item v-for="(item, index) in bannerList" :key="index">
+          <img width="100%" height="100%" :src="item.imgurl" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -87,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { listSzlLiveStreaming, listCourse, zonelist } from "@/api/home";
+import { listSzlLiveStreaming, listCourse, zonelist, listBanner } from "@/api/home";
 import { ref, reactive, onMounted } from "vue";
 import { useUserStore } from "@/store/userStore";
 import MenuBar from "@/views/home/components/MenuBar/index.vue";
@@ -99,6 +97,7 @@ import { LiveListType, CourseListType } from "@/utiles/types";
 import { useRouter } from "vue-router";
 
 onMounted(() => {
+  getBanner(); //banners
   // getHomeLiveList(); //直播
   getHomeRecommendedList(); //推荐课程
   getPrecinctList(); //专区
@@ -107,6 +106,9 @@ onMounted(() => {
 
 const userStore = useUserStore();
 const router = useRouter();
+
+const bannerList = ref<any[]>([]); // 轮播图列表
+
 const live_loading = ref(false); // 直播列表加载动画
 const livelist = reactive<LiveListType[]>([]); // 直播列表
 
@@ -123,6 +125,14 @@ const fr_page = ref(1); // 限时免费列表页码
 const fr_count = ref(0); // 限时免费总数
 const fr_loading = ref(false); // 限时免费列表加载动画
 const fr_list = reactive<CourseListType[]>([]); // 限时免费列表
+
+const getBanner = async () => {
+  const { data } = await listBanner({
+    type: 8,
+  });
+  bannerList.value = data || [];
+  console.log(data);
+};
 
 const getHomeLiveList = async () => {
   live_loading.value = true;
