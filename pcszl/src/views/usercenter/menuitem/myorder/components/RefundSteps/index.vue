@@ -219,14 +219,14 @@ const formatTimeDifference = (targetTimestamp: number) => {
   times.value.Timestamp = (hours * 3600 + minutes * 60 + seconds) * 1000
   console.log(times.value, 'times')
 }
-const onMountedClick = (data: any) => {
+const onMountedClick = (singleData: any,orderData:any) => {
   // 判断是否需要快递公司信息
-  if (props.order.isEntity == 1 && props.single.status == 5) {
+  if (orderData.isEntity == 1 && singleData.status == 5) {
     getCodeList()
   }
   // 判断是否需要倒计时
-  if (data.logs && data.logs.length > 0) {
-    logs.value = data.logs[0]
+  if (singleData.logs && singleData.logs.length > 0) {
+    logs.value = singleData.logs[0]
     if (logs.value.endtime) {
       formatTimeDifference(logs.value.endtime)
     }
