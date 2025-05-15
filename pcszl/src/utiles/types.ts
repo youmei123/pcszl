@@ -11,8 +11,8 @@
  * 用户信息类型         
  */
 export interface UserInfo {
-    id: string;
-    mobile: string;
+    id?: string;
+    mobile?: string;
     realname?: string;
     nickname?: string;
     state?: number;

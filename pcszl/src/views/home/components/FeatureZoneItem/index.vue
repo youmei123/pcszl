@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:55:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 17:16:35
+ * @LastEditTime: 2025-05-15 15:10:25
  * @FilePath: \pcszl\src\components\FeatureZoneItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -25,7 +25,7 @@
             <div class="featurezone-watchcount">
               播放量{{ transNumberToShort(data.playCount) }}
             </div>
-            <div class="play-btn pointer">立即了解</div>
+            <div class="play-btn pointer" @click="linkzone">立即了解</div>
           </div>
         </div>
       </div>
@@ -36,12 +36,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { transNumberToShort } from "@/utiles/public";
+import { useRouter } from "vue-router";
 const props = defineProps({
   data: {
     type: Object,
     default: {},
   },
 });
+
+const router = useRouter();
 
 const isshow = ref(false);
 const handleMouseEnter = () => {
@@ -54,6 +57,16 @@ const handleMouseLeave = () => {
   console.log("鼠标移出");
   isshow.value = false;
   console.log(isshow.value);
+};
+
+const linkzone = () => {
+  router.push({
+    path: "/SingleFeatureZone",
+    query: {
+      id: props.data.id,
+      name: props.data.name,
+    },
+  });
 };
 </script>
 

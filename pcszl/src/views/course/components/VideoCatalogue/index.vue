@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 10:54:13
+ * @LastEditTime: 2025-05-15 14:42:08
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,13 +13,14 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item :name="item.id" v-for="(item, index) in classifyVideoList">
           <template #title
-            ><div class="item-title">
+            ><div class="item-title"  :style="{ 'font-size': userStore.FontSize + 'px' }" >
               {{ item.classifyName }}
             </div>
           </template>
           <div class="subitem-list">
             <div
               class="subitem f-jb-ac pointer"
+               :style="{ 'font-size': userStore.FontSize + 'px' }"
               :class="{ active: activeId == val.id }"
               v-for="(val, ind) in item.videoList"
               @click="handlevideoclick(val, ind, index, item)"
@@ -27,7 +28,7 @@
               <div class="f-as">
                 <div class="iconfont icon-24gf-playCircle"></div>
                 <div class="subitem-info">
-                  <div class="sub-title u-line-1">{{ val.videoName }}</div>
+                  <div class="sub-title u-line-2">{{ val.videoName }}</div>
                   <div class="sub-progress" v-if="val.watchTime && val.watchTime > 0">
                     已看{{ percentage(val) }}%
                   </div>
@@ -52,6 +53,7 @@
       <div class="subitem-list">
         <div
           class="subitem f-jb-ac pointer"
+          :style="{ 'font-size': userStore.FontSize + 'px' }"
           :class="{ active: activeId == item.id }"
           v-for="(item, index) in videoList"
           @click="handlevideoclick(item, index)"
@@ -59,14 +61,16 @@
           <div class="f-as">
             <div class="iconfont icon-24gf-playCircle"></div>
             <div class="subitem-info">
-              <div class="sub-title u-line-1">{{ item.videoName }}</div>
+              <div class="sub-title u-line-2">
+                {{ item.videoName }}
+              </div>
               <div class="sub-progress" v-if="item.watchTime && item.watchTime > 0">
                 已看{{ percentage(item) }}%
               </div>
               <div class="sub-progress" v-else>未看</div>
             </div>
           </div>
-          <div v-if="ispay">
+          <div v-if="ispay" :style="{ 'font-size': userStore.FontSize + 'px' }">
             <div v-if="item.isaudition && item.isaudition == 1" class="free-btn">
               免费
             </div>
@@ -220,7 +224,7 @@ const getvideolist = async (type: number = 0) => {
   const { data } = await videolist(params);
   loadingstatus.value = false;
   classifyVideoList.value = data;
-   //默认加载时有播放进度参数，则直接播放
+  //默认加载时有播放进度参数，则直接播放
   if (type == 0) {
     if (
       props.continue_videoId &&
@@ -449,7 +453,7 @@ defineExpose({
   margin-left: 3px;
 }
 .sub-title {
-  font-size: 16px;
+  // font-size: 16px;
 }
 .notclassifyCount {
   padding-top: 10px;

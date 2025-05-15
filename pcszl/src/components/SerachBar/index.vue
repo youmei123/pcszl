@@ -7,7 +7,7 @@
     <input
       v-model="searchQuery"
       type="text"
-      placeholder="搜索"
+      :placeholder="placeholder"
       @focus.stop="handserachfocus"
       @blur.stop="handserachblur"
       :class="{ focused: isFocused }"
@@ -45,7 +45,13 @@ const props = defineProps({
     type: Number,
     default: 200,
   },
+  focusplaceholder: {
+    type: String,
+    default: "",
+  },
 });
+
+const placeholder = ref("搜索");
 
 const emit = defineEmits<{
   (e: "serachchange", event: string): void;
@@ -56,15 +62,19 @@ const isFocused = ref(false);
 
 const handserachfocus = () => {
   isFocused.value = true;
+  if (props.focusplaceholder) {
+    placeholder.value = props.focusplaceholder;
+  }
   console.log(isFocused.value);
 };
 
 const handserachblur = () => {
+  placeholder.value = "搜索";
   if (!searchQuery.value) isFocused.value = false;
 };
 
 const handserach = () => {
-  console.log(searchQuery.value)
+  console.log(searchQuery.value);
   emit("serachchange", searchQuery.value);
 };
 </script>

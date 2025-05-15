@@ -3,3 +3,7 @@ import request from "@/utiles/request";
 export const loginUser = (data: any) => {
     return request.post<any>('/api/szl/loginUser', data);
 };
+//获取验证码
+export const sendmobile = (data: any) => {
+    return request.get<any>('/api/sms/sendmobile', data);
+};

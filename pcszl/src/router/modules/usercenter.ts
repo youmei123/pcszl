@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 15:13:18
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 10:46:45
+ * @LastEditTime: 2025-05-15 11:13:41
  * @FilePath: \pcszl\src\router\modules\usercenter.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -55,23 +55,23 @@ export default [
                 meta: {
                     title: '地址管理'
                 }
-            },
-            {
-                path: 'serviceagreement',
-                name: 'serviceagreement',
-                component: () => import('@/views/usercenter/menuitem/serviceagreement/index.vue'),
-                meta: {
-                    title: '服务协议'
-                }
-            },
-            {
-                path: 'privacyagreement',
-                name: 'privacyagreement',
-                component: () => import('@/views/usercenter/menuitem/privacyagreement/index.vue'),
-                meta: {
-                    title: '隐私协议'
-                }
             }
+            // {
+            //     path: 'serviceagreement',
+            //     name: 'serviceagreement',
+            //     component: () => import('@/views/usercenter/menuitem/serviceagreement/index.vue'),
+            //     meta: {
+            //         title: '服务协议'
+            //     }
+            // },
+            // {
+            //     path: 'privacyagreement',
+            //     name: 'privacyagreement',
+            //     component: () => import('@/views/usercenter/menuitem/privacyagreement/index.vue'),
+            //     meta: {
+            //         title: '隐私协议'
+            //     }
+            // }
         ]
     },
     {
