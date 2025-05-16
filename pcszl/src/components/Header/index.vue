@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 17:45:19
+ * @LastEditTime: 2025-05-16 17:57:56
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -167,6 +167,7 @@ const navMenuList = reactive([
   },
   {
     name: "特色疗法",
+    path: "/FeatureZone",
   },
   {
     name: "直播",
@@ -305,9 +306,9 @@ const handleBeforeEnter = async () => {
   nickname.value = userStore.UserInfo.nickname;
   headImg.value = userStore.UserInfo.headImg;
   mobile.value = userStore.UserInfo.mobile;
-  console.log(nickname.value)
-  console.log(headImg.value)
-  console.log(mobile.value)
+  console.log(nickname.value);
+  console.log(headImg.value);
+  console.log(mobile.value);
   if (!userStore.userId) return;
   console.log("before enter");
   const { data } = await statisticsWatchRecord({
@@ -365,7 +366,7 @@ const hanldoutlogin = () => {
   background-color: white;
   height: 100px;
   box-sizing: border-box;
-  box-shadow: 0px 1px 10px 0px rgba(219, 219, 219, 0.50);
+  box-shadow: 0px 1px 10px 0px rgba(219, 219, 219, 0.5);
   position: relative; /* 避免被父元素遮挡 */
   z-index: 20;
 }

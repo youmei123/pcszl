@@ -126,6 +126,9 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 </script>
 
 <style lang="scss" scoped>
+.page-container{
+  padding-bottom: 30px;
+}
 .course-container {
   max-width: 1200px;
   width: 100%;

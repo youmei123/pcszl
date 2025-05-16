@@ -8,21 +8,25 @@
         </el-breadcrumb>
       </div>
       <div class="submit-order-content f-jb-as">
-        <div class="submit-order-left" v-if="course || product">
-          <div v-if="types == 1">
+        <div class="submit-order-left" v-if="Commodity">
+          <div v-if="isEntity == 0">
             <VirtualOrder
               ref="virtualOrder"
-              :type="types"
-              :data="course"
+              :type="isEntity"
+              :data="Commodity"
               @productchange="productchange"
             />
           </div>
           <div v-else>
-            <EntityCreateOrder :product="product" @addresschange="addresschange" />
+            <EntityCreateOrder
+              v-if="isEntity == 1"
+              :product="product"
+              @addresschange="addresschange"
+            />
             <VirtualOrder
               ref="virtualOrder"
-              :type="types"
-              :data="product"
+              :type="isEntity"
+              :data="Commodity"
               :freightcharges="freightcharges"
               @productchange="productchange"
             />
@@ -34,8 +38,9 @@
             <div class="row-list">
               <div class="row-item f-jb-ac">
                 <div>商品总价:</div>
-                <div v-if="types == 1">￥{{ course?.coursePrice }}</div>
-                <div v-else>￥{{ product?.price }}</div>
+                <div class="price">
+                  ￥{{ (paycount * (Commodity?.price || 0)).toFixed(2) }}
+                </div>
               </div>
               <div class="row-item f-jb-ac">
                 <div>订单运费:</div>
@@ -43,8 +48,15 @@
               </div>
               <div class="row-item f-jb-ac">
                 <div>需付款:</div>
-                <div class="price" v-if="types == 1">￥{{ course?.coursePrice }}</div>
-                <div class="price" v-else>￥{{ paycount * (product?.price || 0) }}</div>
+                <div class="price" v-if="isEntity == 1">
+                  ￥{{
+                    Number((paycount * (Commodity?.price || 0)).toFixed(2)) +
+                    freightcharges
+                  }}
+                </div>
+                <div class="price" v-else>
+                  ￥{{ (paycount * (Commodity?.price || 0)).toFixed(2) }}
+                </div>
               </div>
               <div class="row-item f-jb-ac">
                 <div>支付方式:</div>
@@ -92,18 +104,27 @@ import { singleproduct } from "@/api/mall";
 import { ElMessage } from "element-plus";
 import QrcodeVue from "qrcode.vue";
 import { AddressType } from "@/utiles/types";
+import { ElLoading } from "element-plus";
+
+interface CommodityType {
+  id: string;
+  price?: number;
+  img?: string;
+  name?: string;
+}
 
 const route = useRoute();
 const router = useRouter();
-
 const virtualOrder = ref<InstanceType<typeof VirtualOrder>>();
 
 const userStore = useUserStore();
-const types = Number(route.query.types); // 1课程  2商城
+const types = Number(route.query.types); // 1课程 7商品
 const courseId = route.query.courseId; // 课程id
-const productId = route.query.productId; // 课程id
+const productId = route.query.productId; // 商品id
+const isEntity = ref(0); // 0虚拟  1实体
 const course = ref<CourseListType>(); //课程对象
 const product = ref<ProductType>(); // 商品对象
+const Commodity = ref<CommodityType>(); //商品对象
 const PayQrcodeDialogVisible = ref(false); // 支付二维码弹窗
 const qrcodeurl = ref("");
 const paycount = ref(1);
@@ -127,6 +148,12 @@ const getSingleCourse = async () => {
   });
   const { listVideo, ...singlecourse } = data;
   course.value = singlecourse as CourseListType;
+  Commodity.value = {
+    id: course.value?.id,
+    name: course.value?.courseName,
+    price: course.value?.coursePrice,
+    img: course.value?.courseCoverImg,
+  };
   console.log(course.value);
 };
 
@@ -136,6 +163,13 @@ const getSingleProduct = async () => {
     userId: userStore.userId,
   });
   product.value = data as ProductType;
+  isEntity.value = product.value?.isEntity || 0;
+  Commodity.value = {
+    id: product.value?.id,
+    name: product.value?.name,
+    price: product.value?.price,
+    img: product.value?.img,
+  };
   console.log(product.value);
 };
 
@@ -177,27 +211,41 @@ const submitorder = async () => {
     deviceType: 4,
     payTypeCode: "WXPAY",
     remark: remake || "",
-    orderType: types == 1 ? 1 : 7,
+    orderType: types,
   };
   if (types == 1) {
     params.courseId = course.value?.id;
     params.productName = course.value?.courseName;
     params.truePrice = course.value?.coursePrice;
   }
-  if (types == 2) {
-    params.truePrice = (product.value?.price || 0) * paycount.value;
-    params.productId = product.value?.id;
-    params.consignee = address.value?.name || "";
-    params.consigneeMobile = address.value?.mobile || "";
-    params.consigneeAddress =
-      (address.value?.area || "") + (address.value?.address || "");
+  if (types == 7) {
+    if (isEntity.value == 1) {
+      params.truePrice =
+        Number(((product.value?.price || 0) * paycount.value).toFixed(2)) +
+        Number(freightcharges.value);
+      params.productId = product.value?.id;
+      params.consignee = address.value?.name || "";
+      params.consigneeMobile = address.value?.mobile || "";
+      params.consigneeAddress =
+        (address.value?.area || "") + (address.value?.address || "");
+    } else {
+      params.truePrice = (product.value?.price || 0) * paycount.value;
+      params.productId = product.value?.id;
+    }
   }
+  const loading = ElLoading.service({
+    lock: true,
+    text: "正在加载中...",
+    background: "rgba(0, 0, 0, 0.7)",
+  });
   const { status, data, message } = await submitSingle(params);
   if (status == "0") {
     qrcodeurl.value = data.qrCode;
     console.log(data);
+    loading.close();
     PayQrcodeDialogVisible.value = true;
   } else {
+    loading.close();
     if (message) {
       ElMessage.warning(message);
     }

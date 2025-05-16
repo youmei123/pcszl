@@ -58,6 +58,9 @@ import { types } from "util";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
+import { useUserStore } from "@/store/userStore";
+import { getCurrentInstance } from "vue";
+const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
 const props = defineProps({
   isSticky: {
     type: Boolean,
@@ -76,14 +79,18 @@ const calculateDiscount = (originalPrice: number, discountedPrice: number) => {
   const discount = (discountedPrice / originalPrice) * 10;
   return discount.toFixed(1) + "折"; // 返回几折，保留1位小数
 };
-
+const userStore = useUserStore();
 const router = useRouter();
 const toBuy = () => {
   console.log("立即购买");
+  if (!userStore.token) {
+    instance?.$openLoginPopup();
+    return;
+  }
   router.push({
     path: "/submitorder",
     query: {
-      types: 2,
+      types: 7,
       productId: props.data.id,
     },
   });

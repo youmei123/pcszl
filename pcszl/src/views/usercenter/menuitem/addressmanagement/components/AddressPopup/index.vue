@@ -159,6 +159,14 @@ const handleChange = (value: any) => {
 };
 
 const addopen = () => {
+  addressform.value = {
+    name: "",
+    mobile: "",
+    address: "",
+    isDefault: 0,
+    area: "",
+    arrayCodeList: [],
+  };
   addressDialogVisible.value = true;
 };
 

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:34
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-14 16:09:48
+ * @LastEditTime: 2025-05-16 17:23:30
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\VirtualOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,27 +12,23 @@
     <div class="virtual-product-content f-jb-ac">
       <div class="product-info f-ac" style="flex: 5">
         <div class="product-img">
-          <img v-if="type == 1" :src="data.courseCoverImg" />
-          <img v-else :src="data.img" />
+          <img :src="data.img" />
         </div>
-        <div class="product-name u-lin-2" v-if="type == 1">{{ data.courseName }}</div>
-        <div class="product-name u-lin-2" v-else>{{ data.name }}</div>
+        <div class="product-name u-lin-2">{{ data.name }}</div>
       </div>
       <div class="price-info f-ac" style="flex: 5">
         <div class="before-price" style="flex: 3.3">
           <div class="price-label">原价</div>
-          <div v-if="type == 1">￥{{ data.coursePrice }}</div>
-          <div v-else>￥{{ data.price }}</div>
+          <div>￥{{ data.price }}</div>
         </div>
         <div class="product-count" style="flex: 3.3">
           <div class="price-label">数量</div>
-          <div v-if="type === 1">1</div>
+          <div v-if="type == 0">1</div>
           <el-input-number v-else v-model="num" :min="1" @change="handleChange" />
         </div>
         <div class="all-price" style="flex: 3.3">
           <div class="price-label">商品总价</div>
-          <div class="all-price-txt" v-if="type == 1">￥{{ data.coursePrice * num }}</div>
-          <div class="all-price-txt" v-else>￥{{ data.price * num }}</div>
+          <div class="all-price-txt">￥{{ (data.price * num).toFixed(2) }}</div>
         </div>
       </div>
     </div>
@@ -53,12 +49,12 @@
       <div
         class="Delivery-container Delivery"
         style="flex: 1; margin-left: 20px"
-        v-if="type != 1"
+        v-if="type != 0"
       >
         <div>配送服务</div>
         <div class="Delivery-info f-jb-ac">
           <div>快递</div>
-          <div class="Delivery-price">￥{{freightcharges}}</div>
+          <div class="Delivery-price">￥{{ freightcharges }}</div>
         </div>
       </div>
     </div>
@@ -77,7 +73,7 @@ const emits = defineEmits<{
 
 const props = defineProps({
   type: {
-    //1是虚拟   2是实体
+    //0是虚拟   1是实体
     type: Number,
     default: 1,
   },
@@ -85,10 +81,11 @@ const props = defineProps({
     type: Object,
     default: {},
   },
-  freightcharges:{ //运费
+  freightcharges: {
+    //运费
     type: Number,
     default: 0,
-  }
+  },
 });
 console.log(props.data);
 const handleChange = (value: number | undefined) => {

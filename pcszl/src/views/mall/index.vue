@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 16:55:10
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-12 15:23:14
+ * @LastEditTime: 2025-05-16 09:02:49
  * @FilePath: \pcszl\src\views\mall\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,13 +16,14 @@
         </el-breadcrumb>
       </div>
       <div class="mall-list">
-        <div v-if="!isloading && productlist.length > 0" class="f-jb-ac f-w">
+        <div v-if="!isloading && productlist.length > 0" class="f-jb-as f-w pd-list-cont">
           <ProductItem v-for="(item, index) in productlist" :data="item" :key="index" />
         </div>
-        <div v-else style="height: 400px">
+        <div v-else style="height: 800px;position: relative;">
           <loading
             v-if="isloading"
             :translateY="50"
+            :height="600"
             color="#FCDC46"
             active
             text="正在加载中..."
@@ -78,6 +79,9 @@ const handlePageChange = (currentPage: number) => {
   padding: 30px;
   box-sizing: border-box;
   border-radius: 10px;
+}
+.pd-list-cont{
+  min-height: 800px;
 }
 :deep(.mall-item) {
   margin-bottom: 30px;

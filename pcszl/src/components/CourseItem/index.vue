@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:29:45
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 17:41:56
+ * @LastEditTime: 2025-05-16 15:52:07
  * @FilePath: \pcszl\src\components\ProductItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -13,7 +13,7 @@
     </div>
     <div class="product-info fd-c f-ja">
       <div class="product-title u-line-1">{{ data.courseName }}</div>
-      <div class="product-desc u-line-2"></div>
+      <div class="product-desc u-line-2">{{data.courseSimpleDescription}}</div>
       <div class="product-bottom f-jb-ac">
         <div class="watch-count">播放量{{ transNumberToShort(data.playCount || 0) }}</div>
         <div class="play-btn pointer" @click="linkplayvideo">立即播放</div>
