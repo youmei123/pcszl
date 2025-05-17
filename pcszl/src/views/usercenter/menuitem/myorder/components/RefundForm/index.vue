@@ -56,7 +56,7 @@
       </el-form-item>
     </el-form>
     <div v-if="submitLoading">
-      <loading :translateY="50"  color="#FCDC46" active text="正在加载中..." :height="400" />
+      <loading :translateY="50"  color="#FCDC46" active text="正在加载中..." :height="550" />
     </div>
     </div>
   </div>

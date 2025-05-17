@@ -85,6 +85,9 @@
         <div class="save-btn pointer" @click="address">保存</div>
       </template>
     </el-dialog>
+    <div v-if="clasLoading">
+      <loading :translateY="50"  color="#FCDC46" active text="正在加载中..." :height="500" />
+    </div>
   </div>
 </template>
 
@@ -126,7 +129,7 @@ const times = ref({
   Timestamp: 0
 })
 const logs = ref(<any>{})
-
+const clasLoading= ref(false)
 // 打开地址弹窗
 const handlesendingpopup = () => {
   addressDialogVisible.value = true;
@@ -137,6 +140,7 @@ const address = async () => {
     ElMessage.error("请输入订单单号")
     return
   }
+  clasLoading.value = true
   const res = await aftersaleAddress({
     id: props.single.id,
     userId: userStore.userId,
@@ -144,6 +148,7 @@ const address = async () => {
     deliveryNumber: addressform.deliveryNumber,
     deliveryName: addressform.deliveryName
   });
+   clasLoading.value = false
   if (res.status == 0) {
     addressDialogVisible.value = false
     emit('Steps')
@@ -160,10 +165,12 @@ const revoke = () => {
       type: 'warning',
     }
   ).then(async () => {
+     clasLoading.value = true
     const res = await aftersaleCancel({
       userId: userStore.userId,
       aftersaleId: props.single.id
     });
+     clasLoading.value = false
     if (res.status == 0) {
       ElMessage({
         type: 'success',

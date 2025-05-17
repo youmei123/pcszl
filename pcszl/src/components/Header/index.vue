@@ -17,7 +17,7 @@
     <div class="menu-list f-ja-ac">
       <div
         class="mebu-item"
-        :class="{ isActive: currentPath == item.path}"
+        :class="{ isActive: currentPath == item.path }"
         v-for="item in navMenuList"
         @click="handmenu(item)"
       >
@@ -198,7 +198,7 @@ const navMenuList = reactive([
   },
   {
     name: "联系我们",
-    path:"/about"
+    path:"/aboutIndex"
   },
 ]);
 

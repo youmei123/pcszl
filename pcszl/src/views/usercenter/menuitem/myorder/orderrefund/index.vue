@@ -55,6 +55,7 @@ import {
   aftersaleSingle
 } from "@/api/order";
 import { useUserStore } from "@/store/userStore";
+const router = useRouter();
 const userStore = useUserStore();
 const refundstatuslist = ref([]);
 const RefundForms = ref(<any>null)
@@ -116,7 +117,9 @@ const Refund = () => {
 }
 // 退款步骤返回
 const Steps = () => {
-  singleOrders()
+  router.push({
+    path: "/usercenter/myorder",
+  });
 }
 // 获取运费
 const getOrderPrice = async () => {
