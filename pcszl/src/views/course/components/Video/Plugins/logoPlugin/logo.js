@@ -3,12 +3,12 @@ import { Plugin } from 'xgplayer'
 const { POSITIONS } = Plugin
 /**
  * @module ./Plugins/logo
- * @exports DemoPlugin
+ * @exports logoPlugin
  */
-export default class demoPlugin extends Plugin {
+export default class logoPlugin extends Plugin {
   // 插件的名称，将作为插件实例的唯一key值
   static get pluginName() {
-    return 'demoPlugin'
+    return 'logoPlugin'
   }
 
   static get defaultConfig () {
@@ -53,6 +53,8 @@ export default class demoPlugin extends Plugin {
   }
 
   render () {
-    return `<div class="demo-plugin">这是一个dmeo插件<div class="icon"></div></div>`
+    return `<div class="logo-plugin">
+        <img src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2024/11/4/3516761452157676449/szllogo.png" />
+    </div>`
   }
 }

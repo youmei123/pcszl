@@ -1,0 +1,6 @@
+.logo-plugin img {
+    height: 50px;
+    width: 150px;
+    position: absolute;
+    left: -150px;
+}

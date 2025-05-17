@@ -5,5 +5,6 @@ declare module "*.vue" {
         install(app: App): void;
     };
     export default component;
-  }
-  
+
+}
+declare module '*.js'

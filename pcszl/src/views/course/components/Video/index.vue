@@ -1,3 +1,11 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-04-11 16:03:51
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-05-17 16:58:32
+ * @FilePath: \pcszl\src\views\course\components\Video\index.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div class="video-container">
     <div id="xgplayer"></div>
@@ -21,7 +29,9 @@ import HlsJsPlugin from "xgplayer-hls.js";
 import { Events } from "xgplayer";
 import Danmu from "xgplayer/es/plugins/danmu";
 import "xgplayer/es/plugins/danmu/index.css";
-import DemoPlugin from "./Plugins/logo"; 
+import logoPlugin from "./Plugins/logoPlugin/logo.js";
+import "./Plugins/logoPlugin/logo.css";
+
 const userStore = useUserStore();
 const xgplayer = ref<any>();
 const currentVideo = ref<CourseVideoType>();
@@ -46,9 +56,9 @@ const getInit = () => {
     autoplay: true,
     poster: props.poster,
     startTime: 0,
-    plugins: [HlsJsPlugin, Danmu, DemoPlugin],
+    plugins: [HlsJsPlugin, Danmu, logoPlugin],
   });
-  console.log(xgplayer.value);
+  console.log(xgplayer.value.plugins);
   // 播放时间改变
   xgplayer.value.on(Events.TIME_UPDATE, (e: any) => {
     const currentTime = Math.floor(e.currentTime); // 获取当前时间并向下取整
