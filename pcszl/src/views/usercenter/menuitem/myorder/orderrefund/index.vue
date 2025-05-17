@@ -18,13 +18,13 @@
       </div>
       <div class="refund-content f-jb-as">
         <div class="refund-left">
-          <div class="refund-form-cont" v-show="currentstatus == 1">
+          <div class="refund-form-cont" v-if="currentstatus == 1">
             <RefundForm ref="RefundForms" :order="order" :type="type" @Refund="Refund" :priceNum="priceTotal" />
           </div>
-          <div class="refund-Steps-cont" v-show="currentstatus != 1">
+          <div class="refund-Steps-cont" v-if="currentstatus != 1">
             <RefundSteps ref="RefundStepss" :order="order" :single="single" @Steps="Steps" />
           </div>
-          <div class="refun-info-box-cont" v-show="currentstatus != 1">
+          <div class="refun-info-box-cont" v-if="currentstatus != 1">
             <RefunInfoBox :order="order" :single="single" :priceNum="priceTotal" />
           </div>
           <div v-if="SingleLoading">
