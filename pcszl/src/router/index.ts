@@ -11,11 +11,13 @@ import Home from './modules/home';
 import course from './modules/course';
 import usercenter from './modules/usercenter';
 import mall from './modules/mall';
+import about from './modules/about';
 const routes: Array<RouteRecordRaw> = [
   ...Home,
   ...course,
   ...usercenter,
-  ...mall
+  ...mall,
+  ...about
 ];
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

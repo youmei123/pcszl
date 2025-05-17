@@ -186,6 +186,7 @@ const navMenuList = reactive([
   },
   {
     name: "关于我们",
+    path:"/about"
   },
   {
     name: "联系我们",
