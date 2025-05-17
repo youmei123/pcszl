@@ -1,7 +1,7 @@
 <template>
   <div class="refund-steps-container">
     <div>
-      <div class="step" v-if="single.logs.length>0">
+      <div class="step">
         <div class="step_box">
           <!-- 左侧进度线 -->
           <div class="step_left"></div>

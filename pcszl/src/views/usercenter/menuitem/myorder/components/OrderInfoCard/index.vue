@@ -38,7 +38,15 @@
       </div>
       <div class="other-item f-jb-ac">
         <div class="other-label">支付方式：</div>
-        <div class="other-value">{{ order.payType == 0 ? '微信支付' : order.payType == 1 ? 'APP支付' : '快手支付' }}</div>
+      <!-- * 0:微信小程序支付
+          * 1:APP支付
+          * 2:安卓快手APP里的师芝林
+          * 3:IOS快手APP里的师芝林
+          * 4:网站端支付
+          * 131:bd逻辑后台开课生成支付宝付款码
+          * 132:bd逻辑后台开课生成微信付款码 -->
+        <div class="other-value" v-if="order.payType == 0 || order.payType == 4">微信支付</div>
+        <div class="other-value" v-if="order.payType == 1 || order.payType == 2 || order.payType == 3">APP支付</div>
       </div>
       <div class="other-item f-jb-ac" v-if="order.deliveryTime">
         <div class="other-label">发货时间：</div>
