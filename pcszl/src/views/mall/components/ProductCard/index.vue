@@ -7,15 +7,15 @@
     </div>
     <div class="hot-bar f-jb-ac">
       <div>
-        <div class="f-ac last-time-bar">
-          <!-- <div>最后6小时￥169</div> -->
-          <div>原价￥{{ data.originalPrice }}</div>
+        <div class="f-ae last-time-bar">
+          <div class="affter-price" ><span>￥</span>{{ data.price }}</div>
+          <div class="before-price" >￥{{ data.originalPrice }}</div>
         </div>
         <div class="f-ac">
           <div class="rob-count">
             疯抢{{ transNumberToShort(data.realSalesVolume + data.salesVolume) }}件
           </div>
-          <!-- <div class="rob-txt">快要抢光</div> -->
+          <div class="rob-txt">快要抢光</div>
         </div>
       </div>
       <div class="hot-right">
@@ -25,7 +25,7 @@
     </div>
     <div class="Label-bar f-ac">
       <div class="double-Label f-ac">
-        <div class="discount">
+        <div class="discount" v-if="calculateDiscount(data.originalPrice, data.price)">
           大促享{{ calculateDiscount(data.originalPrice, data.price) }}
         </div>
         <div class="remainder-time">快要抢光</div>
@@ -43,6 +43,10 @@
       <div class="commitment-item f-ac">
         <div class="iconfont icon-anquanbaozhang"></div>
         <div>资质保障 不支持7天无理由退货</div>
+      </div>
+      <div class="commitment-item f-ac">
+        <div class="iconfont icon-baozhang"></div>
+        <div>48小时内发货 包邮(偏远地区除外)</div>
       </div>
       <div class="commitment-item f-ac">
         <div class="iconfont icon-liwuhuodong"></div>
@@ -115,6 +119,7 @@ const toBuy = () => {
   padding-left: 15px;
   box-sizing: border-box;
   line-height: 50px;
+  border-radius: 4px;
 }
 .title-bar {
   margin-top: 20px;
@@ -132,7 +137,7 @@ const toBuy = () => {
   border-radius: 4px;
   box-sizing: border-box;
   display: inline-block;
-  line-height: 16px;
+  line-height: 15px;
 }
 .hot-bar {
   width: 100%;
@@ -217,7 +222,6 @@ const toBuy = () => {
   box-sizing: border-box;
 }
 .Label-item {
-  width: 80px;
   height: 34px;
   background: #ffffff;
   border-radius: 0px 4px 4px 0px;
@@ -228,6 +232,8 @@ const toBuy = () => {
   line-height: 34px;
   box-sizing: border-box;
   margin-left: 10px;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 .tags-bar {
   overflow: hidden;
@@ -274,6 +280,9 @@ const toBuy = () => {
 .icon-liwuhuodong {
   color: #b6b6b6;
 }
+.icon-baozhang {
+  color: #b6b6b6;
+}
 .iconfont {
   margin-right: 5px;
 }
@@ -289,7 +298,7 @@ const toBuy = () => {
   color: #ff3950;
   text-align: center;
   line-height: 60px;
-  margin-top: 75px;
+  margin-top: 10px;
 }
 .is-sticky {
   height: auto !important;
@@ -316,5 +325,16 @@ const toBuy = () => {
 }
 .is-sticky .buy-btn {
   margin-top: 45px;
+}
+.affter-price{
+  font-size: 24px;
+  font-weight: bold;
+}
+.affter-price span{
+  font-size: 14px;
+}
+.before-price{
+  font-size: 16px;
+  text-decoration: line-through
 }
 </style>

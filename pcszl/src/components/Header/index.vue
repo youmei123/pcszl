@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-16 17:57:56
+ * @LastEditTime: 2025-05-17 10:46:41
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -35,7 +35,8 @@
           @select="handleSelect"
         >
           <template #suffix>
-            <el-icon><Search /></el-icon>
+            <!-- <el-icon><Search /></el-icon> -->
+            <div class="iconfont icon-sousuo"></div>
           </template>
         </el-autocomplete>
       </div>
@@ -47,7 +48,8 @@
       >
         <template #reference>
           <div class="user-btn f-shrink0">
-            <div class="iconfont icon-denglu"></div>
+            <div v-if="!headImg" class="iconfont icon-denglu"></div>
+            <img v-else :src="headImg" alt="" />
           </div>
         </template>
         <div>
@@ -373,9 +375,9 @@ const hanldoutlogin = () => {
 .ishome {
   background-color: rgba(252, 220, 70, 0.1);
   box-shadow: none;
-  // position: absolute;
-  // top: 0;
-  // z-index: 5;
+  position: absolute;
+  top: 0;
+  z-index: 5;
 }
 .logo-box {
   width: 210px;
@@ -413,16 +415,22 @@ const hanldoutlogin = () => {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  overflow: hidden;
   text-align: center;
   line-height: 40px;
   background-color: initial;
   transition: background-color 0.3s ease;
+}
+.user-btn img {
+  width: 100%;
+  height: 100%;
 }
 .user-btn:hover {
   background-color: util.$ThemeColors;
 }
 .user-util-box {
   padding: 8px;
+  padding-bottom: 0;
   box-sizing: border-box;
 }
 
@@ -441,6 +449,7 @@ const hanldoutlogin = () => {
 .user-name {
   font-size: 18px;
   font-weight: bold;
+  color: #212930;
 }
 .vip-end-time {
   font-size: 16px;
@@ -513,5 +522,8 @@ const hanldoutlogin = () => {
 }
 .menu-icon .iconfont {
   font-size: 18px;
+}
+.icon-sousuo {
+  font-size: 16px!important;
 }
 </style>

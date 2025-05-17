@@ -22,13 +22,13 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="padding-top: 30px">
-        <Pagination
-          @changePage="handlePageChange"
-          :count="totalcount"
-          :currentPage="page"
-        />
-      </div>
+    </div>
+    <div style="padding-top: 30px">
+      <Pagination
+        @changePage="handlePageChange"
+        :count="totalcount"
+        :currentPage="page"
+      />
     </div>
     <AddressPopup ref="addressPopup" @editsuccess="editsuccess" />
   </div>
@@ -155,6 +155,7 @@ const handlePageChange = (p: number) => {
 }
 .address-table {
   margin-top: 15px;
+  min-height: 650px;
 }
 :deep(.el-cascader) {
   width: 318px;

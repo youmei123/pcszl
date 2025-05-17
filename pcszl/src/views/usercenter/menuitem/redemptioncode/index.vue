@@ -2,12 +2,12 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 13:43:32
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-16 17:55:41
+ * @LastEditTime: 2025-05-17 09:47:21
  * @FilePath: \pcszl\src\divs\usercenter\menuitem\redemptioncode\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div>
+  <div class="container" >
     <div class="redemption-code-title">兑换码兑换</div>
     <div class="redemption-code-content">
       <div class="redemption-code-input input">
@@ -187,6 +187,9 @@ const messageType = () => {
 </script>
 
 <style lang="scss" scoped>
+.container{
+  min-height: 650px;
+}
 .redemption-code-title {
   font-size: 22px;
   font-weight: bold;

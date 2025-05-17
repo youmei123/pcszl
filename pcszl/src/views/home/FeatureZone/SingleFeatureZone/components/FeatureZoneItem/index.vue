@@ -2,12 +2,12 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-05-06 16:59:07
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-16 16:30:11
+ * @LastEditTime: 2025-05-17 09:19:26
  * @FilePath: \pcszl\src\views\home\FeatureZone\SingleFeatureZone\components\FeatureZoneItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="feature-zone-item">
+  <div class="feature-zone-item pointer" @click="linkcourse" >
     <div class="feature-zone-item-img">
       <img :src="data.courseCoverImg" />
       <div class="svip-icon">svip专属</div>
@@ -19,7 +19,7 @@
       </div>
       <div class="f-jb-ac">
         <div class="watch-num">播放量{{ transNumberToShort(data.playCount) }}</div>
-        <div class="btn-more pointer" @click="linkcourse">立即了解</div>
+        <div class="btn-more " >立即了解</div>
       </div>
     </div>
   </div>

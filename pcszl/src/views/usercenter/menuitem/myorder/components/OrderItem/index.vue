@@ -55,7 +55,7 @@
             <div>￥{{ orderPrice(item) }}</div>
           </div>
           <div class="order-price-cont">
-            <div>{{ item.status == 0 ? '需付款：' : '实付款：' }}</div>
+            <div>{{ item.status == 0 ? '需付款' : '实付款' }}</div>
             <div>￥{{ priceNum(item) }}</div>
           </div>
           <div class="order-switch-cont">
@@ -368,6 +368,7 @@ const isOverOneMonth = (payTime: any) => {
 
 .order-price-cont {
   color: #fb2b1e;
+  text-align: center;
 }
 
 .order-switch-cont {
@@ -390,7 +391,6 @@ const isOverOneMonth = (payTime: any) => {
   text-align: center;
   line-height: 40px;
   box-sizing: border-box;
-  border: 1px solid #DDDDDD;
 }
 
 .order-none-btn:hover {

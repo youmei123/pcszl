@@ -243,3 +243,6 @@ $ThemeColors: #FCDC46;
 :deep(.el-breadcrumb__inner.is-link){
     font-weight: normal;
 }
+:deep(.el-breadcrumb .el-breadcrumb__item:last-child .el-breadcrumb__inner){
+    color: #ce9433;
+}

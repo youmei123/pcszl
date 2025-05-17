@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9646443",
+      "name": "保障1",
+      "font_class": "baozhang",
+      "unicode": "e878",
+      "unicode_decimal": 59512
+    },
+    {
       "icon_id": "18165266",
       "name": "锁,密码,锁定",
       "font_class": "lock",

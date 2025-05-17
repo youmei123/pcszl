@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 16:11:52
+ * @LastEditTime: 2025-05-17 09:33:40
  * @FilePath: \pcszl\src\App.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -37,7 +37,7 @@ body {
   --ThemeColors: #{util.$ThemeColors}; //将scss变量转换成css变量
 }
 #app {
-  overflow-x: hidden;
+  // overflow-x: hidden;
   color: #212930;
   font-size: 16px;
   min-height: 500px;
