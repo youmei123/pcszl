@@ -28,7 +28,7 @@
             <RefunInfoBox :order="order" :single="single" :priceNum="priceTotal" />
           </div>
           <div v-if="SingleLoading">
-            <loading :translateY="50" color="#FCDC46" active text="正在加载中..." :height="400" />
+            <loading :translateY="50" color="#FCDC46" active text="正在加载中..." :height="500" />
           </div>
         </div>
         <div class="refund-right">
@@ -66,7 +66,7 @@ const order = ref(<ordersType>{})
 const orderPrice = ref(0)//运费
 const aftersaleList = ref(<aftersale>{})//售后信息
 const priceTotal = ref("")//需付款
-const type = ref(<number>1)//1仅退款 2退货退款
+const type = ref(Number(route.query.type))//1仅退款 2退货退款
 const SingleLoading = ref(false);//加载
 const single = ref(<aftersale>{})
 // 订单详情

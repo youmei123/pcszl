@@ -1,0 +1,308 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-04-14 16:55:10
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-05-16 09:02:49
+ * @FilePath: \pcszl\src\views\mall\index.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<template>
+    <div class="page-container">
+        <div class="mall-content content">
+            <div class="breadcrumb-cont">
+                <el-breadcrumb :separator-icon="DArrowRight">
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item>关于我们 </el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+            <div class="about-box">
+                <div class="about-title-box" style="margin-top: 20px;">
+                    <div class="f-jc-ac">
+                        <div class="about-titleImg-left"></div>
+                        <div class="about-title">
+                            师芝林介绍
+                        </div>
+                        <div class="about-titleImg-right"></div>
+                    </div>
+                </div>
+                <div class="about-content-box f-ac">
+                    <div class="about-content-left">
+                        <img src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/17/5833978437380646705/about_cent.png"
+                            alt="">
+                    </div>
+                    <div class="about-content-right">
+                        <div class="content-right-title">
+                            师芝林
+                        </div>
+                        <div class="content-right-text">
+                            师芝林是一款旨在为用户提供高效、便捷、全面的学习体验，帮助用户轻松掌握知识，提升学习效果的应用。我们为用户提供丰富的精品课程、热门直播等多种学习资源、途径，更有校长推荐、限时免费与本月新课等板块供用户选择。我们会不断努力改进和优化，为您带来更好的学习体验，快来加入我们吧!
+                        </div>
+                    </div>
+                </div>
+                <div class="about-title-box">
+                    <div class="f-jc-ac">
+                        <div class="about-titleImg-left"></div>
+                        <div class="about-title">
+                            联系我们
+                        </div>
+                        <div class="about-titleImg-right"></div>
+                    </div>
+                </div>
+                <div class="about-content-box contentHeight f">
+                    <div class="address-box">
+                        <div class="about-address-left">
+                            <div class="f">
+                                <div class="address-title f-jc-ac">
+                                    临沂总部
+                                </div>
+                            </div>
+                            <div class="address-row f" v-if="mobile">
+                                <div class="address-row-icon iconfont icon-ic_call"></div>
+                                <div class="address-row-text">
+                                    <div class="row-text-top">
+                                        客服热线
+                                    </div>
+                                    <div class="row-text-bottom">
+                                        {{ mobile }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="address-row f" v-if="address">
+                                <div class="address-row-icon iconfont icon-dizhiguanli"></div>
+                                <div class="address-row-text">
+                                    <div class="row-text-top">
+                                        公司地址
+                                    </div>
+                                    <div class="row-text-bottom">
+                                        {{ address }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="address-row f" v-if="email">
+                                <div class="address-row-icon iconfont icon-youxiang"></div>
+                                <div class="address-row-text">
+                                    <div class="row-text-top">
+                                        官方邮箱
+                                    </div>
+                                    <div class="row-text-bottom">
+                                        {{ email }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="address-row f" v-if="qrCode">
+                                <div class="address-row-icon iconfont icon-qiyeweixin"></div>
+                                <div class="address-row-text">
+                                    <div class="row-text-top">
+                                        企业微信
+                                    </div>
+                                    <div class="row-text-img">
+                                        <img :src="qrCode" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="address-bottom">
+                            <div class="address-bottom-top">联系我们的教务老师，了解更多课程及合作信息。</div>
+                            <div>工作时间08:30 - 17:30</div>
+                        </div>
+                    </div>
+                    <div class="about-address-right ">
+                        <img src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/17/7274905685725425303/address_bg.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import { DArrowRight } from "@element-plus/icons-vue";
+import { ref, onMounted } from "vue";
+import { customerServiceMobile } from "@/api/order";
+import {useRouter } from 'vue-router';
+const mobile = ref(""); //联系电话
+const address = ref(""); //公司地址
+const email = ref(""); //官方邮箱
+const qrCode = ref(""); //联系二维码
+const router = useRouter();
+// console.log(router.currentRoute.value.meta.title)
+// 获取客服信息
+const linkcustomerservice = async () => {
+    const res = await customerServiceMobile({});
+    if (res.status == 0) {
+        mobile.value = res.data.mobile || ""
+        qrCode.value = res.data.qrCode || "";
+        address.value = res.data.address || "";
+        email.value = res.data.email || "";
+    }
+};
+onMounted(() => {
+    linkcustomerservice();
+});
+</script>
+
+<style lang="scss" scoped>
+.page-container{
+    padding-bottom: 50px;
+}
+.breadcrumb-cont {
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+.about-box {
+    width: 100%;
+}
+
+.about-title-box {
+    margin: 30px auto 20px;
+}
+
+.about-titleImg-left {
+    width: 60px;
+    height: 18px;
+    background: url('https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/17/2035612841397225178/titleImg_left.png') no-repeat center;
+    background-size: 100% 100%;
+}
+
+.about-title {
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    font-size: 24px;
+    color: #212930;
+    margin: 0 10px;
+}
+
+.about-titleImg-right {
+    width: 60px;
+    height: 18px;
+    background: url('https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/17/4364864447489899830/titleImg_right.png') no-repeat center;
+    background-size: 100% 100%;
+}
+
+.about-content-box {
+    width: 100%;
+    height: 400px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.about-content-left {
+    width: 800px;
+    height: 100%;
+}
+
+.about-content-left img {
+    width: 100%;
+    height: 100%;
+}
+
+.about-content-right {
+    width: 400px;
+    height: 100%;
+    background: #CE9433;
+    color: #fff;
+    padding: 60px 40px;
+    box-sizing: border-box;
+}
+
+.content-right-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.content-right-text {
+    font-size: 16px;
+    line-height: 34px;
+}
+
+.contentHeight {
+    height: 530px;
+}
+.address-box{
+    width: 50%;
+    height: 100%;
+    background: #CE9433;
+    position: relative;
+}
+
+.about-address-left {
+    width: 100%;
+    padding: 25px 40px 0 40px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.address-title {
+    padding: 10px 20px;
+    box-sizing: border-box;
+    color: #fff;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    font-size: 20px;
+    background: #CE9433;
+    border-radius: 20px;
+    border: 1px solid #FFFFFF;
+}
+
+.address-row {
+    margin-top: 20px;
+}
+
+.address-row-icon {
+    font-size: 20px;
+    color: #fff;
+}
+
+.address-row-text {
+    margin-left: 8px;
+    color: #fff;
+}
+
+.row-text-top {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.row-text-bottom {
+    font-size: 20px;
+}
+
+.row-text-img {
+    width: 90px;
+    height: 90px;
+    margin-top: 10px;
+}
+
+.row-text-img img {
+    width: 100%;
+    height: 100%;
+}
+
+.address-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background: rgba($color: #000000, $alpha: 0.1);
+    padding: 25px 40px;
+    box-sizing: border-box;
+    font-family: SourceHanSansCN;
+    font-weight: 400;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+.address-bottom-top{
+    margin-bottom: 8px;
+}
+.about-address-right{
+    width: 50%;
+    height: 100%;
+}
+.about-address-right img{
+    width: 100%;
+    height: 100%;
+}
+</style>

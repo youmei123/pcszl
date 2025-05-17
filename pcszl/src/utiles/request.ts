@@ -8,6 +8,7 @@
  */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElMessage } from "element-plus";
+import { useUserStore } from "@/store/userStore";
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '', // 从环境变量中获取基础 URL
@@ -37,6 +38,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response: AxiosResponse) => {
         // 对响应数据做点什么
+        if (response.data.message) {
+            ElMessage.warning(response.data.message);
+        }
         return response.data;
     },
     (error) => {
@@ -99,19 +103,35 @@ const objectToQueryString = (obj: Record<string, any>): string => {
 const request = {
     get<T>(url: string, data?: Record<string, any>, config?: AxiosRequestConfig): Promise<T> {
         if (data) {
+            const userStore = useUserStore();
+            if(!data.token && userStore.token){
+                data.token = userStore.token;
+            }
             const queryString = objectToQueryString(data);
             url = `${url}?${queryString}`;
         }
         return service.get(url, config);
     },
     post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+        const userStore = useUserStore();
+        if(!data.token && userStore.token){
+            data.token = userStore.token;
+        }
         return service.post(url, data, config);
     },
     put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
+        const userStore = useUserStore();
+        if(!data.token && userStore.token){
+            data.token = userStore.token;
+        }
         return service.put(url, data, config);
     },
     delete<T>(url: string, data?: Record<string, any>, config?: AxiosRequestConfig): Promise<T> {
         if (data) {
+            const userStore = useUserStore();
+            if(!data.token && userStore.token){
+                data.token = userStore.token;
+            }
             const queryString = objectToQueryString(data);
             url = `${url}?${queryString}`;
         }
