@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-08 14:12:33
+ * @LastEditTime: 2025-05-17 16:11:14
  * @FilePath: \pcszl\vite.config.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -47,7 +47,7 @@ export default defineConfig({
           if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router')) {
             return 'vue-core';
           }
-          if (id.includes('node_modules/xgplayer')) {
+          if (id.includes('node_modules/xgplayer')||id.includes('node_modules/danmu.js')) {
             return 'xgplayer';
           }
           if (id.includes('node_modules/xgplayer-hls.js')) {

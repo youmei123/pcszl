@@ -12,18 +12,22 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { saveWatchTimeNewHuawei } from "@/api/course";
+import { saveWatchTimeNewHuawei, customerServiceMobile } from "@/api/course";
 import { CourseVideoType } from "@/utiles/types";
 import { useUserStore } from "@/store/userStore";
 import Player from "xgplayer";
 import "xgplayer/dist/index.min.css";
 import HlsJsPlugin from "xgplayer-hls.js";
 import { Events } from "xgplayer";
-
+import Danmu from "xgplayer/es/plugins/danmu";
+import "xgplayer/es/plugins/danmu/index.css";
+import DemoPlugin from "./Plugins/logo"; 
 const userStore = useUserStore();
-const xgplayer = ref<Player>();
+const xgplayer = ref<any>();
 const currentVideo = ref<CourseVideoType>();
 const isshowposter = ref(true);
+const mobile = ref<string>("");
+const lastUpdateTime = ref(-1);
 
 const props = defineProps({
   poster: {
@@ -42,11 +46,30 @@ const getInit = () => {
     autoplay: true,
     poster: props.poster,
     startTime: 0,
-    plugins: [HlsJsPlugin],
+    plugins: [HlsJsPlugin, Danmu, DemoPlugin],
   });
   console.log(xgplayer.value);
   // 播放时间改变
-  xgplayer.value.on(Events.TIME_UPDATE, (e) => {
+  xgplayer.value.on(Events.TIME_UPDATE, (e: any) => {
+    const currentTime = Math.floor(e.currentTime); // 获取当前时间并向下取整
+    if (currentTime > 0 && currentTime !== lastUpdateTime.value) {
+      console.log("当前时间", currentTime);
+      if (currentTime % 20 == 0) {
+        if (xgplayer.value) {
+          xgplayer.value.danmu.sendComment({
+            duration: 10000,
+            id: new Date().getTime(),
+            txt: `师芝林老师助理:${mobile.value}`,
+            style: {
+              fontSize: "32px",
+              color: "#666666",
+              paddingTop: "200px",
+            },
+          });
+        }
+      }
+      lastUpdateTime.value = currentTime;
+    }
     emit("timeupdate", e.currentTime);
   });
   //播放资源发生变化 url 发生改变， 切换视频
@@ -57,6 +80,7 @@ const getInit = () => {
 
 onMounted(() => {
   getInit();
+  getCustomerServiceMobile();
 });
 
 onUnmounted(() => {
@@ -82,6 +106,12 @@ const saveVideoRecord = async () => {
           : Math.round(player.currentTime || 0),
     });
   }
+};
+
+const getCustomerServiceMobile = async () => {
+  const { data, status } = await customerServiceMobile();
+  console.log(data);
+  mobile.value = data.mobile || "";
 };
 
 const startvideo = (item: CourseVideoType) => {
@@ -143,8 +173,8 @@ defineExpose({
 
 <style lang="scss" scoped>
 .video-container {
-  width: 840px;
-  height: 473px;
+  width: 1200px;
+  height: 675px;
   position: relative;
 }
 .poster-conter {
@@ -190,5 +220,8 @@ defineExpose({
 }
 :deep(.xgplayer .xgplayer-progress-btn) {
   background: rgba(252, 220, 70, 0.3);
+}
+:deep(.danmu-icon) {
+  display: none;
 }
 </style>

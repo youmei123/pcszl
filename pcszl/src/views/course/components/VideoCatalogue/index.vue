@@ -2,13 +2,13 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 17:43:09
+ * @LastEditTime: 2025-05-17 14:53:38
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="video-catalogue">
-    <div class="catalogue-title">目录</div>
+    <!-- <div class="catalogue-title">目录</div> -->
     <div class="catalogue-cont" v-if="classifyCount > 0 && !loadingstatus">
       <el-collapse v-model="activeNames">
         <el-collapse-item :name="item.id" v-for="(item, index) in classifyVideoList">
@@ -96,7 +96,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, defineEmits } from "vue";
+import { ref, defineEmits } from "vue";
 import { szlCourseVideo, videolist } from "@/api/course";
 import { useUserStore } from "@/store/userStore";
 import { CourseVideoType } from "@/utiles/types";
@@ -159,16 +159,6 @@ const emits = defineEmits<{
   (event: "ActiveVideo", item: CourseVideoType): void;
 }>();
 
-onMounted(() => {
-  console.log(props.classifyCount);
-  console.log(props.courseId);
-  if (props.classifyCount > 0) {
-    getvideolist(0);
-  } else {
-    getSzlCourseVideo(0);
-  }
-});
-
 const loadingstatus = ref(false); //加载状态
 const activeNames = ref(["1"]); //展开标签列表
 const userStore = useUserStore(); //用户信息
@@ -179,6 +169,14 @@ const activeIndex = ref<number>(0); //选中视频index
 const lastclassifyId = ref<string>(""); //最后一次选中的标签id
 const classifyIndex = ref<number>(0); //选中标签视频index
 const condition = ref<string>(""); //搜索条件
+
+const loadData = async () => {
+  if (props.classifyCount > 0) {
+    getvideolist(0);
+  } else {
+    getSzlCourseVideo(0);
+  }
+};
 
 // 获取非标签视频列表
 const getSzlCourseVideo = async (type: number = 0) => {
@@ -369,14 +367,12 @@ defineExpose({
   upldateprogress,
   serachvideo,
   playdefaultvideo,
+  loadData,
 });
 </script>
 
 <style lang="scss" scoped>
 .video-catalogue {
-  width: 360px;
-  height: 552px;
-  background-color: #212930;
   position: relative;
 }
 .catalogue-title {
@@ -394,26 +390,7 @@ defineExpose({
   color: #6e7b87;
   padding: 0 20px;
   box-sizing: border-box;
-  height: 491px;
   overflow-y: auto;
-}
-
-.catalogue-cont::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 8px;
-  /*高宽分别对应横竖滚动条的尺寸*/
-  height: 100px;
-}
-
-.catalogue-cont::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  background: #6e7b87;
-  border-radius: 10px;
-}
-
-.catalogue-cont::-webkit-scrollbar {
-  /*滚动条里面轨道*/
-  background-color: #212930;
 }
 
 :deep(.el-collapse) {
@@ -427,7 +404,7 @@ defineExpose({
 :deep(.el-collapse-item__wrap) {
   background-color: transparent;
   color: #6e7b87;
-  border-bottom: 1px solid #3d4a56;
+  border-bottom: 1px solid #eee;
 }
 :deep(.el-collapse-item__content) {
   color: #6e7b87;
@@ -438,7 +415,7 @@ defineExpose({
     border-bottom: none;
   }
   to {
-    border-bottom: 1px solid #3d4a56;
+    border-bottom: 1px solid #eee;
   }
 }
 
@@ -446,10 +423,15 @@ defineExpose({
   // 应用动画，设置动画名称、动画持续时间、延迟时间和播放次数
   animation: addBorder 0.1s 0.3s 1 forwards;
 }
+
+:deep(.el-collapse-item__arrow){
+  font-size: 26px; 
+}
+
 .item-title {
   height: 16px;
   line-height: 16px;
-  border-left: 3px solid #8ea1b2;
+  border-left: 3px solid util.$ThemeColors;
   padding-left: 7px;
   box-sizing: border-box;
 }
@@ -463,7 +445,19 @@ defineExpose({
   margin-left: 3px;
 }
 .sub-title {
+  color: #212930;
   // font-size: 16px;
+}
+.sub-progress {
+  color: #999999;
+}
+.icon-lock {
+  color: #949494;
+  font-size: 24px;
+}
+.icon-24gf-playCircle {
+  color: #dddddd;
+  font-size: 22px;
 }
 .notclassifyCount {
   padding-top: 10px;
@@ -473,14 +467,14 @@ defineExpose({
   color: #d0e1f0 !important;
 }
 .free-btn {
-  width: 35px;
-  height: 18px;
-  background-color: transparent;
-  border-radius: 9px;
-  border: solid 1px #d0e1f0;
+  width: 60px;
+  height: 34px;
+  background: #ffffff;
+  border-radius: 17px;
+  border: 1px solid #ce9433;
   text-align: center;
-  line-height: 18px;
-  font-size: 12px;
-  color: #d0e1f0;
+  line-height: 34px;
+  font-size: 16px;
+  color: #ce9433;
 }
 </style>
