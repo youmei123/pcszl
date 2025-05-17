@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 10:46:41
+ * @LastEditTime: 2025-05-17 12:10:27
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -24,21 +24,29 @@
         {{ item.name }}
       </div>
     </div>
-    <div class="user-box f-ac">
-      <div class="autocomplete" :class="{ focused: isFocused }">
-        <el-autocomplete
-          v-model="state"
-          :fetch-suggestions="querySearchAsync"
-          :placeholder="placeholder"
-          @focus.stop="handserachfocus"
-          @blur.stop="handserachblur"
-          @select="handleSelect"
-        >
-          <template #suffix>
-            <!-- <el-icon><Search /></el-icon> -->
-            <div class="iconfont icon-sousuo"></div>
-          </template>
-        </el-autocomplete>
+    <div class="user-box f-jc-ac">
+      <div
+        class="autocomplete"
+        :class="{ focused: isFocused }"
+        @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
+      >
+        <div class="autocomplete-box f-je-ac">
+          <el-autocomplete
+            v-model="state"
+            :class="{ 'is-focus': isiconFocused }"
+            :fetch-suggestions="querySearchAsync"
+            :placeholder="placeholder"
+            @focus.stop="handserachfocus"
+            @blur.stop="handserachblur"
+            @select="handleSelect"
+          >
+            <template #suffix>
+              <!-- <el-icon><Search /></el-icon> -->
+              <div class="iconfont icon-sousuo"></div>
+            </template>
+          </el-autocomplete>
+        </div>
       </div>
       <el-popover
         class="box-item"
@@ -210,6 +218,7 @@ const state = ref("");
 const router = useRouter();
 const placeholder = ref("搜索");
 const isFocused = ref(false);
+const isiconFocused = ref(false);
 
 watch(
   () => route.path,
@@ -218,14 +227,28 @@ watch(
   }
 );
 
+const handleMouseEnter = () => {
+  console.log("鼠标移入");
+  isiconFocused.value = true;
+  console.log(isiconFocused.value);
+};
+
+const handleMouseLeave = () => {
+  console.log("鼠标移出");
+  isiconFocused.value = false;
+  console.log(isiconFocused.value);
+};
+
 const handserachfocus = () => {
   isFocused.value = true;
+  isiconFocused.value = true;
   placeholder.value = "请输入课程名称";
 };
 
 const handserachblur = () => {
   placeholder.value = "搜索";
   if (!state.value) isFocused.value = false;
+  isiconFocused.value = false;
 };
 
 const handmenu = (item: any) => {
@@ -510,20 +533,47 @@ const hanldoutlogin = () => {
 }
 .autocomplete {
   margin-right: 20px;
-  width: 80px;
-  transition: width 0.5s ease;
+  width: 40px;
+  // width: 100%;
+  // transition: width 0.5s ease;
 }
+
+.autocomplete :deep(.el-input__inner) {
+  height: 40px;
+}
+.autocomplete :deep(.el-input) {
+  width: 0;
+  transition: all 0.5s ease;
+}
+.autocomplete :deep(.el-input__inner) {
+  height: 40px;
+  width: 0;
+  // display: none; //11
+  transition: all 0.5s ease;
+}
+
 .autocomplete :deep(.el-input__wrapper) {
   border-radius: 20px;
+  box-shadow: none; //111
+  transition: all 0.5s ease;
 }
-.focused {
-  width: 180px;
-  transition: width 0.5s ease;
+.autocomplete :deep(.el-input) {
+  border-color: #ffffff;
 }
+
 .menu-icon .iconfont {
   font-size: 18px;
 }
 .icon-sousuo {
-  font-size: 16px!important;
+  font-size: 26px !important;
+  color: rgba(33, 41, 48, 1);
+}
+:deep(.focused .el-input__inner) {
+  width: 150px;
+  transition: all 0.5s ease;
+}
+:deep(.focused .el-input__wrapper) {
+  box-shadow: 0 0 0 1px #dcdfe6 inset !important;
+  transition: all 0.5s ease;
 }
 </style>
