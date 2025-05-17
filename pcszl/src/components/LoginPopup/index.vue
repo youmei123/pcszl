@@ -57,14 +57,14 @@
           </div>
           <div>
             <div
-              v-if="!isshowpwd"
+              v-if="isshowpwd"
               class="iconfont icon-xianshimima pointer"
-              @click="isshowpwd = true"
+              @click="isshowpwd = false"
             ></div>
             <div
-              v-if="isshowpwd"
+              v-if="!isshowpwd"
               class="iconfont icon-yincangmima pointer"
-              @click="isshowpwd = false"
+              @click="isshowpwd = true"
             ></div>
           </div>
         </div>
