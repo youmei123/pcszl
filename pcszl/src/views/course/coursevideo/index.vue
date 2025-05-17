@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 09:39:57
+ * @LastEditTime: 2025-05-17 13:59:35
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -48,7 +48,7 @@
           <div class="course-info">
             <div class="f-ac">
               <div class="course-title">{{ course?.courseName }}</div>
-              <div class="vip-icon">svip免费</div>
+              <div class="vip-icon" v-if="course?.zoneId">svip免费</div>
             </div>
             <div class="watch-count">
               播放量{{transNumberToShort(course?.playCount!)}}
@@ -63,9 +63,16 @@
       </div>
     </div>
     <div class="product-course-info content f-jb-as">
-      <div class="product-html">
-        <div class="recommended-title">课程简介</div>
-        <div v-html="course?.courseDescription"></div>
+      <div class="tab-cont">
+        <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+          <el-tab-pane label="课程简介" name="1">
+            <div class="recommended-title">课程简介</div>
+            <div v-html="course?.courseDescription"></div>
+          </el-tab-pane>
+          <el-tab-pane label="课程目录" name="2">
+            2222
+          </el-tab-pane>
+        </el-tabs>
       </div>
       <div class="recommended-list">
         <div class="recommended-title">推荐课程</div>
@@ -105,11 +112,13 @@ import { transNumberToShort } from "@/utiles/public";
 import { ref, onMounted } from "vue";
 import { CourseVideoType } from "@/utiles/types";
 import { listCourse } from "@/api/home";
+import type { TabsPaneContext } from "element-plus";
 import { getCurrentInstance } from "vue";
 const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
 //继承接口
 interface courseType extends CourseListType {
   classifyCount: number; //有无标签
+  zoneId: string; //是否是Svip免费
 }
 
 const userStore = useUserStore();
@@ -120,6 +129,7 @@ onMounted(() => {
 });
 
 const route = useRoute();
+const activeName = ref("1"); // 路由激活名称
 const courseId = route.query.courseId as string; //课程id
 const course = ref<courseType>(); //课程对象
 const currentVideo = ref<CourseVideoType>(); //当前播放的视频对象
@@ -165,6 +175,10 @@ const handleActiveVideo = async (item: CourseVideoType) => {
   if (xgPlayer.value) {
     xgPlayer.value.startvideo(item);
   }
+};
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event);
 };
 
 const router = useRouter();
