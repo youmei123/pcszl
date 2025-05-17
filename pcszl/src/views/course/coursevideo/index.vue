@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 13:59:35
+ * @LastEditTime: 2025-05-17 15:24:08
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,22 +27,7 @@
                 () => videoCatalogue && videoCatalogue.playdefaultvideo()
               "
             />
-            <VideoActionBar
-              @actionbarserachchange="
-                (e) => videoCatalogue && videoCatalogue.serachvideo(e)
-              "
-            />
           </div>
-          <VideoCatalogue
-            ref="videoCatalogue"
-            :ispay="ispay"
-            :classifyCount="course?.classifyCount"
-            :courseId="course.id"
-            :continue_watchtime="continue_watchtime"
-            :continue_videoId="continue_videoId"
-            :continue_videoClassifyId="continue_videoClassifyId"
-            @ActiveVideo="handleActiveVideo"
-          />
         </div>
         <div class="product-course-bar f-jb-ac">
           <div class="course-info">
@@ -64,13 +49,28 @@
     </div>
     <div class="product-course-info content f-jb-as">
       <div class="tab-cont">
+        <div class="serach-bar">
+          <el-input v-model="condition" style="width: 200px" placeholder="输入视频名称">
+            <template #suffix>
+              <div class="iconfont icon-sousuo pointer" @click="serachcourse"></div>
+            </template>
+          </el-input>
+        </div>
         <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
           <el-tab-pane label="课程简介" name="1">
-            <div class="recommended-title">课程简介</div>
             <div v-html="course?.courseDescription"></div>
           </el-tab-pane>
           <el-tab-pane label="课程目录" name="2">
-            2222
+            <VideoCatalogue
+              ref="videoCatalogue"
+              :ispay="ispay"
+              :classifyCount="course?.classifyCount"
+              :courseId="course?.id"
+              :continue_watchtime="continue_watchtime"
+              :continue_videoId="continue_videoId"
+              :continue_videoClassifyId="continue_videoClassifyId"
+              @ActiveVideo="handleActiveVideo"
+            />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -102,14 +102,13 @@
 import { DArrowRight } from "@element-plus/icons-vue";
 import XGplayer from "../components/Video/index.vue";
 import VideoCatalogue from "../components/VideoCatalogue/index.vue";
-import VideoActionBar from "../components/VideoActionBar/index.vue";
 import CourseItem from "@/components/CourseItem/index.vue";
 import { useRouter, useRoute } from "vue-router";
 import { useUserStore } from "@/store/userStore";
 import { singleCourse } from "@/api/course";
 import { CourseListType } from "@/utiles/types";
 import { transNumberToShort } from "@/utiles/public";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import { CourseVideoType } from "@/utiles/types";
 import { listCourse } from "@/api/home";
 import type { TabsPaneContext } from "element-plus";
@@ -129,7 +128,7 @@ onMounted(() => {
 });
 
 const route = useRoute();
-const activeName = ref("1"); // 路由激活名称
+const activeName = ref("2"); // 路由激活名称
 const courseId = route.query.courseId as string; //课程id
 const course = ref<courseType>(); //课程对象
 const currentVideo = ref<CourseVideoType>(); //当前播放的视频对象
@@ -138,7 +137,7 @@ const videoCatalogue = ref<InstanceType<typeof VideoCatalogue> | null>(null); //
 const ispay = ref(false); //是否需要付费
 const RecommendedCourseList = ref<CourseListType[]>([]); //推荐课程列表
 const re_loading = ref(false); //推荐课程列表加载状态
-
+const condition = ref(""); //搜索条件
 const continue_watchtime: number = Number(route.query.watchTime) || 0; //继续观看时长
 const continue_videoId: string = (route.query.videoId as string) || ""; //继续观看的视频id
 const continue_videoClassifyId: string = (route.query.videoClassifyId as string) || ""; //继续观看的视频分类id
@@ -151,6 +150,10 @@ const getSingleCourse = async () => {
   const { listVideo, ...singlecourse } = data;
   course.value = singlecourse as courseType;
   ispay.value = course.value.ispay <= 0 && course.value.isfree != 1 ? true : false;
+  await nextTick();
+  if (videoCatalogue.value) {
+    videoCatalogue.value.loadData();
+  }
   console.log(ispay.value);
   console.log(course.value);
 };
@@ -177,8 +180,19 @@ const handleActiveVideo = async (item: CourseVideoType) => {
   }
 };
 
+const serachcourse = async () => {
+  if (videoCatalogue.value) {
+    videoCatalogue.value.serachvideo(condition.value);
+  }
+};
+
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event);
+  if (tab.props.label == "课程目录") {
+    if (videoCatalogue.value) {
+      videoCatalogue.value.loadData();
+    }
+  }
+  console.log(tab.props.label, event);
 };
 
 const router = useRouter();
@@ -204,7 +218,6 @@ const coursepay = () => {
 }
 .video-content {
   width: 100%;
-  height: 710px;
   background-color: white;
 }
 .breadcrumb-cont {
@@ -245,7 +258,6 @@ const coursepay = () => {
 }
 .pay-btn {
   width: 260px;
-  // height: 60px;
   background: util.$ThemeColors;
   border-radius: 30px;
   text-align: center;
@@ -256,13 +268,14 @@ const coursepay = () => {
   padding-top: 20px;
   box-sizing: border-box;
 }
-.product-html {
+.tab-cont {
   width: 810px;
   border-radius: 10px;
   padding: 30px;
   padding-top: 25px;
   box-sizing: border-box;
   background-color: white;
+  position: relative;
 }
 .recommended-list {
   width: 370px;
@@ -279,7 +292,6 @@ const coursepay = () => {
   height: 174px;
 }
 :deep(.product-info) {
-  // height: 60px;
   margin-top: 12px;
   margin-bottom: 20px;
 }
@@ -288,5 +300,27 @@ const coursepay = () => {
   color: #212930;
   margin-bottom: 20px;
   font-weight: bold;
+}
+:deep(.el-tabs__item) {
+  font-size: 24px;
+}
+:deep(.el-tabs__item:hover) {
+  color: #212930;
+}
+:deep(.el-tabs__item.is-active) {
+  color: #212930;
+}
+:deep(.el-tabs__active-bar) {
+  height: 4px;
+  background-color: util.$ThemeColors;
+}
+.serach-bar {
+  position: absolute;
+  right: 30px;
+  top: 25px;
+  z-index: 99;
+}
+.serach-bar :deep(.el-input__wrapper) {
+  border-radius: 17px;
 }
 </style>
