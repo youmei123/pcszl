@@ -35,7 +35,7 @@
     <div class="virtual-product-bottom f-jb-ac">
       <div class="Remarks-container f-as" style="flex: 1">
         <div>备注:</div>
-        <div style="width: 90%">
+        <div style="width: 85%">
           <el-input
             v-model="textarea"
             style="width: 100%"
@@ -158,12 +158,22 @@ defineExpose({
   padding-top: 15px;
   box-sizing: border-box;
 }
+::v-deep .Remarks-container{
+  .el-textarea__inner:focus{
+    box-shadow: 0 0 0 1px transparent inset !important;
+  }
+  textarea{
+    padding: 0 !important;
+    margin-top: -2px !important;
+    margin-left: 8px !important;
+  }
+} 
 :deep(.el-textarea__inner) {
   background-color: #f6f6f6;
   box-shadow: none;
 }
 :deep(.el-textarea__inner:focus) {
-  box-shadow: 0 0 0 1px util.$ThemeColors inset;
+  box-shadow: 0 0 0 1px #409eff inset;
   outline: none;
 }
 .Delivery {

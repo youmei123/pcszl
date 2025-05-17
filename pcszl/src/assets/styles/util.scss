@@ -215,16 +215,17 @@ $ThemeColors: #FCDC46;
 }
 
 :deep(.el-input__wrapper:hover) {
-    box-shadow: 0 0 0 1px $ThemeColors inset;
+    // box-shadow: 0 0 0 1px $ThemeColors inset;
 }
 
-:deep(.el-input__wrapper.is-focus) {
-    box-shadow: 0 0 0 1px $ThemeColors inset;
+:deep(.el-textarea__inner:focus) {
+//    box-shadow: 0 0 0 1px #409eff inset;
 }
 
 :deep(.el-input-number__decrease:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
     box-shadow: 0 0 0 1px $ThemeColors inset;
 }
+
 
 :deep(.el-input-number__increase:hover ~ .el-input:not(.is-disabled) .el-input__wrapper) {
     box-shadow: 0 0 0 1px $ThemeColors inset;

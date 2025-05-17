@@ -199,5 +199,8 @@ defineExpose({onMountedClick})
   border-radius: 20px;
   text-align: center;
   line-height: 40px;
+  cursor: pointer;
 }
+
+
 </style>
