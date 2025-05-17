@@ -7,4 +7,12 @@ export default [
             title: '关于我们'
         }
     },
+    {
+        path: '/aboutIndex',
+        name: 'aboutIndex',
+        component: () => import('@/views/about/aboutIndex.vue'),
+        meta: {
+            title: '联系我们'
+        }
+    },
 ];
