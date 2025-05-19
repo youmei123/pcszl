@@ -3,7 +3,7 @@
     <div v-if="orderList.length != 0 && !listLoading">
       <div class="order-item" v-for="(item, index) in orderList" :key="index">
         <div class="order-statu-bar f-ac">
-          <div class="order-time">2025-1-10 10:56</div>
+          <div class="order-time">{{ timeFormat(item.addtime, 'yyyy-mm-dd hh:MM:ss') }}</div>
           <div class="order-idcard">订单号：{{ item.orderNo }}</div>
           <div class="order-status">
             <div class="order-status-item1" v-if="item.status == 0">
@@ -109,6 +109,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { defineEmits } from 'vue';
 import { ordersType } from "@/utiles/types";
 import { useUserStore } from "@/store/userStore";
+import { timeFormat } from "@/utiles/public"
 const userStore = useUserStore();
 const emit = defineEmits(['changeGetList', 'Popup', 'kfPopup', 'zfPopup']);
 const router = useRouter();
@@ -307,7 +308,9 @@ const isOverOneMonth = (payTime: any) => {
 }
 
 .order-status-item1 {
-  width: 60px;
+  // width: 60px;
+  padding: 0 8px;
+  box-sizing: border-box;
   height: 24px;
   background: rgb(255, 233, 232);
   border-radius: 4px;
@@ -317,7 +320,9 @@ const isOverOneMonth = (payTime: any) => {
 }
 
 .order-status-item2 {
-  width: 77px;
+  // width: 77px;
+  padding: 0 8px;
+  box-sizing: border-box;
   height: 24px;
   background: rgb(245, 245, 245);
   border-radius: 4px;

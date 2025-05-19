@@ -76,8 +76,8 @@ defineExpose({ linkcustomerservice, closepopup })
 }
 
 .popup-box {
-    width: 550px;
-    max-height: 600px;
+    width: 650px;
+    max-height: 700px;
     background: #ffffff;
     border-radius: 10px;
     position: absolute;
@@ -134,7 +134,7 @@ defineExpose({ linkcustomerservice, closepopup })
 
 .steps-content {
     overflow: auto;
-    height: 400px;
+    height: 550px;
     padding-bottom: 15px;
     box-sizing: border-box;
 }
