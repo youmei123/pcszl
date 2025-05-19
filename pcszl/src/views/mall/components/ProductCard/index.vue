@@ -123,7 +123,7 @@ const toBuy = () => {
   border-radius: 4px;
 }
 .title-bar {
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 26px;
   color: #212930;
   font-weight: bold;
@@ -148,7 +148,7 @@ const toBuy = () => {
   background-size: 100%;
   padding: 15px;
   box-sizing: border-box;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .hot-right {
   text-align: right;
@@ -175,30 +175,30 @@ const toBuy = () => {
   margin-right: 10px;
 }
 .rob-count {
-  width: 110px;
-  height: 34px;
+  width: 100px;
+  height: 30px;
   background: #ffffff;
   border-radius: 4px;
   border: 1px solid #fb2b1e;
   font-size: 16px;
   color: #fb2b1e;
   text-align: center;
-  line-height: 34px;
+  line-height: 30px;
 }
 .rob-txt {
   width: 80px;
-  height: 34px;
+  height: 30px;
   background: #fb2b1e;
   border-radius: 4px;
   border: 1px solid #ffffff;
   text-align: center;
-  line-height: 34px;
+  line-height: 30px;
   color: #ffffff;
   font-size: 16px;
   margin-left: 5px;
 }
 .Label-bar {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 .discount {
   width: 110px;
@@ -238,7 +238,7 @@ const toBuy = () => {
 }
 .tags-bar {
   overflow: hidden;
-  margin-top: 20px;
+  margin-top: 10px;
   position: relative;
 }
 
@@ -266,7 +266,7 @@ const toBuy = () => {
   margin-right: 10px;
 }
 .commitment-cont {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .commitment-item {
   height: 48px;
@@ -299,7 +299,7 @@ const toBuy = () => {
   color: #ff3950;
   text-align: center;
   line-height: 60px;
-  margin-top: 10px;
+  margin-top: 55px;
 }
 .is-sticky {
   height: auto !important;
@@ -328,7 +328,7 @@ const toBuy = () => {
   margin-top: 45px;
 }
 .affter-price{
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
 }
 .affter-price span{

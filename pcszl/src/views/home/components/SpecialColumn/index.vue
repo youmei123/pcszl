@@ -1,3 +1,11 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-04-11 15:51:36
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-05-19 17:06:29
+ * @FilePath: \pcszl\src\views\home\components\SpecialColumn\index.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div class="module-cont">
     <div class="module-title-bar f-jb-ac">
@@ -9,7 +17,7 @@
     </div>
     <slot></slot>
     <div class="more-btn pointer f-jc-ac" @click="$emit('btnchange',title)" >
-      <div class="f-ac" style="margin-top: 10px">
+      <div class="f-ac" style="margin-top: 12px">
         {{ moretext }}
         <div class="iconfont" :class="moreicon"></div>
       </div>
@@ -68,6 +76,7 @@ defineProps({
   margin-top: 15px;
   padding-right: 20px;
   box-sizing: border-box;
+  line-height: 74px;
 }
 
 .more-btn .iconfont {

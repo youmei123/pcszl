@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 16:15:04
+ * @LastEditTime: 2025-05-19 17:28:42
  * @FilePath: \pcszl\src\App.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,7 +11,7 @@ import { ref, watch, nextTick } from "vue";
 import { ElConfigProvider } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
-import LoginPopup from "@/utiles/login-popup";
+import LoginPopup from "@/components/LoginPopup/index.vue";
 import { useModalStore } from "@/store/loginStore";
 
 const modalStore = useModalStore();
@@ -33,7 +33,7 @@ router.afterEach((to, from, next) => {
 </script>
 
 <template>
-  <el-config-provider :locale="zhCn">
+  <el-config-provider :locale="zhCn" :zIndex="6000" >
     <Header v-if="isRouteLoading" />
     <router-view v-slot="{ Component }" :key="route.fullPath">
       <transition name="fade-right" mode="out-in">
@@ -76,4 +76,5 @@ body {
   opacity: 0;
   transform: translateX(20px);
 }
+
 </style>

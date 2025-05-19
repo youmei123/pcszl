@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-09 15:55:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 15:10:25
+ * @LastEditTime: 2025-05-19 17:05:25
  * @FilePath: \pcszl\src\components\FeatureZoneItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -72,6 +72,7 @@ const linkzone = () => {
 </script>
 
 <style lang="scss" scoped>
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -104,7 +105,7 @@ const linkzone = () => {
   color: #fff5e5;
   font-size: 16px;
   text-align: center;
-  line-height: 34px;
+  line-height: 33px;
 }
 .shad-cover {
   position: absolute;
@@ -123,6 +124,7 @@ const linkzone = () => {
 }
 .shad-cover {
   padding: 25px;
+  padding-bottom: 20px;
   box-sizing: border-box;
   color: white;
   width: 100%;
@@ -133,9 +135,10 @@ const linkzone = () => {
 }
 .featurezone-desc {
   font-size: 16px;
-  height: 41px;
-  margin: 15px 0;
+  // height: 41px;
+  margin: 10px 0;
   width: 100%;
+  line-height: 24px;
 }
 .featurezone-watchcount {
   font-size: 16px;

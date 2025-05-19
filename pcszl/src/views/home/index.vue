@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 10:06:14
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-15 17:14:03
+ * @LastEditTime: 2025-05-19 16:30:57
  * @FilePath: \pcszl\src\views\home\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AEim
 -->
@@ -72,7 +72,7 @@
       moreicon="icon-huanyihuan"
       @btnchange="handlebtnchange"
     >
-      <div class="block-box f-jb-ac f-w">
+      <div class="block-box f-jb-ac f-w free">
         <CourseItem
           v-if="!fr_loading && fr_list.length > 0"
           v-for="(item, index) in fr_list"
@@ -234,5 +234,8 @@ const handlebtnchange = (title: string) => {
 .block-box {
   position: relative;
   min-height: 150px;
+}
+.free :deep(.product-item){
+  margin-bottom: 0;
 }
 </style>

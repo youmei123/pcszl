@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-05-06 15:00:06
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-06 16:34:58
+ * @LastEditTime: 2025-05-19 17:57:21
  * @FilePath: \pcszl\src\views\home\FeatureZone\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -34,7 +34,7 @@
             @changePage="handlePageChange"
             :count="totalcount"
             :currentPage="pageNo"
-            :pageSize="2"
+            :pageSize="3"
           />
         </div>
       </div>
@@ -61,7 +61,7 @@ const getZoneList = async () => {
   zl_loading.value = true;
   const { data, count } = await zonelist({
     page: pageNo.value,
-    size: 2,
+    size: 3,
   });
   list.splice(0, list.length, ...(data || []));
   totalcount.value = count;
@@ -77,6 +77,9 @@ const handlePageChange = (page: number) => {
 </script>
 
 <style lang="scss" scoped>
+.page-container {
+  min-height: 600px !important;
+}
 .breadcrumb-cont {
   padding: 15px 0;
   box-sizing: border-box;

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 15:56:30
+ * @LastEditTime: 2025-05-19 16:41:41
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -51,7 +51,12 @@
     <div class="product-course-info content f-jb-as">
       <div class="tab-cont">
         <div class="serach-bar">
-          <el-input v-model="condition" style="width: 200px" placeholder="输入视频名称">
+          <el-input
+            v-model="condition"
+            @input="serachchange"
+            style="width: 200px"
+            placeholder="输入视频名称"
+          >
             <template #suffix>
               <div class="iconfont icon-sousuo pointer" @click="serachcourse"></div>
             </template>
@@ -184,7 +189,15 @@ const handleActiveVideo = async (item: CourseVideoType, isend = false) => {
 const serachcourse = async () => {
   if (videoCatalogue.value) {
     videoCatalogue.value.serachvideo(condition.value);
-    condition.value=''
+  }
+};
+
+const serachchange = async (e: string) => {
+  console.log(e);
+  if (videoCatalogue.value) {
+    if (!condition.value) {
+      videoCatalogue.value.serachvideo(condition.value);
+    }
   }
 };
 

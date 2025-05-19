@@ -74,12 +74,12 @@
     <el-dialog
       v-model="PayQrcodeDialogVisible"
       title="支付二维码"
-      width="350"
+      width="300"
       align-center
       :close-on-click-modal="false"
     >
       <div class="dialog-content f-jc-ac">
-        <qrcode-vue :value="qrcodeurl" :size="300" class="qrcode-container" />
+        <qrcode-vue :value="qrcodeurl" :size="250" class="qrcode-container" />
       </div>
       <template #footer>
         <div class="buy-btn pointer" @click="paysuccess">已完成支付</div>
@@ -264,7 +264,7 @@ const paysuccess = () => {
 
 <style lang="scss" scoped>
 .page-container {
-  min-height: 600px !important;
+  min-height: 550px !important;
   padding-bottom: 30px;
   box-sizing: border-box;
 }
@@ -318,5 +318,11 @@ const paysuccess = () => {
   text-align: center;
   line-height: 50px;
   margin-top: 20px;
+}
+:deep(.el-dialog__footer){
+  padding-top: 0;
+}
+:deep(.el-dialog){
+  padding-bottom: 20px;
 }
 </style>
