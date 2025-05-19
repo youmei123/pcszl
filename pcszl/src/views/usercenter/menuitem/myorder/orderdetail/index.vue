@@ -142,9 +142,11 @@ const singleOrders = async () => {
     }
     if (order.value.aftersaleList && order.value.aftersaleList.length != 0) {
       aftersaleList.value = order.value.aftersaleList[0]
+      tabIndex.value=5
       upStatusTitle(5,order.value.status, aftersaleList.value.refundStatus, aftersaleList.value.status)
     } else {
       aftersaleList.value = <aftersale>{}
+      tabIndex.value=0
       upStatusTitle(0,order.value.status,0,0)
     }
     if (order.value.deliveryName) {

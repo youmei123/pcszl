@@ -79,7 +79,12 @@ const menuBarList = reactive([
 
 const handlemenuitemclick = (item: menuItem) => {
   console.log(item.id);
-  router.push({ path: "/course", query: { id: item.id } });
+  if(item.name=='特色疗法'){
+    router.push({ path: "/FeatureZone"});   
+  }else{
+    router.push({ path: "/course", query: { id: item.id } });
+  }
+  
 };
 </script>
 
