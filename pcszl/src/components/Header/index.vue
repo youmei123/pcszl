@@ -35,15 +35,15 @@
           <el-autocomplete
             v-model="state"
             :class="{ 'is-focus': isiconFocused }"
-            :fetch-suggestions="querySearchAsync"
             :placeholder="placeholder"
+            :fetch-suggestions="querySearchAsync"
             @focus.stop="handserachfocus"
             @blur.stop="handserachblur"
             @select="handleSelect"
           >
             <template #suffix>
               <!-- <el-icon><Search /></el-icon> -->
-              <div class="iconfont icon-sousuo"></div>
+              <div class="iconfont icon-sousuo" @click="serve"></div>
             </template>
           </el-autocomplete>
         </div>
@@ -163,9 +163,9 @@ defineProps({
 onMounted(() => {
   allcourselist.value=[]
     if(route.path=='/mall'){
-      serachProductlist("")
+      serachProductlist("",'')
     }else{
-      serachcourselist("");
+      serachcourselist("",'');
     }
 });
 
@@ -236,9 +236,9 @@ watch(
     currentPath.value = newPath;
     allcourselist.value=[]
     if(newPath=='/mall'){
-      serachProductlist("")//商品
+      serachProductlist("",'')//商品
     }else{
-      serachcourselist("");//课程
+      serachcourselist("",'');//课程
     }
   }
 );
@@ -287,6 +287,13 @@ const formatPhoneNumber = (phoneNumber: string): string => {
 };
 
 const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
+  if(!queryString){
+    if(route.path=='/mall'){
+      serachProductlist(state.value,cb)
+    }else{
+      serachcourselist(state.value,cb)
+    }
+  }
   const results = queryString
     ? filterByValueContainingName(queryString)
     : allcourselist.value;
@@ -300,16 +307,48 @@ const filterByValueContainingName = (name: string): { value: string; link: strin
     (item) => item.value.toLowerCase().includes(searchKey) // 不区分大小写的包含匹配
   );
 };
-
-const serachcourselist = async (queryString: string = "") => {
-  const { data } = await listCourse({});
-  allcourselist.value = transformCoursesToNameLink(data);
-};
-const serachProductlist = async (queryString: string = "") => {
-  const { data } = await listproduct({});
-  allcourselist.value = transformCoursesToNameLink(data);
+// 点击搜索
+const serve=()=>{
+  allcourselist.value=[]
+  if(route.path=='/mall'){
+    serachProductlist(state.value,'')
+  }else{
+    serachcourselist(state.value,'')
+  }
 }
-
+// 课程
+const serachcourselist = async (queryString: string = "",cb:any) => {
+  const { data } = await listCourse({
+    condition:queryString || ''
+  });
+  allcourselist.value = transformCoursesToNameLink(data);
+  if(queryString && data.length==0){
+    ElMessage({
+      type: "warning",
+      message: "没有找到相关课程",
+    });
+  }
+  if(!queryString && cb){
+    cb(allcourselist.value)
+  }
+};
+// 商品
+const serachProductlist = async (queryString: string = "",cb:any) => {
+  const { data } = await listproduct({
+    condition:queryString
+  });
+  allcourselist.value = transformCoursesToNameLink(data);
+  if(queryString && data.length==0){
+    ElMessage({
+      type: "warning",
+      message: "没有找到相关商品",
+    });
+  }
+  if(!queryString && cb){
+    cb(allcourselist.value)
+  }
+}
+// 处理数据
 const transformCoursesToNameLink = (courses: any[]): LinkItem[] => {
   let list=<any>[]
  if(route.path=='/mall'){
@@ -325,7 +364,7 @@ const transformCoursesToNameLink = (courses: any[]): LinkItem[] => {
   }
   return list
 };
-
+// 点击跳转
 const handleSelect = (item: Record<string, any>) => {
   console.log(item);
   router.push(item.link);

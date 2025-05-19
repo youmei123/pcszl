@@ -160,6 +160,13 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.page-container{
+  min-height: auto;
+}
+.order-refund-container{
+  padding-bottom: 30px;
+  box-sizing: border-box;
+}
 .breadcrumb-cont {
   padding: 15px 0;
   box-sizing: border-box;

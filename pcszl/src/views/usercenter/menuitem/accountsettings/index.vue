@@ -164,6 +164,7 @@ const saveUserInfo = async () => {
   position: absolute;
   top: 0;
   right: 0;
+  font-size: 16px;
 }
 .header-img {
   width: 50px;
@@ -213,4 +214,19 @@ const saveUserInfo = async () => {
   background-color: util.$ThemeColors;
   margin-left: 10px;
 }
+::v-deep .el-form{
+  font-size: 16px;
+  .el-form-item__label{
+    font-size: 16px;
+  }
+  .el-form-item__content{
+    font-size: 16px;
+  }
+  .el-radio__label{
+    font-size: 16px;
+  }
+  .el-input__inner{
+    font-size: 16px;
+  }
+} 
 </style>

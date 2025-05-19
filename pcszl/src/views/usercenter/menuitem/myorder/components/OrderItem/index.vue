@@ -63,11 +63,11 @@
             <div class="order-pay-btn order-pay-btn-bg pointer" @click="submitpay(item)" v-if="item.status == 0">
               付款
             </div>
-            <div class="order-pay-btn pointer" @click="toSubmit(item)"
+            <div class="order-pay-btn order-none-btn  pointer" @click="toSubmit(item)"
               v-if="(item.status >= 1 && item.status != 3) || item.aftersaleId">
               再买一单
             </div>
-            <div class="order-pay-btn pointer" @click="urge(item)"
+            <div class="order-pay-btn order-none-btn  pointer" @click="urge(item)"
               v-if="tabIndex != 5 && item.status == 3 && (!item.aftersaleId || item.refundStatus == 2 || item.aftersaleStatus == 3 || item.aftersaleStatus == 4)">
               催发货
             </div>

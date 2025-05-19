@@ -462,6 +462,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.page-container{
+  min-height: auto;
+}
 .breadcrumb-cont {
   padding: 15px 0;
   box-sizing: border-box;
@@ -469,11 +472,13 @@ onMounted(() => {
 
 .detail-cont {
   position: relative;
+  padding-bottom: 30px;
+  box-sizing: border-box;
 }
 
 .detail-left {
   width: 810px;
-  height: 620px;
+  height: auto;
   background: #ffffff;
   border-radius: 10px;
   padding: 30px;
