@@ -2,14 +2,17 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 14:53:38
+ * @LastEditTime: 2025-05-19 14:12:13
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="video-catalogue">
     <!-- <div class="catalogue-title">目录</div> -->
-    <div class="catalogue-cont" v-if="classifyCount > 0 && !loadingstatus">
+    <div
+      class="catalogue-cont"
+      v-if="classifyCount > 0 && !loadingstatus && classifyVideoList.length > 0"
+    >
       <el-collapse v-model="activeNames">
         <el-collapse-item :name="item.id" v-for="(item, index) in classifyVideoList">
           <template #title
@@ -48,7 +51,7 @@
     </div>
     <div
       class="catalogue-cont notclassifyCount"
-      v-else-if="classifyCount <= 0 && !loadingstatus"
+      v-else-if="classifyCount <= 0 && !loadingstatus && videoList.length > 0"
     >
       <div class="subitem-list">
         <div
@@ -79,15 +82,13 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-else style="height: 500px; position: relative">
       <loading
         v-if="loadingstatus"
         :translateY="50"
         :height="552"
-        color="#fff"
-        backgroundColor="#212930"
+        color="#FCDC46"
         active
-        textColor="#fff"
         text="正在加载中..."
       />
       <el-empty v-else description="暂无数据" />
@@ -156,10 +157,11 @@ interface classifyvideotype {
 }
 
 const emits = defineEmits<{
-  (event: "ActiveVideo", item: CourseVideoType): void;
+  (event: "ActiveVideo", item: CourseVideoType, isend?: boolean): void;
+  (event: "LastVideo"): void;
 }>();
 
-const loadingstatus = ref(false); //加载状态
+const loadingstatus = ref(true); //加载状态
 const activeNames = ref(["1"]); //展开标签列表
 const userStore = useUserStore(); //用户信息
 const videoList = ref<CourseVideoType[]>([]); //视频列表
@@ -199,7 +201,7 @@ const getSzlCourseVideo = async (type: number = 0) => {
       );
       activeId.value = props.continue_videoId;
       activeIndex.value = videoindex;
-      emits("ActiveVideo", videoList.value[videoindex]);
+      emits("ActiveVideo", videoList.value[videoindex], islastvideo());
     }
   }
   //清空搜索条件后，重置下标
@@ -315,7 +317,7 @@ const handlevideoclick = (
       lastclassifyId.value = pitem.id;
     }
   }
-  emits("ActiveVideo", item);
+  emits("ActiveVideo", item, islastvideo());
 };
 
 const playdefaultvideo = async () => {
@@ -339,7 +341,7 @@ const playdefaultvideo = async () => {
           classifyIndex.value = 0;
           lastclassifyId.value = category.id;
           activeNames.value.push(category.id);
-          emits("ActiveVideo", video);
+          emits("ActiveVideo", video, islastvideo());
         }
       }
     }
@@ -347,8 +349,56 @@ const playdefaultvideo = async () => {
     if (videoList.value.length > 0) {
       activeId.value = videoList.value[0].id;
       activeIndex.value = 0;
-      emits("ActiveVideo", videoList.value[0]);
+      emits("ActiveVideo", videoList.value[0], islastvideo());
     }
+  }
+};
+
+const islastvideo = () => {
+  if (props.classifyCount > 0) {
+    if (classifyIndex.value + 1 < classifyVideoList.value.length) {
+      return false;
+    } else {
+      let videolist = classifyVideoList.value[classifyIndex.value].videoList;
+      if (activeIndex.value + 1 < videolist!.length) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  } else {
+    if (activeIndex.value + 1 < videoList.value.length) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+};
+
+const playnextvideo = () => {
+  if (props.classifyCount > 0) {
+    let videolist = classifyVideoList.value[classifyIndex.value].videoList;
+    if (activeIndex.value + 1 < videolist!.length) {
+      activeIndex.value += 1;
+      activeId.value = videolist![activeIndex.value].id;
+      console.log("走了1");
+      emits("ActiveVideo", videolist![activeIndex.value], islastvideo());
+    } else {
+      classifyIndex.value += 1;
+      if (!activeNames.value.includes(classifyVideoList.value[classifyIndex.value].id)) {
+        activeNames.value.push(classifyVideoList.value[classifyIndex.value].id);
+      }
+      videolist = classifyVideoList.value[classifyIndex.value].videoList;
+      activeIndex.value = 0;
+      activeId.value = videolist![activeIndex.value].id;
+      console.log("走了2");
+      emits("ActiveVideo", videolist![activeIndex.value], islastvideo());
+    }
+  } else {
+    activeIndex.value += 1;
+    activeId.value = videoList.value[activeIndex.value].id;
+    console.log("走了3");
+    emits("ActiveVideo", videoList.value[activeIndex.value], islastvideo());
   }
 };
 
@@ -368,6 +418,7 @@ defineExpose({
   serachvideo,
   playdefaultvideo,
   loadData,
+  playnextvideo,
 });
 </script>
 
@@ -424,8 +475,8 @@ defineExpose({
   animation: addBorder 0.1s 0.3s 1 forwards;
 }
 
-:deep(.el-collapse-item__arrow){
-  font-size: 26px; 
+:deep(.el-collapse-item__arrow) {
+  font-size: 26px;
 }
 
 .item-title {
@@ -464,7 +515,16 @@ defineExpose({
   box-sizing: border-box;
 }
 .active {
-  color: #d0e1f0 !important;
+  color: #ce9433 !important;
+}
+.active .icon-24gf-playCircle {
+  color: #ce9433 !important;
+}
+.active .sub-title {
+  color: #ce9433 !important;
+}
+.active .sub-progress {
+  color: #ce9433 !important;
 }
 .free-btn {
   width: 60px;

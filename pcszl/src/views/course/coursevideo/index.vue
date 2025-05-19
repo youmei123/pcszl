@@ -23,6 +23,7 @@
               ref="xgPlayer"
               :poster="course?.courseCoverImg"
               @timeupdate="(e) => videoCatalogue && videoCatalogue.upldateprogress(e)"
+              @playnextvideo="videoCatalogue && videoCatalogue.playnextvideo()"
               @playdefaultvideo="
                 () => videoCatalogue && videoCatalogue.playdefaultvideo()
               "
@@ -171,12 +172,12 @@ const getRecommendedCourseList = async () => {
   console.log(data);
 };
 
-const handleActiveVideo = async (item: CourseVideoType) => {
+const handleActiveVideo = async (item: CourseVideoType, isend = false) => {
   console.log(item);
   currentVideo.value = item;
   console.log(xgPlayer.value);
   if (xgPlayer.value) {
-    xgPlayer.value.startvideo(item);
+    xgPlayer.value.startvideo(item, isend);
   }
 };
 

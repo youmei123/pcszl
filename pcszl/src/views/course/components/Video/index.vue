@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:03:51
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 17:45:47
+ * @LastEditTime: 2025-05-19 13:58:23
  * @FilePath: \pcszl\src\views\course\components\Video\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -40,6 +40,7 @@ const currentVideo = ref<CourseVideoType>();
 const isshowposter = ref(true);
 const mobile = ref<string>("");
 const lastUpdateTime = ref(-1);
+const islastvideo = ref(false);
 
 const props = defineProps({
   poster: {
@@ -58,13 +59,9 @@ const getInit = () => {
     autoplay: true,
     poster: props.poster,
     startTime: 0,
-    plugins: [HlsJsPlugin, Danmu, logoPlugin,AutoPlayMask],
+    plugins: [HlsJsPlugin, Danmu, logoPlugin, AutoPlayMask],
   });
   console.log(xgplayer.value.plugins);
-
-  const AutoPlayMaskPlugin = xgplayer.value.getPlugin("AutoPlayMask");
-  AutoPlayMaskPlugin.onClick('aaa')
-  console.log(AutoPlayMaskPlugin)
   // 播放时间改变
   xgplayer.value.on(Events.TIME_UPDATE, (e: any) => {
     const currentTime = Math.floor(e.currentTime); // 获取当前时间并向下取整
@@ -88,10 +85,29 @@ const getInit = () => {
     }
     emit("timeupdate", e.currentTime);
   });
-  //播放资源发生变化 url 发生改变， 切换视频
-  xgplayer.value.on(Events.URL_CHANGE, (e) => {
-    console.log(e);
+  xgplayer.value.on(Events.PLAY, (e: any) => {
+    if (islastvideo.value) {
+      AutoPlayMaskPlugin.lastvideo();
+    }else{
+      AutoPlayMaskPlugin.hide();
+    }
   });
+  xgplayer.value.on(Events.ENDED, (e: any) => {
+    console.log("播放结束");
+    AutoPlayMaskPlugin.show();
+  });
+  xgplayer.value.on("AutoPlayMask-replay", (e: any) => {
+    console.log("页面监听到重播按钮:", e);
+    xgplayer.value.currentTime = 1;
+    xgplayer.value.play();
+  });
+
+  xgplayer.value.on("AutoPlayMask-next", (e: any) => {
+    console.log("页面监听到下一个按钮:", e);
+    emit("playnextvideo", "");
+  });
+  //先监听事件再声明插件
+  const AutoPlayMaskPlugin = xgplayer.value.getPlugin("AutoPlayMask");
 };
 
 onMounted(() => {
@@ -129,12 +145,12 @@ const getCustomerServiceMobile = async () => {
   console.log(data);
   mobile.value = data.mobile || "";
 };
-
-const startvideo = (item: CourseVideoType) => {
+const startvideo = (item: CourseVideoType, isend: boolean = false) => {
   let definition: any = [];
   if (xgplayer.value && xgplayer.value.cumulateTime > 0) {
     saveVideoRecord();
   }
+  islastvideo.value = isend;
   //获取 logo 插件
   const logo = xgplayer.value.getPlugin("logoPlugin");
   if (item.isWatermark == 1) {
@@ -187,6 +203,7 @@ const playdefaultvideo = () => {
 const emit = defineEmits<{
   (e: "timeupdate", event: number): void;
   (e: "playdefaultvideo", event: string): void;
+  (e: "playnextvideo", event: string): void;
 }>();
 
 defineExpose({
@@ -246,5 +263,8 @@ defineExpose({
 }
 :deep(.danmu-icon) {
   display: none;
+}
+:deep(.xgplayer-replay) {
+  display: none !important;
 }
 </style>
