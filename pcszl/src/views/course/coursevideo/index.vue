@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 15:24:08
+ * @LastEditTime: 2025-05-19 15:56:30
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -113,8 +113,8 @@ import { ref, onMounted, nextTick } from "vue";
 import { CourseVideoType } from "@/utiles/types";
 import { listCourse } from "@/api/home";
 import type { TabsPaneContext } from "element-plus";
-import { getCurrentInstance } from "vue";
-const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
+import { useModalStore } from "@/store/loginStore";
+const modalStore = useModalStore();
 //继承接口
 interface courseType extends CourseListType {
   classifyCount: number; //有无标签
@@ -184,6 +184,7 @@ const handleActiveVideo = async (item: CourseVideoType, isend = false) => {
 const serachcourse = async () => {
   if (videoCatalogue.value) {
     videoCatalogue.value.serachvideo(condition.value);
+    condition.value=''
   }
 };
 
@@ -199,7 +200,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 const router = useRouter();
 const coursepay = () => {
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     return;
   }
   router.push({

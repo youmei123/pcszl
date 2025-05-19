@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="container" >
-    <div class="continue-bar f-jb-ac" v-if="mycourseRecord&&mycourseList.length > 0">
+    <div class="continue-bar f-jb-ac" v-if="mycourseRecord&&mycourseRecord?.videoName">
       <div class="f-ac">
         <div>上次观看至</div>
         <div class="continue-time">

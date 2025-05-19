@@ -2,18 +2,30 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 09:33:40
+ * @LastEditTime: 2025-05-19 16:15:04
  * @FilePath: \pcszl\src\App.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup lang="ts">
-import { ref} from "vue";
+import { ref, watch, nextTick } from "vue";
 import { ElConfigProvider } from "element-plus";
-import { useRouter,useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
+import LoginPopup from "@/utiles/login-popup";
+import { useModalStore } from "@/store/loginStore";
+
+const modalStore = useModalStore();
 const isRouteLoading = ref(false);
 const router = useRouter();
 const route = useRoute();
+const isshowLogin = ref(false);
+watch(
+  () => modalStore.isLoginVisible,
+  (newVal) => {
+    console.log(newVal);
+  }
+);
+
 //让路由切换刷新时，Header和Footer让其与路由同步显示
 router.afterEach((to, from, next) => {
   isRouteLoading.value = true;
@@ -23,13 +35,14 @@ router.afterEach((to, from, next) => {
 <template>
   <el-config-provider :locale="zhCn">
     <Header v-if="isRouteLoading" />
-    <router-view v-slot="{ Component }" :key="route.fullPath" >
+    <router-view v-slot="{ Component }" :key="route.fullPath">
       <transition name="fade-right" mode="out-in">
         <component :is="Component" />
       </transition>
     </router-view>
     <Footer v-if="isRouteLoading" />
   </el-config-provider>
+  <LoginPopup />
 </template>
 
 <style lang="scss">

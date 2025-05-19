@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 15:23:36
+ * @LastEditTime: 2025-05-19 15:58:26
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -150,7 +150,9 @@ import { statisticsWatchRecord } from "@/api/usercenter";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { getCurrentInstance } from "vue";
 import { CourseListType } from "@/utiles/types";
+import { useModalStore } from "@/store/loginStore";
 
+const modalStore = useModalStore();
 defineProps({
   moretext: {
     type: String,
@@ -332,7 +334,7 @@ const handleSelect = (item: Record<string, any>) => {
 
 const linusercenter = () => {
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     ElMessage({
       type: "warning",
       message: "请先登录",
@@ -346,7 +348,7 @@ const linusercenter = () => {
 
 const linmmyorder = () => {
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     ElMessage({
       type: "warning",
       message: "请先登录",
@@ -376,7 +378,7 @@ const handleBeforeEnter = async () => {
 
 const handlelogin = () => {
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     return;
   }
 };
