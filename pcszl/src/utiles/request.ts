@@ -2,19 +2,24 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 16:18:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 09:35:59
+ * @LastEditTime: 2025-05-19 16:21:00
  * @FilePath: \pcszl\src\utiles\request.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElMessage } from "element-plus";
 import { useUserStore } from "@/store/userStore";
+import { useModalStore } from "@/store/loginStore";
+import { debounce } from "@/utiles/public";
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '', // 从环境变量中获取基础 URL
     timeout: 5000, // 请求超时时间
 });
 
+
+let isRedirectingToLogin = false;
+let message=''
 // 请求拦截器
 service.interceptors.request.use(
     (config: any) => {
@@ -37,9 +42,27 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
     (response: AxiosResponse) => {
+        const userStore = useUserStore();
         // 对响应数据做点什么
         if (response.data.message) {
-            ElMessage.warning(response.data.message);
+            console.log(response.data.message.indexOf('过期'))
+            if (response.data.message.indexOf('过期') != -1 || response.data.message
+                .indexOf('登录') != -1 || response.data.message
+                    .indexOf('禁用') != -1) {
+                userStore.resetState();
+                if (response.data.message.indexOf('禁用') == -1) {
+                    console.log('进入isRedirectingToLogin')
+                    //禁止重复触发登录页面跳转
+                    if (!isRedirectingToLogin) {
+                        console.log('触发redirectToLogin')
+                        message=response.data.message
+                        redirectToLogin();
+                    }
+                }
+            }else{
+                message=''
+                ElMessage.warning(response.data.message);
+            }
         }
         return response.data;
     },
@@ -99,12 +122,21 @@ const objectToQueryString = (obj: Record<string, any>): string => {
         .join('&');
 };
 
+const redirectToLogin = debounce(() => {
+    isRedirectingToLogin = true;
+    console.log('触发openLoginPopup')
+    ElMessage.warning(message);
+    const modalStore = useModalStore();
+    // 调用显示弹窗的方法
+    modalStore.showLoginModal();
+}, 1000);
+
 // 封装请求方法
 const request = {
     get<T>(url: string, data?: Record<string, any>, config?: AxiosRequestConfig): Promise<T> {
         if (data) {
             const userStore = useUserStore();
-            if(!data.token && userStore.token){
+            if (!data.token && userStore.token) {
                 data.token = userStore.token;
             }
             const queryString = objectToQueryString(data);
@@ -114,14 +146,14 @@ const request = {
     },
     post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         const userStore = useUserStore();
-        if(!data.token && userStore.token){
+        if (!data.token && userStore.token) {
             data.token = userStore.token;
         }
         return service.post(url, data, config);
     },
     put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
         const userStore = useUserStore();
-        if(!data.token && userStore.token){
+        if (!data.token && userStore.token) {
             data.token = userStore.token;
         }
         return service.put(url, data, config);
@@ -129,7 +161,7 @@ const request = {
     delete<T>(url: string, data?: Record<string, any>, config?: AxiosRequestConfig): Promise<T> {
         if (data) {
             const userStore = useUserStore();
-            if(!data.token && userStore.token){
+            if (!data.token && userStore.token) {
                 data.token = userStore.token;
             }
             const queryString = objectToQueryString(data);

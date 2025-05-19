@@ -2,14 +2,14 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 10:10:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-16 16:33:42
+ * @LastEditTime: 2025-05-19 16:13:10
  * @FilePath: \pcszl\src\components\loginpopup\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="shad-box" v-if="isopen">
+  <div class="shad-box" v-if="modalStore.isLoginVisible" >
     <div class="login-box">
-      <div class="close-btn pointer" @click="isopen = false">
+      <div class="close-btn pointer" @click="closeloginpopup">
         <el-icon :size="24"><Close /></el-icon>
       </div>
       <div class="logo-box">
@@ -106,22 +106,27 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed, watch } from "vue";
 import { ElMessage } from "element-plus";
 import { loginUser, sendmobile } from "@/api/login";
 import { updateUser } from "@/api/usercenter";
 import { useUserStore } from "@/store/userStore";
 import { Close } from "@element-plus/icons-vue";
 import { md5 } from "js-md5";
+import { useModalStore } from "@/store/loginStore";
+
+const modalStore = useModalStore();
 
 const userStore = useUserStore();
 
+
+
+onMounted(() => {
+    console.log('LoginPopup 组件挂载');
+})
 const account = ref(""); // 账号
 const password = ref(""); // 密码
-
-const isopen = ref(true);
 const type = ref(0); // 0: 登录 1: 注册
-const checked = ref(false); //是否勾选协议
 const isshowpwd = ref(false); // 是否显示密码
 const newpassword = ref("");
 const time = ref(60);
@@ -129,8 +134,15 @@ const sendMsg = ref("获取验证码");
 const timer = ref<NodeJS.Timeout | null>(null);
 const code = ref("");
 
-const open = () => {
-  isopen.value = true;
+watch(
+  () => modalStore.isLoginVisible,
+   (newVal) => {
+    console.log(newVal)
+  }
+);
+
+const closeloginpopup = () => {
+  modalStore.hideLoginModal();
 };
 
 const loginsubmit = () => {
@@ -168,7 +180,7 @@ const hnadlogin = async () => {
     userStore.setUserInfo(data);
     userStore.setToken(data.token);
     userStore.setUserId(data.id);
-    isopen.value = false;
+    modalStore.hideLoginModal();
     ElMessage({
       message: "登录成功",
       grouping: true,
@@ -177,8 +189,6 @@ const hnadlogin = async () => {
     setTimeout(() => {
       window.location.reload();
     }, 600);
-  } else {
-    ElMessage.info(message);
   }
 };
 
@@ -215,8 +225,6 @@ const getVerifyCode = async () => {
       }
     }, 1000);
     ElMessage.success("验证码发送成功");
-  } else {
-    ElMessage.info(message);
   }
 };
 
@@ -241,8 +249,6 @@ const hnadregister = async () => {
     code.value = "";
     newpassword.value = "";
     ElMessage.success("修改密码成功！");
-  } else {
-    ElMessage.warning(message);
   }
 };
 

@@ -63,8 +63,9 @@ import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
 import { useUserStore } from "@/store/userStore";
-import { getCurrentInstance } from "vue";
-const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
+import { useModalStore } from "@/store/loginStore";
+
+const modalStore = useModalStore();
 const props = defineProps({
   isSticky: {
     type: Boolean,
@@ -88,7 +89,7 @@ const router = useRouter();
 const toBuy = () => {
   console.log("立即购买");
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     return;
   }
   router.push({

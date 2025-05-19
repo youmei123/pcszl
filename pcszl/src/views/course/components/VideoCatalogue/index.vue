@@ -102,8 +102,9 @@ import { szlCourseVideo, videolist } from "@/api/course";
 import { useUserStore } from "@/store/userStore";
 import { CourseVideoType } from "@/utiles/types";
 import { ElMessage } from "element-plus";
-import { getCurrentInstance } from "vue";
-const instance = getCurrentInstance()?.appContext.config.globalProperties; // 获取全局属性
+import { useModalStore } from "@/store/loginStore";
+
+const modalStore = useModalStore();
 const props = defineProps({
   classifyCount: {
     //当前视频是否有无标签
@@ -301,7 +302,7 @@ const handlevideoclick = (
   pitem?: classifyvideotype
 ) => {
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     return;
   }
   if (item.isaudition != 1 && props.ispay) {
@@ -322,7 +323,7 @@ const handlevideoclick = (
 
 const playdefaultvideo = async () => {
   if (!userStore.token) {
-    instance?.$openLoginPopup();
+    modalStore.showLoginModal();
     return;
   }
   if (props.ispay) {

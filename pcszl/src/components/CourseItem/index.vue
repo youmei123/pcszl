@@ -27,7 +27,6 @@ import { ref, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
 import { useUserStore } from "@/store/userStore";
-
 const userStore = useUserStore();
 const router = useRouter();
 const props = defineProps({
