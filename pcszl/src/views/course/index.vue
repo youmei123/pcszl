@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 14:39:12
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 08:55:54
+ * @LastEditTime: 2025-05-19 17:16:58
  * @FilePath: \pcszl\src\views\course\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -153,5 +153,23 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   padding-top: 15px;
   box-sizing: border-box;
   min-height: 770px;
+}
+:deep(.el-tabs__nav-prev){
+  font-size: 20px;
+  line-height: 76px;
+}
+:deep(.el-tabs__nav-next){
+  font-size: 20px;
+  line-height: 76px;
+}
+:deep(.el-tabs){
+  --el-tabs-header-height:70px
+}
+:deep(.el-tabs__active-bar){
+  height: 4px;
+}
+:deep(.el-tabs__nav-wrap:after){
+  height: 4px;
+  background: #F6F6F6;
 }
 </style>

@@ -190,8 +190,18 @@ defineExpose({
   text-align: center;
   line-height: 50px;
   margin: 0 auto;
+  font-size: 16px;
 }
 .el-cascader{
   width: 100%;
+}
+:deep(.el-form-item__label){
+  font-size: 16px;
+}
+:deep(.el-radio__label){
+  font-size: 16px;
+}
+:deep(.el-dialog__footer){
+  padding-top: 0;
 }
 </style>

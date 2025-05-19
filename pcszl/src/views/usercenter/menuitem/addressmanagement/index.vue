@@ -151,7 +151,7 @@ const handlePageChange = (p: number) => {
   background-color: rgb(245, 247, 249);
   color: #212930;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
 }
 .address-table {
   margin-top: 15px;
@@ -168,5 +168,8 @@ const handlePageChange = (p: number) => {
 }
 .default {
   background-color: util.$ThemeColors;
+}
+:deep(.el-table__row){
+  font-size: 16px;
 }
 </style>

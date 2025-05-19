@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 15:27:34
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-16 17:23:30
+ * @LastEditTime: 2025-05-19 17:49:37
  * @FilePath: \pcszl\src\views\usercenter\submitorder\components\VirtualOrder\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,7 +11,7 @@
     <div class="virtual-title">确认订单信息</div>
     <div class="virtual-product-content f-jb-ac">
       <div class="product-info f-ac" style="flex: 5">
-        <div class="product-img">
+        <div class="product-img f-shrink0">
           <img :src="data.img" />
         </div>
         <div class="product-name u-lin-2">{{ data.name }}</div>
@@ -19,16 +19,16 @@
       <div class="price-info f-ac" style="flex: 5">
         <div class="before-price" style="flex: 3.3">
           <div class="price-label">原价</div>
-          <div>￥{{ data.price }}</div>
+          <div style="height: 30px;line-height: 30px;" >￥{{ data.price }}</div>
         </div>
         <div class="product-count" style="flex: 3.3">
           <div class="price-label">数量</div>
-          <div v-if="type == 0">1</div>
+          <div style="height: 30px;line-height: 30px;" v-if="type == 0">1</div>
           <el-input-number v-else v-model="num" :min="1" @change="handleChange" />
         </div>
         <div class="all-price" style="flex: 3.3">
           <div class="price-label">商品总价</div>
-          <div class="all-price-txt">￥{{ (data.price * num).toFixed(2) }}</div>
+          <div style="height: 30px;line-height: 30px;" class="all-price-txt">￥{{ (data.price * num).toFixed(2) }}</div>
         </div>
       </div>
     </div>

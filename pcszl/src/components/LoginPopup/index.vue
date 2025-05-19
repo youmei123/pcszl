@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 10:10:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 16:13:10
+ * @LastEditTime: 2025-05-19 17:25:59
  * @FilePath: \pcszl\src\components\loginpopup\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -269,7 +269,7 @@ defineExpose({
   top: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 5000;
 }
 .login-box {
   width: 400px;
