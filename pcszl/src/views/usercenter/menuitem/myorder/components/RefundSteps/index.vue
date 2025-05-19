@@ -68,9 +68,9 @@
       </div>
     </div>
 
-    <el-dialog v-model="addressDialogVisible" title="编辑邮寄信息" width="470" align-center>
+    <el-dialog v-model="addressDialogVisible" title="编辑邮寄信息" width="500" align-center>
       <div class="dialog-content">
-        <el-form :model="addressform" label-width="auto" style="max-width: 400px">
+        <el-form :model="addressform" label-width="auto">
           <el-form-item label="快递公司" prop="deliveryName">
             <el-select v-model="addressform.deliveryName" placeholder="请选择快递公司">
               <el-option :label="item.name" :value="item.name" v-for="(item, index) in CodeList" :key="index" />
@@ -233,6 +233,12 @@ defineExpose({ onMountedClick })
 </script>
 
 <style lang="scss" scoped>
+::v-deep .el-select__wrapper{
+  width: 100%;
+  box-sizing: border-box;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 .refund-steps-container {
   padding: 20px;
   box-sizing: border-box;
@@ -415,5 +421,11 @@ p {
     font-size: 16px;
     color: #ce9433;
   }
+}
+.dialog-content{
+  padding: 15px;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 </style>

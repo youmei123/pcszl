@@ -14,7 +14,7 @@
         <div class="order-label">商品总价:</div>
         <div class="order-value">￥{{ (order.truePrice - orderPrice).toFixed(2) }}</div>
       </div>
-      <div class="item-bar f-jb-ac">
+      <div class="item-bar f-jb-ac" v-if="order.isEntity==1">
         <div class="order-label">订单运费:</div>
         <div class="order-value">￥{{ orderPrice }}</div>
       </div>

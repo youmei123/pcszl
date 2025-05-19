@@ -101,7 +101,7 @@ const getAddressList = async () => {
     userId: userStore.userId,
     page: page.value,
   });
-  tableData.value = data.slice(0, 4);
+  tableData.value = data
   if(tableData.value.length>0){
     emits("addresschange", tableData.value[select_address_index.value]);
   }
@@ -147,7 +147,10 @@ const switchaddress = (index: number) => {
   margin-right: 30px;
 }
 .address-select-list {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  margin-top:15px;
+  max-height: 260px;
+  overflow: auto;
 }
 .address-item {
   border: 1px solid #dddddd;
@@ -156,7 +159,7 @@ const switchaddress = (index: number) => {
   border-radius: 10px;
   padding: 15px;
   box-sizing: border-box;
-  margin-top: 15px;
+  margin-bottom: 15px;
   position: relative;
 }
 .address-name {

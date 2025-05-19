@@ -142,9 +142,10 @@ const singleOrders = async () => {
     }
     if (order.value.aftersaleList && order.value.aftersaleList.length != 0) {
       aftersaleList.value = order.value.aftersaleList[0]
-      upStatusTitle(order.value.status, aftersaleList.value.refundStatus, aftersaleList.value.status)
+      upStatusTitle(5,order.value.status, aftersaleList.value.refundStatus, aftersaleList.value.status)
     } else {
       aftersaleList.value = <aftersale>{}
+      upStatusTitle(0,order.value.status,0,0)
     }
     if (order.value.deliveryName) {
       getexpressdeliveryinfo();
@@ -328,8 +329,8 @@ const paysuccess = () => {
   singleOrders()
 };
 // 判断标题状态
-const upStatusTitle = (status: any, refundStatus: any, aftersaleStatus: any) => {
-  if (tabIndex.value == 5) {
+const upStatusTitle = (tabIndex:any,status: any, refundStatus: any, aftersaleStatus: any) => {
+  if (tabIndex == 5) {
     if (refundStatus == 0) {
       statusTitle.value = '退款中'
     } else if (refundStatus == 1 && (aftersaleStatus != 3 && aftersaleStatus != 4)) {
@@ -452,7 +453,7 @@ const materialflow = async () => {
 }
 onMounted(() => {
   if (route.query.orderId) {
-    upStatusTitle(route.query.status, route.query.refundStatus, route.query.aftersaleStatus)
+    // upStatusTitle(route.query.status, route.query.refundStatus, route.query.aftersaleStatus)
     singleOrders()
   }
 })

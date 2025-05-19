@@ -97,7 +97,7 @@ import { LiveListType, CourseListType } from "@/utiles/types";
 import { useRouter } from "vue-router";
 
 onMounted(() => {
-  //getBanner(); //banners
+  getBanner(); //banners
   // getHomeLiveList(); //直播
   getHomeRecommendedList(); //推荐课程
   getPrecinctList(); //专区
@@ -139,7 +139,7 @@ const fr_list = reactive<CourseListType[]>([]); // 限时免费列表
 
 const getBanner = async () => {
   const { data } = await listBanner({
-    type: 8,
+    type: 2,
   });
   bannerList.value = data || [];
   console.log(data);

@@ -35,7 +35,8 @@
               拒绝退款
             </div>
           </div>
-          <div class="order-link-detail pointer" @click="linkorderdetail(item)">订单详情</div>
+          <div class="order-link-detail pointer" v-if="tabIndex != 5" @click="linkorderdetail(item)">订单详情</div>
+          <div class="order-link-detail pointer" v-if="tabIndex == 5" @click="linkToRefundPage(item)">售后详情</div>
         </div>
         <div class="order-info-bar f-jb-ac">
           <div class="order-product-box f-ac">

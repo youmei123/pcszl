@@ -181,15 +181,11 @@ const submitpay = async (item: any) => {
     deviceType: 4,
   };
   listLoading.value = true;
-  const { status, data, message } = await submitSingle(params);
+  const { status, data } = await submitSingle(params);
   listLoading.value = false;
   if (status == "0") {
     qrcodeurl.value = data.qrCode;
     PayQrcodeDialogVisible.value = true;
-  } else {
-    if (message) {
-      ElMessage.warning(message);
-    }
   }
 };
 // 支付弹窗 点击已完成支付

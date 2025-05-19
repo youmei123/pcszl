@@ -10,8 +10,9 @@
     <div class="shad-box" v-if="visible" @click="closepopup()">
         <div @click.stop class="popup-box">
             <div class="popup-content">
-                <div class="top-bar">
+                <div class="top-bar f-jb-ac">
                     <div class="popup-title">物流详情</div>
+                    <Close  style="wwidth: 30px;height: 30px;color: #999999;cursor: pointer;" @click="closepopup()" />
                 </div>
                 <div class="material-flow-content">
                     <div class="express-delivery-bar f-jb-ac" v-if="expressdelivery.name">
@@ -34,6 +35,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Close } from "@element-plus/icons-vue";
 import ccDefineStep from './ccDefineStep.vue'
 import { ref, reactive, onMounted } from "vue";
 const props = defineProps({

@@ -142,6 +142,7 @@
 <script setup lang="ts">
 import { ArrowRight } from "@element-plus/icons-vue";
 import { listCourse } from "@/api/home";
+import { listproduct } from "@/api/mall";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "@/store/userStore";
@@ -158,7 +159,12 @@ defineProps({
 });
 
 onMounted(() => {
-  serachcourselist("");
+  allcourselist.value=[]
+    if(route.path=='/mall'){
+      serachProductlist("")
+    }else{
+      serachcourselist("");
+    }
 });
 
 interface LinkItem {
@@ -179,15 +185,15 @@ const navMenuList = reactive([
     name: "特色疗法",
     path: "/FeatureZone",
   },
-  {
-    name: "直播",
-  },
-  {
-    name: "短视频",
-  },
-  {
-    name: "百科",
-  },
+  // {
+  //   name: "直播",
+  // },
+  // {
+  //   name: "短视频",
+  // },
+  // {
+  //   name: "百科",
+  // },
   {
     name: "商城",
     path: "/mall",
@@ -226,6 +232,12 @@ watch(
   () => route.path,
   (newPath) => {
     currentPath.value = newPath;
+    allcourselist.value=[]
+    if(newPath=='/mall'){
+      serachProductlist("")//商品
+    }else{
+      serachcourselist("");//课程
+    }
   }
 );
 
@@ -244,7 +256,11 @@ const handleMouseLeave = () => {
 const handserachfocus = () => {
   isFocused.value = true;
   isiconFocused.value = true;
-  placeholder.value = "请输入课程名称";
+  if(route.path=='/mall'){
+    placeholder.value = "请输入商品名称";
+  }else{
+    placeholder.value = "请输入课程名称";
+  }
 };
 
 const handserachblur = () => {
@@ -287,12 +303,25 @@ const serachcourselist = async (queryString: string = "") => {
   const { data } = await listCourse({});
   allcourselist.value = transformCoursesToNameLink(data);
 };
+const serachProductlist = async (queryString: string = "") => {
+  const { data } = await listproduct({});
+  allcourselist.value = transformCoursesToNameLink(data);
+}
 
-const transformCoursesToNameLink = (courses: CourseListType[]): LinkItem[] => {
-  return courses.map((item) => ({
-    value: item.courseName,
-    link: `/coursevideo?courseId=${item.id}`,
-  }));
+const transformCoursesToNameLink = (courses: any[]): LinkItem[] => {
+  let list=<any>[]
+ if(route.path=='/mall'){
+    list=courses.map((item) => ({
+      value: item.name,
+      link: `/productDetail?productId=${item.id}`,
+    }));
+  }else{
+    list=courses.map((item) => ({
+      value: item.courseName,
+      link: `/coursevideo?courseId=${item.id}`,
+    }));
+  }
+  return list
 };
 
 const handleSelect = (item: Record<string, any>) => {

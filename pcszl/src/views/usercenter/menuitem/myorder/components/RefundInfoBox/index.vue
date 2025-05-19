@@ -4,11 +4,11 @@
       <div class="info-item f-ac">
         <div class="info-label">退货商品</div>
         <div class="info-cont">
-          <div class="form-product-bar f-ac">
+          <div class="form-product-bar f">
             <div class="product-img-box">
               <img :src="order.productImg" />
             </div>
-            <div class="product-info">
+            <div class="product-info f-ja fd-c">
               <div class="u-line-1">{{order.productName}}</div>
               <div class="f-ac">
                 <div style="margin-right: 20px">￥{{order.productPrice}}</div>
@@ -84,6 +84,7 @@ const props = defineProps({
 }
 .product-info {
   margin-left: 10px;
+  height: 60px;
 }
 .product-img-box {
   width: 60px;

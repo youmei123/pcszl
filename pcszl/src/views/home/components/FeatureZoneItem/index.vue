@@ -8,9 +8,10 @@
 -->
 <template>
   <div
-    class="featurezone-item"
+    class="featurezone-item pointer"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
+    @click="linkzone"
   >
     <img v-if="data.coverImg" :src="data.coverImg" />
     <div class="svip-icon">svip专属</div>
@@ -25,7 +26,7 @@
             <div class="featurezone-watchcount">
               播放量{{ transNumberToShort(data.playCount) }}
             </div>
-            <div class="play-btn pointer" @click="linkzone">立即了解</div>
+            <div class="play-btn ">立即了解</div>
           </div>
         </div>
       </div>

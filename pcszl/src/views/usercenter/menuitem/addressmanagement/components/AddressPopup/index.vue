@@ -191,4 +191,7 @@ defineExpose({
   line-height: 50px;
   margin: 0 auto;
 }
+.el-cascader{
+  width: 100%;
+}
 </style>

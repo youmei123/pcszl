@@ -7,7 +7,7 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="feature-zone-item">
+  <div class="feature-zone-item pointer" @click="handlesingleroom(data)">
     <div class="feature-zone-item-img">
       <img :src="data.coverImg" />
       <div class="svip-icon">svip专属</div>
@@ -19,7 +19,7 @@
       </div>
       <div class="f-jb-ac">
         <div class="watch-num">播放量{{ transNumberToShort(data.playCount) }}</div>
-        <div class="btn-more pointer" @click="handlesingleroom(data)">立即了解</div>
+        <div class="btn-more">立即了解</div>
       </div>
     </div>
   </div>
