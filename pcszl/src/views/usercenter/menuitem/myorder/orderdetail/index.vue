@@ -57,7 +57,7 @@
             v-if="aftersaleList.refundStatus == 1 && (aftersaleList.status != 3 && aftersaleList.status != 4) && tabIndex == 5">
             退款完成</div>
           <div class="none-btn pointer" v-if="aftersaleList.refundStatus == 2">已取消</div>
-          <div class="none-btn pointer" v-if="(aftersaleList.status == 3 || aftersaleList.status == 4) && tabIndex == 5">拒绝退款
+          <div class="color-btn pointer" @click="linkToRefundPage()" v-if="(aftersaleList.status == 3 || aftersaleList.status == 4) && tabIndex == 5">拒绝退款
           </div>
         </div>
       </div>

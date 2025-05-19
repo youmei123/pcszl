@@ -26,8 +26,8 @@
               </p>
               <!-- 倒计时 -->
               <p class="result f-ac" v-if="index == 0 && item.endtime">
-                <span>剩余{{ times.days > 0 ? `${times.days}天` : '' }}</span>
-                <span class="active">
+                剩余<span class="DayActive">{{ times.days > 0 ? `${times.days}天` : '' }}</span>
+                <span>
                   <el-countdown format="HH:mm:ss" :value="times.Timestamp" @finish="finish" />
                 </span>
               </p>
@@ -208,12 +208,13 @@ const formatTimeDifference = (targetTimestamp: number) => {
   let minutes = Math.floor(totalSeconds / 60);
   // 秒数
   let seconds = totalSeconds
+  let endTimes = (hours * 3600 + minutes * 60 + seconds) * 1000
   times.value.days = days
   times.value.hours = hours
   times.value.minutes = minutes
   times.value.seconds = seconds
-  times.value.Timestamp = (hours * 3600 + minutes * 60 + seconds) * 1000
-  console.log(times.value, 'times')
+  times.value.Timestamp =(Date.now() + endTimes)
+  // console.log(times.value, 'times')
 }
 const onMountedClick = (singleData: any, orderData: any) => {
   // 判断是否需要快递公司信息
@@ -243,11 +244,7 @@ defineExpose({ onMountedClick })
   font-weight: bold;
 }
 
-.refund-last-time {
-  margin-top: 10px;
-}
-
-.refund-last-time .active {
+.DayActive{
   color: #ce9433;
 }
 
@@ -356,6 +353,8 @@ p {
       .titleActive {
         font-size: 20px;
       }
+      
+      
 
       .times {
         font-size: 15px;
@@ -409,6 +408,12 @@ p {
         }
       }
     }
+  }
+}
+::v-deep .el-statistic{
+  .el-statistic__content{
+    font-size: 16px;
+    color: #ce9433;
   }
 }
 </style>
