@@ -152,13 +152,13 @@ const handredeem = async () => {
     ElMessage.warning("请先登录");
     return;
   }
-  const { status, message } = await redeemuse({
+  const { status,data, message } = await redeemuse({
     redeemCode: redeemCode.value,
     redeemPassword: redeemPassword.value,
     userId: userStore.userId,
   });
   if (status == "0") {
-    showmessage.value = message;
+    showmessage.value = data;
     ElMessage.success("兑换成功,请前往我的课程进行学习");
     redeemCode.value = "";
     redeemPassword.value = "";
