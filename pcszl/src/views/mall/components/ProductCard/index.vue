@@ -174,7 +174,9 @@ const toBuy = () => {
   margin-right: 10px;
 }
 .rob-count {
-  width: 100px;
+  // width: 100px;
+  padding: 0 10px;
+  box-sizing: border-box;
   height: 30px;
   background: #ffffff;
   border-radius: 4px;
@@ -182,7 +184,7 @@ const toBuy = () => {
   font-size: 16px;
   color: #fb2b1e;
   text-align: center;
-  line-height: 30px;
+  line-height:28px;
 }
 .rob-txt {
   width: 80px;
@@ -218,7 +220,7 @@ const toBuy = () => {
   font-size: 16px;
   color: #fb2b1e;
   text-align: center;
-  line-height: 34px;
+  line-height: 33px;
   box-sizing: border-box;
 }
 .Label-item {
@@ -229,7 +231,7 @@ const toBuy = () => {
   font-size: 16px;
   color: #fb2b1e;
   text-align: center;
-  line-height: 34px;
+  line-height: 32px;
   box-sizing: border-box;
   margin-left: 10px;
   padding: 0 10px;

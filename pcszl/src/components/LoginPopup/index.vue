@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 10:10:42
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 17:25:59
+ * @LastEditTime: 2025-05-20 11:18:53
  * @FilePath: \pcszl\src\components\loginpopup\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -14,7 +14,7 @@
       </div>
       <div class="logo-box">
         <img
-          src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/14/5090787630086403142/log.png"
+          src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/7/2951187417718319454/logo.png"
         />
       </div>
       <div class="popup-title">{{ type == 0 ? "密码登录" : "重置密码" }}</div>
@@ -276,6 +276,7 @@ defineExpose({
   border-radius: 10px;
   background: #ffffff;
   padding: 20px 30px;
+  padding-top: 25px;
   box-sizing: border-box;
   box-shadow: 0px 2px 20px 0px rgba(117, 117, 117, 0.3);
   position: absolute;
@@ -285,8 +286,8 @@ defineExpose({
   color: #212930;
 }
 .logo-box {
-  width: 110px;
-  height: 80px;
+  width: 210px;
+  height: 50px;
   margin: 0 auto;
 }
 .logo-box img {
@@ -296,7 +297,7 @@ defineExpose({
 .popup-title {
   font-size: 24px;
   font-weight: bold;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .popup-desc {
   font-size: 16px;
@@ -360,7 +361,7 @@ input {
 }
 .close-btn {
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 20px;
+  right: 20px;
 }
 </style>
