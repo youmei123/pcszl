@@ -2,15 +2,15 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 09:32:33
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 17:28:42
+ * @LastEditTime: 2025-05-20 16:59:15
  * @FilePath: \pcszl\src\App.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
-import { ElConfigProvider } from "element-plus";
+// import { ElConfigProvider } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
+// import zhCn from "element-plus/es/locale/lang/zh-cn";
 import LoginPopup from "@/components/LoginPopup/index.vue";
 import { useModalStore } from "@/store/loginStore";
 
@@ -33,7 +33,7 @@ router.afterEach((to, from, next) => {
 </script>
 
 <template>
-  <el-config-provider :locale="zhCn" :zIndex="6000" >
+  <!-- <el-config-provider :locale="zhCn" :zIndex="6000" > -->
     <Header v-if="isRouteLoading" />
     <router-view v-slot="{ Component }" :key="route.fullPath">
       <transition name="fade-right" mode="out-in">
@@ -41,7 +41,7 @@ router.afterEach((to, from, next) => {
       </transition>
     </router-view>
     <Footer v-if="isRouteLoading" />
-  </el-config-provider>
+  <!-- </el-config-provider> -->
   <LoginPopup />
 </template>
 
