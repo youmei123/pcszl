@@ -100,7 +100,7 @@ const form = reactive({
   type: props.type,//售后类型 1:退款 2:退货退款
   refundRemark: "",//退款说明
   refundImg: "",
-  price:"",//退款金额
+  price:0,//退款金额
 });
 const rules = reactive({
   refundReason: [
@@ -115,9 +115,13 @@ const submitLoading=ref(false)
 // 提交退款申请
 const orderRefund = async () => {
   form.type=props.type
+  if(Number(form.price)<= 0 || (Number(form.price) > Number(props.priceNum))){
+    ElMessage.warning("退款金额不得小于0，不得大于实付金额！")
+    return
+  }
   // console.log(form)
   if(!form.refundReason){
-    ElMessage.error("请选择退款理由")
+    ElMessage.warning("请选择退款理由")
     return
   }
   submitLoading.value=true
