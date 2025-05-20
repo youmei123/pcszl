@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-30 15:25:58
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-05 10:05:01
+ * @LastEditTime: 2025-05-20 11:16:19
  * @FilePath: \pcszl\src\views\usercenter\menuitem\myorder\components\OrderInfoCard\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -61,8 +61,8 @@
         <div class="other-value">{{ order.deliveryNumber }}</div>
       </div>
       <div class="other-item f-jb-ac" v-if="order.remark">
-        <div class="other-label">备注：</div>
-        <div class="other-value">{{ order.remark }}</div>
+        <div class="other-label f-shrink0">备注：</div>
+        <div class="other-value" style="line-height: 26px;" >{{ order.remark }}</div>
       </div>
     </div>
     <div class="switch-bar f-je-ac" v-if="isbutton">
@@ -192,5 +192,11 @@ const urge = () => {
 
 .switch-bar :first-child {
   margin-left: 0 !important;
+}
+.other-label{
+  width: 80px;
+}
+.other-value{
+  text-align: right;
 }
 </style>

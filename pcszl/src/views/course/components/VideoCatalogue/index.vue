@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-20 09:57:21
+ * @LastEditTime: 2025-05-20 11:25:02
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -38,11 +38,11 @@
                   <div class="sub-progress" v-else>未看</div>
                 </div>
               </div>
-              <div v-if="ispay">
+              <div v-if="ispay" class="icon-btn" >
                 <div v-if="val.isaudition && val.isaudition == 1" class="free-btn">
                   免费
                 </div>
-                <div v-else class="iconfont icon-lock"></div>
+                <div v-else style="width: 40px;" class="iconfont icon-lock"></div>
               </div>
             </div>
           </div>
@@ -73,11 +73,11 @@
               <div class="sub-progress" v-else>未看</div>
             </div>
           </div>
-          <div v-if="ispay" :style="{ 'font-size': userStore.FontSize + 'px' }">
+          <div v-if="ispay" class="icon-btn" >
             <div v-if="item.isaudition && item.isaudition == 1" class="free-btn">
               免费
             </div>
-            <div v-else class="iconfont icon-lock"></div>
+            <div v-else style="width: 40px;" class="iconfont icon-lock"></div>
           </div>
         </div>
       </div>
@@ -440,8 +440,6 @@ defineExpose({
 }
 .catalogue-cont {
   color: #6e7b87;
-  padding: 0 20px;
-  padding-left: 0;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -492,7 +490,7 @@ defineExpose({
   width: 2rem;
 }
 .subitem {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .subitem-info {
   margin-left: 3px;
@@ -529,14 +527,17 @@ defineExpose({
   color: #ce9433 !important;
 }
 .free-btn {
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 24px;
   background: #ffffff;
   border-radius: 17px;
   border: 1px solid #ce9433;
   text-align: center;
-  line-height: 34px;
-  font-size: 16px;
+  line-height: 24px;
+  font-size: 12px;
   color: #ce9433;
+}
+.icon-btn{
+  text-align: center;
 }
 </style>
