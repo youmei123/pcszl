@@ -142,14 +142,7 @@ const editaddress = async () => {
       });
     }
     emit("editsuccess");
-  } else {
-    if (message) {
-      ElMessage({
-        message: message,
-        type: "warning",
-      });
-    }
-  }
+  } 
 };
 const handleChange = (value: any) => {
   console.log(addressform.value);
@@ -192,7 +185,7 @@ defineExpose({
   margin: 0 auto;
   font-size: 16px;
 }
-.el-cascader{
+:deep(.el-cascader){
   width: 100%;
 }
 :deep(.el-form-item__label){

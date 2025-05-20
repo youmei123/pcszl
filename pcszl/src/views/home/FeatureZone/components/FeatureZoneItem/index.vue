@@ -45,14 +45,16 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .feature-zone-item {
-  width: 360px;
+  width: 560px;
+  margin-bottom: 20px;
 }
 .feature-zone-item-img {
   width: 100%;
-  height: 210px;
-  background-color: util.$ThemeColors;
+  height: 314px;
+  // background-color: util.$ThemeColors;
   border-radius: 16px 16px 0px 0px;
   border: 1px solid #dddddd;
+  box-sizing: border-box;
   position: relative;
   overflow: hidden;
 }

@@ -246,9 +246,9 @@ const submitorder = async () => {
     PayQrcodeDialogVisible.value = true;
   } else {
     loading.close();
-    if (message) {
-      ElMessage.warning(message);
-    }
+    // if (message) {
+    //   ElMessage.warning(message);
+    // }
   }
 };
 
