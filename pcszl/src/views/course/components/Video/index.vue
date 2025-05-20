@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:03:51
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 16:28:55
+ * @LastEditTime: 2025-05-20 10:19:24
  * @FilePath: \pcszl\src\views\course\components\Video\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,7 +12,7 @@
     <div class="poster-conter" v-if="isshowposter">
       <img :src="poster" alt="poster" />
       <div class="shad-box pointer" @click="playdefaultvideo">
-        <div class="iconfont icon-24gf-playCircle"></div>
+        <div class="iconfont icon-playcircle"></div>
       </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-10 14:39:12
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 17:16:58
+ * @LastEditTime: 2025-05-20 09:51:27
  * @FilePath: \pcszl\src\views\course\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,30 +16,32 @@
         </el-breadcrumb>
       </div>
       <div class="course-list">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane
-            v-for="item in tablist"
-            :label="item.courseTypeName"
-            :name="item.id"
-          >
-            <div
-              class="course-item-cont f-w f-jb"
-              v-if="!loading1 && courselist.length > 0"
+        <div class="course-tab-cont" >
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane
+              v-for="item in tablist"
+              :label="item.courseTypeName"
+              :name="item.id"
             >
-              <CourseItem v-for="val in courselist" :data="val" :key="val.id" />
-            </div>
-            <div v-else style="height: 750px" class="f-jc-ac" >
-              <loading
-                v-if="loading1"
-                :translateY="50"
-                color="#FCDC46"
-                active
-                text="正在加载中..."
-              />
-              <el-empty v-else description="暂无数据" />
-            </div>
-          </el-tab-pane>
-        </el-tabs>
+              <div
+                class="course-item-cont f-w f-jb"
+                v-if="!loading1 && courselist.length > 0"
+              >
+                <CourseItem v-for="val in courselist" :data="val" :key="val.id" />
+              </div>
+              <div v-else style="height: 750px" class="f-jc-ac">
+                <loading
+                  v-if="loading1"
+                  :translateY="50"
+                  color="#FCDC46"
+                  active
+                  text="正在加载中..."
+                />
+                <el-empty v-else description="暂无数据" />
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
         <Pagination
           @changePage="handlePageChange"
           :count="totalcount"
@@ -123,11 +125,10 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   pageNo.value = 1;
   getlistCourse();
 };
-
 </script>
 
 <style lang="scss" scoped>
-.page-container{
+.page-container {
   padding-bottom: 30px;
 }
 .course-container {
@@ -141,6 +142,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 }
 .course-list {
   padding: 30px;
+  padding-top: 0;
   box-sizing: border-box;
   background-color: white;
   border-radius: 10px;
@@ -152,24 +154,26 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 .course-item-cont {
   padding-top: 15px;
   box-sizing: border-box;
-  min-height: 770px;
 }
-:deep(.el-tabs__nav-prev){
+:deep(.el-tabs__nav-prev) {
   font-size: 20px;
   line-height: 76px;
 }
-:deep(.el-tabs__nav-next){
+:deep(.el-tabs__nav-next) {
   font-size: 20px;
   line-height: 76px;
 }
-:deep(.el-tabs){
-  --el-tabs-header-height:70px
+:deep(.el-tabs) {
+  --el-tabs-header-height: 70px;
 }
-:deep(.el-tabs__active-bar){
+:deep(.el-tabs__active-bar) {
   height: 4px;
 }
-:deep(.el-tabs__nav-wrap:after){
+:deep(.el-tabs__nav-wrap:after) {
   height: 4px;
-  background: #F6F6F6;
+  background: #f6f6f6;
+}
+.course-tab-cont{
+  min-height: 900px;
 }
 </style>

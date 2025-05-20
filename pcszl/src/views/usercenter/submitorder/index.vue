@@ -325,4 +325,7 @@ const paysuccess = () => {
 :deep(.el-dialog){
   padding-bottom: 20px;
 }
+:deep(.el-cascader--large){
+  width: 100%;
+}
 </style>

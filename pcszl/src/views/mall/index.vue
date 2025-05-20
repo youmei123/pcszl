@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-14 16:55:10
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-16 09:02:49
+ * @LastEditTime: 2025-05-20 10:13:44
  * @FilePath: \pcszl\src\views\mall\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -69,6 +69,10 @@ const handlePageChange = (currentPage: number) => {
 </script>
 
 <style lang="scss" scoped>
+.page-container{
+  padding-bottom: 30px;
+  box-sizing: border-box;
+}
 .breadcrumb-cont {
   padding: 20px 0;
   box-sizing: border-box;
