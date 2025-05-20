@@ -29,7 +29,11 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="退款金额" prop="price">
-        <el-input v-model="form.price" type="text"  placeholder="请输入退款金额" />
+        <view style="color:red;">
+          <text>￥</text>
+          <text>{{ form.price }}</text>
+        </view>
+        <!-- <el-input v-model="form.price" type="text"  placeholder="请输入退款金额" /> -->
       </el-form-item>
       <el-form-item label="退款理由" prop="refundReason">
         <el-select v-model="form.refundReason" placeholder="请选择退款理由">
