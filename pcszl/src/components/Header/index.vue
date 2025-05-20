@@ -162,11 +162,6 @@ defineProps({
 
 onMounted(() => {
   allcourselist.value=[]
-    if(route.path=='/mall'){
-      serachProductlist("",'')
-    }else{
-      serachcourselist("",'');
-    }
 });
 
 interface LinkItem {
@@ -229,17 +224,13 @@ const router = useRouter();
 const placeholder = ref("搜索");
 const isFocused = ref(false);
 const isiconFocused = ref(false);
-
 watch(
   () => route.path,
   (newPath) => {
     currentPath.value = newPath;
+    handserachblur()
     allcourselist.value=[]
-    if(newPath=='/mall'){
-      serachProductlist("",'')//商品
-    }else{
-      serachcourselist("",'');//课程
-    }
+    state.value=""
   }
 );
 
@@ -285,19 +276,18 @@ const formatPhoneNumber = (phoneNumber: string): string => {
 
   return phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1****$3");
 };
-
+const cbs=ref(<any>null)
 const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
-  if(!queryString){
-    if(route.path=='/mall'){
-      serachProductlist(state.value,cb)
-    }else{
-      serachcourselist(state.value,cb)
-    }
+  if(queryString){
+    cbs.value=cb
+    const results = queryString
+      ? filterByValueContainingName(queryString)
+      : allcourselist.value;
+    cb(results || []);
+  }else{
+    cb([]);
   }
-  const results = queryString
-    ? filterByValueContainingName(queryString)
-    : allcourselist.value;
-  cb(results);
+  
 };
 
 const filterByValueContainingName = (name: string): { value: string; link: string }[] => {
@@ -309,11 +299,18 @@ const filterByValueContainingName = (name: string): { value: string; link: strin
 };
 // 点击搜索
 const serve=()=>{
+  if(!state.value){
+    ElMessage({
+      type: "warning",
+      message: "请输入搜索内容",
+    });
+    return
+  }
   allcourselist.value=[]
   if(route.path=='/mall'){
-    serachProductlist(state.value,'')
+    serachProductlist(state.value,cbs.value)
   }else{
-    serachcourselist(state.value,'')
+    serachcourselist(state.value,cbs.value)
   }
 }
 // 课程
@@ -328,9 +325,7 @@ const serachcourselist = async (queryString: string = "",cb:any) => {
       message: "没有找到相关课程",
     });
   }
-  if(!queryString && cb){
-    cb(allcourselist.value)
-  }
+  cbs.value(allcourselist.value)
 };
 // 商品
 const serachProductlist = async (queryString: string = "",cb:any) => {
@@ -344,9 +339,7 @@ const serachProductlist = async (queryString: string = "",cb:any) => {
       message: "没有找到相关商品",
     });
   }
-  if(!queryString && cb){
-    cb(allcourselist.value)
-  }
+  cbs.value(allcourselist.value)
 }
 // 处理数据
 const transformCoursesToNameLink = (courses: any[]): LinkItem[] => {

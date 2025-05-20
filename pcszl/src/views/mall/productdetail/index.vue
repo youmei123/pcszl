@@ -123,6 +123,12 @@ onUnmounted(() => {
   // background-color: util.$ThemeColors;
   min-height: 800px;
 }
+:deep(.product-html-cont p){
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
 :deep(.product-html-cont img){
   width: 100%!important;
   height: auto!important

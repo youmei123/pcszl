@@ -164,7 +164,7 @@ const handleAvatarSuccess: UploadProps["onSuccess"] = (response, uploadFile) => 
 // 拦截过大图片
 const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error("Avatar picture size can not exceed 2MB!");
+    ElMessage.error("不得大于2MB!");
     return false;
   }
   return true;

@@ -137,7 +137,7 @@ const singleOrders = async () => {
   if (res.status == 0) {
     order.value = res.data
     priceNum()
-    if (order.value.consigneeAddress) {
+    if (order.value.consigneeAddress && order.value.isEntity==1) {
       getOrderPrice()
     }
     if (order.value.aftersaleList && order.value.aftersaleList.length != 0) {
@@ -319,10 +319,6 @@ const submitpay = async () => {
   if (status == "0") {
     qrcodeurl.value = data.qrCode;
     PayQrcodeDialogVisible.value = true;
-  } else {
-    if (message) {
-      ElMessage.warning(message);
-    }
   }
 }
 // 支付弹窗 点击已完成支付
@@ -360,22 +356,8 @@ const upStatusTitle = (tabIndex:any,status: any, refundStatus: any, aftersaleSta
 }
 // 获取运费
 const getOrderPrice = async () => {
-  if (order.value.isEntity != 1) {
-    return 0
-  }
-  if (!order.value.consigneeAddress ||
-    (!order.value.consigneeAddress.includes("西藏自治区") && !order.value.consigneeAddress.includes("新疆维吾尔自治区"))) {
-    orderPrice.value = 0
-    return
-  }
-  let text = ''
-  if (order.value.consigneeAddress.includes("西藏自治区")) {
-    text = '西藏'
-  } else if (order.value.consigneeAddress.includes("新疆维吾尔自治区")) {
-    text = '新疆'
-  }
   const res = await postage({
-    address: text
+    address: order.value.consigneeAddress.slice(0,2)
   });
   if (res.status == '0') {
     orderPrice.value = Number(res.data)

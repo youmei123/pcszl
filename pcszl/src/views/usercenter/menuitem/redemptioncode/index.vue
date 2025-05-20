@@ -169,7 +169,6 @@ const handredeem = async () => {
       isUse.value = true;
       isshowpopup.value = true;
     }
-    // ElMessage.info(message);
   }
 };
 

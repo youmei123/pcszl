@@ -18,6 +18,14 @@
         <div class="order-label">订单运费:</div>
         <div class="order-value">￥{{ orderPrice }}</div>
       </div>
+      <div class="item-bar f-jb-ac" v-if="order.couponMoney">
+        <div class="order-label">优惠劵抵扣:</div>
+        <div class="order-value">￥{{ order.couponMoney }}</div>
+      </div>
+      <div class="item-bar f-jb-ac" v-if="order.healthcoinCount">
+        <div class="order-label">健康币抵扣:</div>
+        <div class="order-value">￥{{ (order.healthcoinCount/10000).toFixed(2) }}</div>
+      </div>
       <div class="item-bar f-jb-ac">
         <div class="order-label">{{ order.status == 0 ? '需付款：' : '实付款：' }}</div>
         <div class="order-value" style="color: #fb2b1e">￥{{ priceNum }}</div>

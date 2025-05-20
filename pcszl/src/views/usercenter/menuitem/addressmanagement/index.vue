@@ -96,9 +96,6 @@ const handledeleteaddress = async (row: AddressType) => {
     if (status == "0") {
       ElMessage.success("删除成功");
       getAddressList();
-    } else {
-      if (!message) return;
-      ElMessage.error(message);
     }
   }
 };
@@ -119,9 +116,6 @@ const handleisDefault = async (row: AddressType) => {
     if (status == "0") {
       ElMessage.success("设置成功");
       getAddressList();
-    } else {
-      if (!message) return;
-      ElMessage.error(message);
     }
   }
 };

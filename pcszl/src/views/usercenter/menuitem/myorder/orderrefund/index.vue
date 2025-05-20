@@ -81,7 +81,7 @@ const singleOrders = async () => {
     order.value = res.data
     type.value = order.value.isEntity == 1 ? Number(route.query.type) : 1
     priceNum()
-    if (order.value.consigneeAddress) {
+    if (order.value.consigneeAddress && order.value.isEntity==1) {
       getOrderPrice()
     }
     if (order.value.aftersaleList && order.value.aftersaleList.length != 0) {
@@ -123,19 +123,8 @@ const Steps = () => {
 }
 // 获取运费
 const getOrderPrice = async () => {
-  if (!order.value.consigneeAddress ||
-    (!order.value.consigneeAddress.includes("西藏自治区") && !order.value.consigneeAddress.includes("新疆维吾尔自治区"))) {
-    orderPrice.value = 0
-    return
-  }
-  let text = ''
-  if (order.value.consigneeAddress.includes("西藏自治区")) {
-    text = '西藏'
-  } else if (order.value.consigneeAddress.includes("新疆维吾尔自治区")) {
-    text = '新疆'
-  }
   const res = await postage({
-    address: text
+    address: order.value.consigneeAddress.slice(0,2)
   });
   if (res.status == '0') {
     orderPrice.value = Number(res.data)

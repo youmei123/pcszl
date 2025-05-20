@@ -185,17 +185,7 @@ const getPostage = async (text: string) => {
 const addresschange = (item: AddressType) => {
   address.value = item;
   if (!item.area) return;
-  if (!item.area.includes("西藏自治区") && !item.area.includes("新疆维吾尔自治区")) {
-    freightcharges.value = 0;
-  } else {
-    let text = "";
-    if (item.area!.includes("西藏自治区")) {
-      text = "西藏";
-    } else if (item.area!.includes("新疆维吾尔自治区")) {
-      text = "新疆";
-    }
-    getPostage(text);
-  }
+  getPostage(item.area.slice(0,2));
 };
 
 const productchange = ({ count }: any) => {
@@ -246,9 +236,6 @@ const submitorder = async () => {
     PayQrcodeDialogVisible.value = true;
   } else {
     loading.close();
-    // if (message) {
-    //   ElMessage.warning(message);
-    // }
   }
 };
 
