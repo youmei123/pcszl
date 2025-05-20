@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:03:51
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-20 10:19:24
+ * @LastEditTime: 2025-05-20 15:40:06
  * @FilePath: \pcszl\src\views\course\components\Video\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -47,6 +47,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  ispay: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const getInit = () => {
@@ -86,11 +90,28 @@ const getInit = () => {
     emit("timeupdate", e.currentTime);
   });
   xgplayer.value.on(Events.PLAY, (e: any) => {
+    console.log("播放开始");
     if (islastvideo.value) {
       AutoPlayMaskPlugin.lastvideo();
-    }else{
+    } else {
       AutoPlayMaskPlugin.hide();
     }
+  });
+  xgplayer.value.on(Events.AUTOPLAY_PREVENTED, (e: any) => {
+    console.log("autoplay was prevented!!");
+  });
+  xgplayer.value.on(Events.AUTOPLAY_STARTED, (e: any) => {
+    console.log("autoplay success!!");
+  });
+  xgplayer.value.on(Events.CANPLAY_THROUGH, (e: any) => {
+    console.log("可以流畅播放");
+    if (xgplayer.value) {
+      xgplayer.value.play();
+    }
+  });
+  xgplayer.value.on(Events.PAUSE, (e: any) => {
+    console.log(e);
+    console.log("暂停");
   });
   xgplayer.value.on(Events.ENDED, (e: any) => {
     console.log("播放结束");
@@ -145,7 +166,7 @@ const getCustomerServiceMobile = async () => {
   console.log(data);
   mobile.value = data.mobile || "";
 };
-const startvideo = (item: CourseVideoType, isend: boolean = false) => {
+const startvideo = async (item: CourseVideoType, isend: boolean = false) => {
   let definition: any = [];
   if (xgplayer.value && xgplayer.value.cumulateTime > 0) {
     saveVideoRecord();
@@ -160,12 +181,13 @@ const startvideo = (item: CourseVideoType, isend: boolean = false) => {
   }
   isshowposter.value = false;
   currentVideo.value = item;
+  xgplayer.value.currentTime = 0;
   console.log(item);
   if (item.qualityList && item.qualityList.length > 0) {
     definition = item.qualityList.map((val) => {
       let txt;
       if (val.quality == "1") {
-        txt = "原画质";
+        txt = "超清";
       }
       if (val.quality == "2") {
         txt = "标清";
@@ -187,12 +209,14 @@ const startvideo = (item: CourseVideoType, isend: boolean = false) => {
       xgplayer.value.emit("resourceReady", definition);
       xgplayer.value.plugins.definition.changeDefinition(definition[0]);
     }
-    xgplayer.value.currentTime = item.watchTime || 0;
-    // setTimeout(() => {
-    //   if (xgplayer.value) {
-    //     xgplayer.value.currentTime = 0;
-    //   }
-    // }, 500);
+    if (item.watchTime) {
+      if (item.watchTime >= item.hwDuration!) {
+        xgplayer.value.currentTime = 0;
+      } else {
+        xgplayer.value.currentTime = item.watchTime;
+      }
+    }
+    console.log(item);
   }
 };
 
