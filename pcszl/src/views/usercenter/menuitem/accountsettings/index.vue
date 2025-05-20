@@ -214,7 +214,7 @@ const saveUserInfo = async () => {
   background-color: util.$ThemeColors;
   margin-left: 10px;
 }
-::v-deep .el-form{
+:deep(.el-form){
   font-size: 16px;
   .el-form-item__label{
     font-size: 16px;

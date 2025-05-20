@@ -28,8 +28,8 @@
           <el-radio :value="1">未收到货</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="退款金额">
-        <div style="color:red;">￥{{ priceNum }}</div>
+      <el-form-item label="退款金额" prop="price">
+        <el-input v-model="form.price" type="text"  placeholder="请输入退款金额" />
       </el-form-item>
       <el-form-item label="退款理由" prop="refundReason">
         <el-select v-model="form.refundReason" placeholder="请选择退款理由">
@@ -67,6 +67,7 @@ import { ref, reactive, onMounted } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import type { UploadProps } from "element-plus";
 import { ElMessage } from "element-plus";
+import { ordersType } from "@/utiles/types";
 import {
   reasonList,
   aftersaleSubmit,
@@ -77,7 +78,7 @@ const emit = defineEmits([ "Refund" ]);
 const props = defineProps({
   order:{
     type: Object,
-    default: {}
+    default: <ordersType>{}
   },
   type:{
     type:Number,
@@ -99,18 +100,22 @@ const form = reactive({
   type: props.type,//售后类型 1:退款 2:退货退款
   refundRemark: "",//退款说明
   refundImg: "",
+  price:"",//退款金额
 });
 const rules = reactive({
   refundReason: [
     { required: true, message: '请选择退款理由', trigger: 'change' },
   ],
+  price:[
+    { required: true, message: '请输入退款金额', trigger: 'blur' },
+  ]
 })
 const refundReasonList=ref([])
 const submitLoading=ref(false)
 // 提交退款申请
 const orderRefund = async () => {
   form.type=props.type
-  console.log(form)
+  // console.log(form)
   if(!form.refundReason){
     ElMessage.error("请选择退款理由")
     return
@@ -123,7 +128,8 @@ const orderRefund = async () => {
     type:form.type,
     refundReason: form.refundReason,
     refundRemark: form.refundRemark,
-    refundImg: form.refundImg
+    refundImg: form.refundImg,
+    refundMoney: form.price,
   });
   submitLoading.value=false
   if(res.status==0){
@@ -134,6 +140,9 @@ const orderRefund = async () => {
 // 初始执行 外部调用
 const onMountedClick=()=>{
   getReasonList()
+  setTimeout(()=>{
+    priceNum()
+  })
 }
 // 获取退款理由
 const getReasonList= async ()=>{
@@ -156,6 +165,18 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   }
   return true;
 };
+const priceNum = () => {
+  let coinNumPrice: any = 0
+  let couponMoney: any = 0
+  if (props.order.healthcoinCount) {
+    coinNumPrice = (props.order.healthcoinCount / 10000).toFixed(2)
+  }
+  if (props.order.couponMoney) {
+    couponMoney = props.order.couponMoney
+  }
+  let price: any = (props.order.truePrice * props.order.count).toFixed(2)
+  form.price = (price - coinNumPrice - couponMoney).toFixed(2)
+}
 defineExpose({onMountedClick})
 </script>
 

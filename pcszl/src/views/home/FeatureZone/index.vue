@@ -16,7 +16,7 @@
         </el-breadcrumb>
       </div>
       <div class="featurezone-cont">
-        <div class="featurezone-item-cont f-jb-ac" v-if="!zl_loading && list.length > 0">
+        <div class="featurezone-item-cont f-jb-ac f-w" v-if="!zl_loading && list.length > 0">
           <FeatureZoneItem v-for="item in list" :key="item.id" :data="item" />
         </div>
         <div v-else style="height: 400px">
@@ -34,7 +34,7 @@
             @changePage="handlePageChange"
             :count="totalcount"
             :currentPage="pageNo"
-            :pageSize="3"
+            :pageSize="10"
           />
         </div>
       </div>
@@ -61,7 +61,7 @@ const getZoneList = async () => {
   zl_loading.value = true;
   const { data, count } = await zonelist({
     page: pageNo.value,
-    size: 3,
+    size: 10,
   });
   list.splice(0, list.length, ...(data || []));
   totalcount.value = count;

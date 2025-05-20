@@ -158,7 +158,7 @@ defineExpose({
   padding-top: 15px;
   box-sizing: border-box;
 }
-::v-deep .Remarks-container{
+:deep(.Remarks-container){
   .el-textarea__inner:focus{
     box-shadow: 0 0 0 1px transparent inset !important;
   }
