@@ -30,7 +30,7 @@
         </div>
         <div class="remainder-time">快要抢光</div>
       </div>
-      <div class="Label-item" v-if="data.originalPrice != data.price">
+      <div class="Label-item" style="border-radius: 4px;" v-if="data.originalPrice != data.price">
         立省{{ (data.originalPrice - data.price).toFixed(2) }}
       </div>
     </div>
@@ -58,7 +58,6 @@
 </template>
 
 <script lang="ts" setup>
-import { types } from "util";
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
@@ -123,7 +122,7 @@ const toBuy = () => {
   border-radius: 4px;
 }
 .title-bar {
-  margin-top: 10px;
+  margin-top: 15px;
   font-size: 26px;
   color: #212930;
   font-weight: bold;
@@ -148,7 +147,7 @@ const toBuy = () => {
   background-size: 100%;
   padding: 15px;
   box-sizing: border-box;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .hot-right {
   text-align: right;
@@ -198,7 +197,7 @@ const toBuy = () => {
   margin-left: 5px;
 }
 .Label-bar {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .discount {
   width: 110px;
@@ -238,7 +237,7 @@ const toBuy = () => {
 }
 .tags-bar {
   overflow: hidden;
-  margin-top: 10px;
+  margin-top: 15px;
   position: relative;
 }
 
@@ -266,7 +265,7 @@ const toBuy = () => {
   margin-right: 10px;
 }
 .commitment-cont {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 .commitment-item {
   height: 48px;
@@ -299,7 +298,7 @@ const toBuy = () => {
   color: #ff3950;
   text-align: center;
   line-height: 60px;
-  margin-top: 55px;
+  margin-top: 30px;
 }
 .is-sticky {
   height: auto !important;

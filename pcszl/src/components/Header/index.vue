@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:05
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 17:41:16
+ * @LastEditTime: 2025-05-20 10:37:02
  * @FilePath: \pcszl\src\components\Header\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -491,6 +491,9 @@ const hanldoutlogin = () => {
   font-size: 18px;
   cursor: pointer;
 }
+.mebu-item:hover{
+  color: #ce9433!important;
+}
 .user-box {
   width: 300px;
 }
@@ -641,7 +644,7 @@ const hanldoutlogin = () => {
   font-size: 18px;
 }
 .icon-sousuo {
-  font-size: 26px !important;
+  font-size: 24px !important;
   color: rgba(33, 41, 48, 1);
 }
 :deep(.focused .el-input__inner) {

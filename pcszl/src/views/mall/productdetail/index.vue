@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 09:13:38
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 17:31:54
+ * @LastEditTime: 2025-05-20 10:35:02
  * @FilePath: \pcszl\src\views\mall\productdetail\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -122,6 +122,10 @@ onUnmounted(() => {
   width: 750px;
   // background-color: util.$ThemeColors;
   min-height: 800px;
+}
+:deep(.product-html-cont img){
+  width: 100%!important;
+  height: auto!important
 }
 /* 定义进入和离开过渡的活动状态，设置过渡的属性、时间和缓动函数 */
 .slide-fade-enter-active,

@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:29:55
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 14:12:13
+ * @LastEditTime: 2025-05-20 09:57:21
  * @FilePath: \pcszl\src\views\course\components\VideoCatalogue\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -441,6 +441,7 @@ defineExpose({
 .catalogue-cont {
   color: #6e7b87;
   padding: 0 20px;
+  padding-left: 0;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -512,7 +513,7 @@ defineExpose({
   font-size: 22px;
 }
 .notclassifyCount {
-  padding-top: 10px;
+  // padding-top: 10px;
   box-sizing: border-box;
 }
 .active {

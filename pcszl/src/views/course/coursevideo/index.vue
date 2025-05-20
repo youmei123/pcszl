@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-19 16:41:41
+ * @LastEditTime: 2025-05-20 09:55:31
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -287,7 +287,7 @@ const coursepay = () => {
   width: 810px;
   border-radius: 10px;
   padding: 30px;
-  padding-top: 25px;
+  padding-top: 10px;
   box-sizing: border-box;
   background-color: white;
   position: relative;
@@ -315,6 +315,9 @@ const coursepay = () => {
   color: #212930;
   margin-bottom: 20px;
   font-weight: bold;
+}
+:deep(.el-tabs){
+  --el-tabs-header-height:55px
 }
 :deep(.el-tabs__item) {
   font-size: 24px;
