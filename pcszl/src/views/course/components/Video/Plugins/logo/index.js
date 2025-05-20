@@ -1,3 +1,11 @@
+/*
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-05-17 16:26:09
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-05-20 14:47:43
+ * @FilePath: \pcszl\src\views\course\components\Video\Plugins\logo\index.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { Plugin } from 'xgplayer'
 
 const { POSITIONS } = Plugin
@@ -14,7 +22,7 @@ export default class logoPlugin extends Plugin {
   static get defaultConfig () {
       return {
         // 挂载在controls的右侧，如果不指定则默认挂载在播放器根节点上
-        position: POSITIONS.ROOT_RIGHT
+        position: POSITIONS.ROOT
       }
   }
 
