@@ -164,6 +164,8 @@ export interface ordersType {
     deliveryName:string;
     payTime:number;
     courseId:string;
+    payPrice:number;
+    deliveryPostage:number;
 }
 // 售后类型
 export interface aftersale{

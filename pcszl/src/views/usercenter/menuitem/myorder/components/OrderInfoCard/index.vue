@@ -12,23 +12,23 @@
     <div class="order-info-list">
       <div class="item-bar f-jb-ac">
         <div class="order-label">商品总价:</div>
-        <div class="order-value">￥{{ (order.truePrice - orderPrice).toFixed(2) }}</div>
+        <div class="order-value">￥{{ (order.productPrice * order.count).toFixed(2) }}</div>
       </div>
       <div class="item-bar f-jb-ac" v-if="order.isEntity==1">
         <div class="order-label">订单运费:</div>
-        <div class="order-value">￥{{ orderPrice }}</div>
+        <div class="order-value">￥{{ order.deliveryPostage? order.deliveryPostage : 0 }}</div>
       </div>
       <div class="item-bar f-jb-ac" v-if="order.couponMoney">
-        <div class="order-label">优惠劵抵扣:</div>
-        <div class="order-value">￥{{ order.couponMoney }}</div>
+        <div class="order-label">优惠劵:</div>
+        <div class="order-value">-￥{{ order.couponMoney }}</div>
       </div>
       <div class="item-bar f-jb-ac" v-if="order.healthcoinCount">
-        <div class="order-label">健康币抵扣:</div>
-        <div class="order-value">￥{{ (order.healthcoinCount/10000).toFixed(2) }}</div>
+        <div class="order-label">健康币:</div>
+        <div class="order-value">-￥{{ (order.healthcoinCount/10000).toFixed(2) }}</div>
       </div>
       <div class="item-bar f-jb-ac">
         <div class="order-label">{{ order.status == 0 ? '需付款：' : '实付款：' }}</div>
-        <div class="order-value" style="color: #fb2b1e">￥{{ priceNum }}</div>
+        <div class="order-value" style="color: #fb2b1e">￥{{ order.payPrice }}</div>
       </div>
     </div>
     <div class="other-info-list" :class="{ 'falseBorder': !isbutton }">
@@ -111,14 +111,6 @@ const props = defineProps({
   aftersaleList: {
     type: Object,
     default: {}
-  },
-  orderPrice: {
-    type: Number,
-    default: 0
-  },
-  priceNum: {
-    type: String,
-    default: ""
   },
   tabIndex: {
     type: Number,

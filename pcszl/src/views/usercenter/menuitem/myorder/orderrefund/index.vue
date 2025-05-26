@@ -19,21 +19,20 @@
       <div class="refund-content f-jb-as">
         <div class="refund-left">
           <div class="refund-form-cont" v-if="currentstatus == 1">
-            <RefundForm ref="RefundForms" :order="order" :type="type" @Refund="Refund" :priceNum="priceTotal" />
+            <RefundForm ref="RefundForms" :order="order" :type="type" @Refund="Refund" />
           </div>
           <div class="refund-Steps-cont" v-if="currentstatus != 1">
             <RefundSteps ref="RefundStepss" :order="order" :single="single" @Steps="Steps" />
           </div>
           <div class="refun-info-box-cont" v-if="currentstatus != 1">
-            <RefunInfoBox :order="order" :single="single" :priceNum="priceTotal" />
+            <RefunInfoBox :order="order" :single="single"/>
           </div>
           <div v-if="SingleLoading">
             <loading :translateY="50" color="#FCDC46" active text="正在加载中..." :height="500" />
           </div>
         </div>
         <div class="refund-right">
-          <OrderInfoCard :order="order" :aftersaleList="aftersaleList" :orderPrice="orderPrice"
-            :priceNum="priceTotal" />
+          <OrderInfoCard :order="order" :aftersaleList="aftersaleList"/>
         </div>
       </div>
     </div>
@@ -64,9 +63,7 @@ const currentstatus = ref(1);//当前进度
 const route = useRoute();
 const orderId = ref(route.query.orderId)
 const order = ref(<ordersType>{})
-const orderPrice = ref(0)//运费
 const aftersaleList = ref(<aftersale>{})//售后信息
-const priceTotal = ref("")//需付款
 const type = ref(Number(route.query.type))//1仅退款 2退货退款
 const SingleLoading = ref(false);//加载
 const single = ref(<aftersale>{})
@@ -80,10 +77,6 @@ const singleOrders = async () => {
   if (res.status == 0) {
     order.value = res.data
     type.value = order.value.isEntity == 1 ? Number(route.query.type) : 1
-    priceNum()
-    if (order.value.consigneeAddress && order.value.isEntity==1) {
-      getOrderPrice()
-    }
     if (order.value.aftersaleList && order.value.aftersaleList.length != 0) {
       aftersaleList.value = order.value.aftersaleList[0]
       currentstatus.value = 2
@@ -120,28 +113,6 @@ const Steps = () => {
   router.push({
     path: "/usercenter/myorder",
   });
-}
-// 获取运费
-const getOrderPrice = async () => {
-  const res = await postage({
-    address: order.value.consigneeAddress.slice(0,2)
-  });
-  if (res.status == '0') {
-    orderPrice.value = Number(res.data)
-  }
-}
-// 计算需付金额
-const priceNum = () => {
-  let coinNumPrice: any = 0
-  let couponMoney: any = 0
-  if (order.value.healthcoinCount) {
-    coinNumPrice = (order.value.healthcoinCount / 10000).toFixed(2)
-  }
-  if (order.value.couponMoney) {
-    couponMoney = order.value.couponMoney
-  }
-  let price: any = (order.value.truePrice * order.value.count).toFixed(2)
-  priceTotal.value = (price - coinNumPrice - couponMoney).toFixed(2)
 }
 onMounted(() => {
   singleOrders()

@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="detail-right">
-        <OrderInfoCard :order="order" :aftersaleList="aftersaleList" :orderPrice="orderPrice" :priceNum="priceTotal"
+        <OrderInfoCard :order="order" :aftersaleList="aftersaleList"
           :tabIndex="tabIndex" :isbutton="true" @handlebtnchange="handlebtnchange" />
       </div>
       <div v-if="pageLoading">
@@ -115,9 +115,7 @@ const tabIndex = ref(Number(route.query.tabIndex));//当前tab索引
 const isopen = ref(Number(route.query.isopen));//是否有售后
 const statusTitle = ref("")//标题状态
 const order = ref(<ordersType>{})
-const orderPrice = ref(0)//运费
 const aftersaleList = ref(<aftersale>{})//售后信息
-const priceTotal = ref("")//需付款
 const mobile = ref("")//联系电话
 const qrCode = ref("")//联系二维码
 const customerPopups = ref<any>()
@@ -136,10 +134,6 @@ const singleOrders = async () => {
   pageLoading.value = false
   if (res.status == 0) {
     order.value = res.data
-    priceNum()
-    if (order.value.consigneeAddress && order.value.isEntity==1) {
-      getOrderPrice()
-    }
     if (order.value.aftersaleList && order.value.aftersaleList.length != 0) {
       aftersaleList.value = order.value.aftersaleList[0]
       tabIndex.value=5
@@ -353,28 +347,6 @@ const upStatusTitle = (tabIndex:any,status: any, refundStatus: any, aftersaleSta
       statusTitle.value = '订单详情'
     }
   }
-}
-// 获取运费
-const getOrderPrice = async () => {
-  const res = await postage({
-    address: order.value.consigneeAddress.slice(0,2)
-  });
-  if (res.status == '0') {
-    orderPrice.value = Number(res.data)
-  }
-}
-// 计算需付金额
-const priceNum = () => {
-  let coinNumPrice: any = 0
-  let couponMoney: any = 0
-  if (order.value.healthcoinCount) {
-    coinNumPrice = (order.value.healthcoinCount / 10000).toFixed(2)
-  }
-  if (order.value.couponMoney) {
-    couponMoney = order.value.couponMoney
-  }
-  let price: any = (order.value.truePrice * order.value.count).toFixed(2)
-  priceTotal.value = (price - coinNumPrice - couponMoney).toFixed(2)
 }
 // 订单从支付时间开始是否超过一个月
 const isOverOneMonth = (payTime: any) => {

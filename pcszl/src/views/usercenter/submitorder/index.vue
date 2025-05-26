@@ -202,6 +202,8 @@ const submitorder = async () => {
     payTypeCode: "WXPAY",
     remark: remake || "",
     orderType: types,
+    count:paycount.value,
+    productPrice:product.value?.price
   };
   if (types == 1) {
     params.courseId = course.value?.id;

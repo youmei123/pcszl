@@ -29,11 +29,11 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="退款金额" prop="price">
-        <view style="color:red;">
+        <!-- <view style="color:red;">
           <text>￥</text>
           <text>{{ form.price }}</text>
-        </view>
-        <!-- <el-input v-model="form.price" type="text"  placeholder="请输入退款金额" /> -->
+        </view> -->
+        <el-input v-model="form.price" type="text"  placeholder="请输入退款金额" />
       </el-form-item>
       <el-form-item label="退款理由" prop="refundReason">
         <el-select v-model="form.refundReason" placeholder="请选择退款理由">
@@ -88,10 +88,6 @@ const props = defineProps({
     type:Number,
     default:1
   },
-  priceNum:{
-    type:String,
-    default:""
-  },
 });
 //声明 uploadFile的类型
 interface UploadFile {
@@ -119,7 +115,7 @@ const submitLoading=ref(false)
 // 提交退款申请
 const orderRefund = async () => {
   form.type=props.type
-  if(Number(form.price)<= 0 || (Number(form.price) > Number(props.priceNum))){
+  if(Number(form.price)<= 0 || (Number(form.price) > Number(props.order.payPrice))){
     ElMessage.warning("退款金额不得小于0，不得大于实付金额！")
     return
   }
@@ -149,7 +145,7 @@ const orderRefund = async () => {
 const onMountedClick=()=>{
   getReasonList()
   setTimeout(()=>{
-    priceNum()
+    form.price=props.order.payPrice
   })
 }
 // 获取退款理由
@@ -173,18 +169,6 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = (rawFile) => {
   }
   return true;
 };
-const priceNum = () => {
-  let coinNumPrice: any = 0
-  let couponMoney: any = 0
-  if (props.order.healthcoinCount) {
-    coinNumPrice = (props.order.healthcoinCount / 10000).toFixed(2)
-  }
-  if (props.order.couponMoney) {
-    couponMoney = props.order.couponMoney
-  }
-  let price: any = (props.order.truePrice * props.order.count).toFixed(2)
-  form.price = (price - coinNumPrice - couponMoney).toFixed(2)
-}
 defineExpose({onMountedClick})
 </script>
 

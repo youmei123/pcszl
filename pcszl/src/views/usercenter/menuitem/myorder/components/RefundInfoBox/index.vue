@@ -66,10 +66,6 @@ const props = defineProps({
     type: Object,
     default:<aftersale>{}
   },
-  priceNum:{
-    type:String,
-    default:""
-  },
 });
 </script>
 

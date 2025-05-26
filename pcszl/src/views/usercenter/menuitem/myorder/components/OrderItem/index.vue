@@ -53,11 +53,11 @@
           </div>
           <div class="order-delivery-cont">
             <div>运费</div>
-            <div>￥{{ orderPrice(item) }}</div>
+            <div>￥{{ item.deliveryPostage?item.deliveryPostage:0 }}</div>
           </div>
           <div class="order-price-cont">
             <div>{{ item.status == 0 ? '需付款' : '实付款' }}</div>
-            <div>￥{{ priceNum(item) }}</div>
+            <div>￥{{ item.payPrice }}</div>
           </div>
           <div class="order-switch-cont">
             <div class="order-pay-btn order-pay-btn-bg pointer" @click="submitpay(item)" v-if="item.status == 0">
@@ -147,30 +147,6 @@ const linkorderdetail = (item: any) => {
     }
   });
 };
-// 计算需付金额
-const priceNum = (item: any) => {
-  let coinNumPrice: any = 0
-  let couponMoney: any = 0
-  if (item.healthcoinCount) {
-    coinNumPrice = (item.healthcoinCount / 10000).toFixed(2)
-  }
-  if (item.couponMoney) {
-    couponMoney = item.couponMoney
-  }
-  let price: any = (item.truePrice * item.count).toFixed(2)
-  return (price - coinNumPrice - couponMoney).toFixed(2)
-}
-// 判断是否有运费
-const orderPrice = (item: any) => {
-  if (item.isEntity != 1) {
-    return 0
-  }
-  if (item.consigneeAddress && (item.consigneeAddress.includes("西藏自治区") || item.consigneeAddress.includes("新疆维吾尔自治区"))) {
-    return 20
-  } else {
-    return 0
-  }
-}
 // 再买一单
 const toSubmit = (item: any) => {//1:课程 2:VIP  6:经络vip  7：商品   8:百科VIP
   let name = ''
