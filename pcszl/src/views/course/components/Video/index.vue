@@ -2,14 +2,14 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:03:51
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-21 09:37:02
+ * @LastEditTime: 2025-05-30 10:51:43
  * @FilePath: \pcszl\src\views\course\components\Video\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="video-container" :class="{ 'video-container-product': type == 1 }">
+  <div class="video-container">
     <div id="xgplayer"></div>
-    <div class="poster-conter" v-if="isshowposter && type == 0">
+    <div class="poster-conter" v-if="isshowposter && definedposter">
       <img :src="poster" alt="poster" />
       <div class="shad-box pointer" @click="playdefaultvideo">
         <div class="iconfont icon-playcircle"></div>
@@ -48,27 +48,34 @@ const props = defineProps({
     default: "",
   },
   type: {
+    //0  看课  1商品
     type: Number,
-    default: 0
+    default: 0,
+  },
+  definedposter: {
+    type: Boolean,
+    default: false,
+  },
+  autoplay: {
+    type: Boolean,
+    default: false,
   },
 });
 
 const getInit = () => {
   console.log(props.poster);
-
   let config = {
     id: "xgplayer",
     width: "100%",
     height: "100%",
     lang: "zh-cn",
-    autoplay: true,
+    autoplay: props.autoplay,
     poster: props.poster,
     startTime: 0,
     plugins: [HlsJsPlugin, Danmu, logoPlugin, AutoPlayMask],
-  }
+  };
   if (props.type == 1) {
     config.plugins = [HlsJsPlugin];
-    config.autoplay=false;
   }
 
   xgplayer.value = new Player(config);
@@ -109,11 +116,10 @@ const getInit = () => {
         AutoPlayMaskPlugin.hide();
       }
     }
-
   });
   xgplayer.value.on(Events.LOAD_START, (e: any) => {
     console.log("视频开始加载");
-    if (props.type != 1) {
+    if (props.type != 1 && AutoPlayMaskPlugin) {
       AutoPlayMaskPlugin.hide();
     }
   });
@@ -125,7 +131,7 @@ const getInit = () => {
   });
   xgplayer.value.on(Events.CANPLAY_THROUGH, (e: any) => {
     console.log("可以流畅播放");
-    if (xgplayer.value && props.type==0) {
+    if (xgplayer.value && props.type == 0) {
       xgplayer.value.play();
     }
   });
@@ -155,7 +161,9 @@ const getInit = () => {
 
 onMounted(() => {
   getInit();
-  getCustomerServiceMobile();
+  if (props.type == 0) {
+    getCustomerServiceMobile();
+  }
 });
 
 onUnmounted(() => {
@@ -163,6 +171,7 @@ onUnmounted(() => {
 });
 
 const saveVideoRecord = async () => {
+  if (props.type == 1) return;
   if (currentVideo.value && xgplayer.value) {
     const video = currentVideo.value;
     const player = xgplayer.value;
@@ -256,22 +265,16 @@ const productVideo = (item: any) => {
   currentVideo.value = item;
   xgplayer.value.currentTime = 0;
   xgplayer.value.src = item.hwUrl;
-}
+};
 
 defineExpose({
   startvideo,
-  productVideo
+  productVideo,
 });
 </script>
 
 <style lang="scss" scoped>
 .video-container {
-  width: 1200px;
-  height: 675px;
-  position: relative;
-}
-
-.video-container-product {
   width: 100%;
   height: 100%;
   position: relative;

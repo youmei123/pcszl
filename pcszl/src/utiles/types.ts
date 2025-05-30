@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-12 16:48:32
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-13 17:04:54
+ * @LastEditTime: 2025-05-30 09:54:27
  * @FilePath: \pcszl\src\utiles\types.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -102,7 +102,7 @@ export interface CourseVideoType {
  * 商品类型       
  */
 export interface ProductType {
-    id: string; 
+    id: string;
     name?: string;
     img?: string;
     price?: number;
@@ -116,8 +116,18 @@ export interface ProductType {
     realSalesVolume?: number;
     bdCostPrice?: number;
     isShow?: number;
-    description?:string,
-    productSpecificationCount:number;
+    description?: string,
+    productSpecificationCount: number;
+    szlProductVideo?: {
+        hwDuration: number;
+        hwSize: number;
+        hwUrl: string;
+        hwassetId: string;
+        id: string;
+        imgUrl: string;
+        productId: string;
+        videoName: string;
+    }
 }
 /**
  * 地址类型       
@@ -131,7 +141,7 @@ export interface AddressType {
     mobile?: string;
     address?: string;
     area?: string;
-    isDefault?: number | 1; 
+    isDefault?: number | 1;
     arrayCodeList?: string[];
 }
 
@@ -139,47 +149,47 @@ export interface AddressType {
  * 订单类型      
  */
 export interface ordersType {
-    id: string; 
-    productId:string;
-    productName:string;
-    productImg:string;
-    status:number;
-    orderType:number;
-    orderNo:string;
-    productPrice:number;
-    truePrice:number;
-    isEntity:number;
-    healthcoinCount:number;
-    couponMoney:number;
-    count:number;
-    addtime:number;
-    aftersaleIsShow:number;
-    refundStatus:number;
-    aftersaleId:string;
-    deliveryNumber:string;
-    aftersaleStatus:number;
-    consignee:string;
-    consigneeAddress:string;
-    consigneeMobile:string;
-    aftersaleList:Array<aftersale>;
-    deliveryName:string;
-    payTime:number;
-    courseId:string;
-    payPrice:number;
-    deliveryPostage:number;
+    id: string;
+    productId: string;
+    productName: string;
+    productImg: string;
+    status: number;
+    orderType: number;
+    orderNo: string;
+    productPrice: number;
+    truePrice: number;
+    isEntity: number;
+    healthcoinCount: number;
+    couponMoney: number;
+    count: number;
+    addtime: number;
+    aftersaleIsShow: number;
+    refundStatus: number;
+    aftersaleId: string;
+    deliveryNumber: string;
+    aftersaleStatus: number;
+    consignee: string;
+    consigneeAddress: string;
+    consigneeMobile: string;
+    aftersaleList: Array<aftersale>;
+    deliveryName: string;
+    payTime: number;
+    courseId: string;
+    payPrice: number;
+    deliveryPostage: number;
 }
 // 售后类型
-export interface aftersale{
-    id:string;
-    refundStatus:number;
-    status:number;
-    aftersaleCompanyAddress:{
-        name:string;
-        mobile:string;
-        address:string;
-        id:string;
+export interface aftersale {
+    id: string;
+    refundStatus: number;
+    status: number;
+    aftersaleCompanyAddress: {
+        name: string;
+        mobile: string;
+        address: string;
+        id: string;
     },
-    statusText:string;
-    logs:[{}]
+    statusText: string;
+    logs: [{}]
 }
 

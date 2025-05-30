@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-24 09:13:38
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-20 10:35:02
+ * @LastEditTime: 2025-05-30 11:06:45
  * @FilePath: \pcszl\src\views\mall\productdetail\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,20 +21,31 @@
           <div class="product-img">
             <img :src="product?.img" />
           </div>
-          <ProductCard ref="productCard" :data="product" :specificationList="specificationList"
-            @specificationChange="specificationChange" @countChange="countChange" />
+          <ProductCard
+            ref="productCard"
+            :data="product"
+            :specificationList="specificationList"
+            @specificationChange="specificationChange"
+            @countChange="countChange"
+          />
         </div>
         <div class="product-info-box f-as">
           <div>
-            <div style="width: 750px;height: 500px;" v-show="szlProductVideo.hwUrl">
+            <div style="width: 750px; height: 422px" v-show="szlProductVideo?.hwUrl">
               <XGplayer ref="xgPlayer" :poster="szlProductVideo?.imgUrl" :type="1" />
             </div>
             <div class="product-html-cont f-shrink0" v-html="product?.description"></div>
           </div>
           <Transition name="slide-fade">
             <el-affix :offset="100" target=".product-info-box" v-show="isSticky">
-              <ProductCard ref="Card" :data="product" :isSticky="isSticky" :specificationList="specificationList"
-                @specificationChange="specificationChange" @countChange="countChange" />
+              <ProductCard
+                ref="Card"
+                :data="product"
+                :isSticky="isSticky"
+                :specificationList="specificationList"
+                @specificationChange="specificationChange"
+                @countChange="countChange"
+              />
             </el-affix>
           </Transition>
         </div>
@@ -57,12 +68,12 @@ const isSticky = ref(false); // 是否吸顶
 const route = useRoute(); // 获取路由参数
 const userStore = useUserStore(); // 获取用户信息
 const productId = route.query.productId; // 获取商品id
-const product = ref<any>(); // 商品详情
+const product = ref<ProductType>(); // 商品详情
 const specificationList = ref<any>(); // 规格
-const productCard = ref(<any>null)
-const Card = ref(<any>null)
+const productCard = ref(<any>null);
+const Card = ref(<any>null);
 const xgPlayer = ref<InstanceType<typeof XGplayer> | null>(null); //视频播放组件对象
-const szlProductVideo = ref(<any>{})//商品视频
+const szlProductVideo = ref(<ProductType["szlProductVideo"]>{}); //商品视频
 
 const handleScroll = () => {
   const scrollY = window.scrollY;
@@ -80,19 +91,23 @@ const getSingleProduct = async () => {
     userId: userStore.userId,
   });
   product.value = data;
-  // console.log(data); 
+  // console.log(data);
   await nextTick();
-  if (product.value.szlProductVideo && product.value.szlProductVideo.hwUrl) {
-    szlProductVideo.value = product.value.szlProductVideo
+  if (
+    product.value &&
+    product.value.szlProductVideo &&
+    product.value.szlProductVideo.hwUrl
+  ) {
+    szlProductVideo.value = product.value.szlProductVideo;
     if (xgPlayer.value) {
-      xgPlayer.value.productVideo(product.value.szlProductVideo)
+      xgPlayer.value.productVideo(product.value.szlProductVideo);
     }
   }
   if (data.productSpecificationCount != 0) {
-    getListSpecification()
+    getListSpecification();
   } else {
-    productCard.value.mountedClick(2, product.value)
-    Card.value.mountedClick(2, product.value)
+    productCard.value.mountedClick(2, product.value);
+    Card.value.mountedClick(2, product.value);
   }
 };
 // 规格
@@ -103,23 +118,26 @@ const getListSpecification = async () => {
   });
   if (res.status == 0) {
     specificationList.value = res.data;
-    let data = specificationList.value.reduce((minItem: any, item: any) => {
-      return (item.specificationPrice < minItem.specificationPrice) ? item : minItem;
-    }, { specificationPrice: Infinity });
-    productCard.value.mountedClick(1, data)
-    Card.value.mountedClick(1, data)
+    let data = specificationList.value.reduce(
+      (minItem: any, item: any) => {
+        return item.specificationPrice < minItem.specificationPrice ? item : minItem;
+      },
+      { specificationPrice: Infinity }
+    );
+    productCard.value.mountedClick(1, data);
+    Card.value.mountedClick(1, data);
   }
-}
+};
 // 规格点击同步
 const specificationChange = (item: any) => {
-  productCard.value.mountedClick(1, item)
-  Card.value.mountedClick(1, item)
-}
+  productCard.value.mountedClick(1, item);
+  Card.value.mountedClick(1, item);
+};
 // 数量同步
 const countChange = (count: number) => {
-  productCard.value.countNum(count)
-  Card.value.countNum(count)
-}
+  productCard.value.countNum(count);
+  Card.value.countNum(count);
+};
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -190,7 +208,7 @@ onUnmounted(() => {
 
 :deep(.product-html-cont img) {
   width: 100% !important;
-  height: auto !important
+  height: auto !important;
 }
 
 /* 定义进入和离开过渡的活动状态，设置过渡的属性、时间和缓动函数 */

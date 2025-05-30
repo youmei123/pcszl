@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 11:00:20
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-20 09:55:31
+ * @LastEditTime: 2025-05-30 10:47:31
  * @FilePath: \pcszl\src\views\course\coursevideo\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -18,9 +18,10 @@
           </el-breadcrumb>
         </div>
         <div class="f-as" v-if="course">
-          <div v-if="course?.courseCoverImg">
+          <div v-if="course?.courseCoverImg" class="video-box">
             <XGplayer
               ref="xgPlayer"
+              definedposter
               :poster="course?.courseCoverImg"
               @timeupdate="(e) => videoCatalogue && videoCatalogue.upldateprogress(e)"
               @playnextvideo="videoCatalogue && videoCatalogue.playnextvideo()"
@@ -316,8 +317,8 @@ const coursepay = () => {
   margin-bottom: 20px;
   font-weight: bold;
 }
-:deep(.el-tabs){
-  --el-tabs-header-height:55px
+:deep(.el-tabs) {
+  --el-tabs-header-height: 55px;
 }
 :deep(.el-tabs__item) {
   font-size: 24px;
@@ -340,5 +341,9 @@ const coursepay = () => {
 }
 .serach-bar :deep(.el-input__wrapper) {
   border-radius: 17px;
+}
+.video-box {
+  width: 1200px;
+  height: 675px;
 }
 </style>
