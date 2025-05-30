@@ -51,6 +51,7 @@ const linkproductdetail = () => {
 .mall-item {
   overflow: hidden;
   width: 264px;
+  margin-right: 21px;
 }
 .mall-poster {
   width: 100%;

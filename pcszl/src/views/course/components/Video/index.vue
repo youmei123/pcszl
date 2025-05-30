@@ -7,9 +7,9 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div class="video-container">
+  <div class="video-container" :class="{ 'video-container-product': type == 1 }">
     <div id="xgplayer"></div>
-    <div class="poster-conter" v-if="isshowposter">
+    <div class="poster-conter" v-if="isshowposter && type == 0">
       <img :src="poster" alt="poster" />
       <div class="shad-box pointer" @click="playdefaultvideo">
         <div class="iconfont icon-playcircle"></div>
@@ -47,11 +47,16 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  type: {
+    type: Number,
+    default: 0
+  },
 });
 
 const getInit = () => {
   console.log(props.poster);
-  xgplayer.value = new Player({
+
+  let config = {
     id: "xgplayer",
     width: "100%",
     height: "100%",
@@ -60,10 +65,18 @@ const getInit = () => {
     poster: props.poster,
     startTime: 0,
     plugins: [HlsJsPlugin, Danmu, logoPlugin, AutoPlayMask],
-  });
+  }
+  if (props.type == 1) {
+    config.plugins = [HlsJsPlugin];
+    config.autoplay=false;
+  }
+
+  xgplayer.value = new Player(config);
+
   console.log(xgplayer.value.plugins);
   // 播放时间改变
   xgplayer.value.on(Events.TIME_UPDATE, (e: any) => {
+    if (props.type == 1) return;
     const currentTime = Math.floor(e.currentTime); // 获取当前时间并向下取整
     if (currentTime > 0 && currentTime !== lastUpdateTime.value) {
       console.log("当前时间", currentTime);
@@ -87,17 +100,22 @@ const getInit = () => {
   });
   xgplayer.value.on(Events.PLAY, (e: any) => {
     console.log("播放开始");
-    if (islastvideo.value) {
-      console.log("AutoPlayMaskPlugin.lastvideo");
-      AutoPlayMaskPlugin.lastvideo();
-    } else {
-      console.log("AutoPlayMaskPlugin.hide");
-      AutoPlayMaskPlugin.hide();
+    if (AutoPlayMaskPlugin) {
+      if (islastvideo.value) {
+        console.log("AutoPlayMaskPlugin.lastvideo");
+        AutoPlayMaskPlugin.lastvideo();
+      } else {
+        console.log("AutoPlayMaskPlugin.hide");
+        AutoPlayMaskPlugin.hide();
+      }
     }
+
   });
   xgplayer.value.on(Events.LOAD_START, (e: any) => {
     console.log("视频开始加载");
-    AutoPlayMaskPlugin.hide();
+    if (props.type != 1) {
+      AutoPlayMaskPlugin.hide();
+    }
   });
   xgplayer.value.on(Events.AUTOPLAY_PREVENTED, (e: any) => {
     console.log("autoplay was prevented!!");
@@ -107,7 +125,7 @@ const getInit = () => {
   });
   xgplayer.value.on(Events.CANPLAY_THROUGH, (e: any) => {
     console.log("可以流畅播放");
-    if (xgplayer.value) {
+    if (xgplayer.value && props.type==0) {
       xgplayer.value.play();
     }
   });
@@ -117,7 +135,9 @@ const getInit = () => {
   });
   xgplayer.value.on(Events.ENDED, (e: any) => {
     console.log("播放结束");
-    AutoPlayMaskPlugin.show();
+    if (props.type != 1) {
+      AutoPlayMaskPlugin.show();
+    }
   });
   xgplayer.value.on("AutoPlayMask-replay", (e: any) => {
     console.log("页面监听到重播按钮:", e);
@@ -231,9 +251,16 @@ const emit = defineEmits<{
   (e: "playdefaultvideo", event: string): void;
   (e: "playnextvideo", event: string): void;
 }>();
+const productVideo = (item: any) => {
+  isshowposter.value = false;
+  currentVideo.value = item;
+  xgplayer.value.currentTime = 0;
+  xgplayer.value.src = item.hwUrl;
+}
 
 defineExpose({
   startvideo,
+  productVideo
 });
 </script>
 
@@ -243,6 +270,13 @@ defineExpose({
   height: 675px;
   position: relative;
 }
+
+.video-container-product {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 .poster-conter {
   position: absolute;
   right: 0;
@@ -252,10 +286,12 @@ defineExpose({
   background-color: #fff;
   z-index: 99;
 }
+
 .poster-conter img {
   width: 100%;
   height: 100%;
 }
+
 .shad-box {
   position: absolute;
   left: 0;
@@ -264,6 +300,7 @@ defineExpose({
   top: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
+
 .shad-box .iconfont {
   position: absolute;
   left: 50%;
@@ -272,24 +309,31 @@ defineExpose({
   color: #fff;
   font-size: 100px;
 }
+
 :deep(.xgplayer .xgplayer-progress-played) {
   background: util.$ThemeColors;
 }
+
 :deep(.xgplayer .xg-options-list li.selected) {
   color: util.$ThemeColors;
 }
+
 :deep(.xgplayer .xg-options-list li:hover) {
   color: util.$ThemeColors;
 }
+
 :deep(.xgplayer .xgplayer-drag) {
   background: util.$ThemeColors;
 }
+
 :deep(.xgplayer .xgplayer-progress-btn) {
   background: rgba(252, 220, 70, 0.3);
 }
+
 :deep(.danmu-icon) {
   display: none;
 }
+
 :deep(.xgplayer-replay) {
   display: none !important;
 }

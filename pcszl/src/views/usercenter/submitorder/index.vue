@@ -27,6 +27,7 @@
               ref="virtualOrder"
               :type="isEntity"
               :data="Commodity"
+              :count="count"
               :freightcharges="freightcharges"
               @productchange="productchange"
             />
@@ -111,6 +112,7 @@ interface CommodityType {
   price?: number;
   img?: string;
   name?: string;
+  specificationName?:any;
 }
 
 const route = useRoute();
@@ -130,7 +132,8 @@ const qrcodeurl = ref("");
 const paycount = ref(1);
 const freightcharges = ref(0);
 const address = ref<AddressType>();
-
+const specificationName=ref(route.query.specificationName)
+const count=ref(Number(route.query.count))
 console.log(types);
 
 onMounted(() => {
@@ -167,8 +170,9 @@ const getSingleProduct = async () => {
   Commodity.value = {
     id: product.value?.id,
     name: product.value?.name,
-    price: product.value?.price,
+    price: Number(route.query.price) || product.value?.price,
     img: product.value?.img,
+    specificationName:specificationName.value
   };
   console.log(product.value);
 };
@@ -220,6 +224,10 @@ const submitorder = async () => {
       params.consigneeMobile = address.value?.mobile || "";
       params.consigneeAddress =
         (address.value?.area || "") + (address.value?.address || "");
+      if(route.query.specificationId){
+        params.productSpecificationId = route.query.specificationId;
+        params.productSpecificationName=specificationName.value
+      }
     } else {
       params.truePrice = (product.value?.price || 0) * paycount.value;
       params.productId = product.value?.id;

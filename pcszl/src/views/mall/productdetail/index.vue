@@ -17,17 +17,24 @@
             <el-breadcrumb-item>商品详情</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div class="product-content f-ac">
+        <div class="product-content f">
           <div class="product-img">
             <img :src="product?.img" />
           </div>
-          <ProductCard :data="product" />
+          <ProductCard ref="productCard" :data="product" :specificationList="specificationList"
+            @specificationChange="specificationChange" @countChange="countChange" />
         </div>
         <div class="product-info-box f-as">
-          <div class="product-html-cont f-shrink0" v-html="product?.description"></div>
+          <div>
+            <div style="width: 750px;height: 500px;" v-show="szlProductVideo.hwUrl">
+              <XGplayer ref="xgPlayer" :poster="szlProductVideo?.imgUrl" :type="1" />
+            </div>
+            <div class="product-html-cont f-shrink0" v-html="product?.description"></div>
+          </div>
           <Transition name="slide-fade">
-            <el-affix :offset="100" target=".product-info-box" v-if="isSticky">
-              <ProductCard :data="product" :isSticky="isSticky" />
+            <el-affix :offset="100" target=".product-info-box" v-show="isSticky">
+              <ProductCard ref="Card" :data="product" :isSticky="isSticky" :specificationList="specificationList"
+                @specificationChange="specificationChange" @countChange="countChange" />
             </el-affix>
           </Transition>
         </div>
@@ -37,10 +44,11 @@
 </template>
 
 <script lang="ts" setup>
+import XGplayer from "@/views/course/components/Video/index.vue";
 import { DArrowRight } from "@element-plus/icons-vue";
 import ProductCard from "@/views/mall/components/ProductCard/index.vue";
-import { ref, onMounted, onUnmounted } from "vue";
-import { singleproduct } from "@/api/mall";
+import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { singleproduct, listSpecification } from "@/api/mall";
 import { useUserStore } from "@/store/userStore";
 import { useRoute } from "vue-router";
 import { ProductType } from "@/utiles/types";
@@ -49,27 +57,69 @@ const isSticky = ref(false); // 是否吸顶
 const route = useRoute(); // 获取路由参数
 const userStore = useUserStore(); // 获取用户信息
 const productId = route.query.productId; // 获取商品id
-const product = ref<ProductType>(); // 商品详情
+const product = ref<any>(); // 商品详情
+const specificationList = ref<any>(); // 规格
+const productCard = ref(<any>null)
+const Card = ref(<any>null)
+const xgPlayer = ref<InstanceType<typeof XGplayer> | null>(null); //视频播放组件对象
+const szlProductVideo = ref(<any>{})//商品视频
 
-console.log(productId);
 const handleScroll = () => {
   const scrollY = window.scrollY;
-  console.log(scrollY);
+  // console.log(scrollY);
   if (scrollY > 400) {
     isSticky.value = true;
   } else {
     isSticky.value = false;
   }
 };
-
+// 商品详情
 const getSingleProduct = async () => {
   const { data } = await singleproduct({
     productId: productId,
     userId: userStore.userId,
   });
   product.value = data;
-  console.log(data);
+  // console.log(data); 
+  await nextTick();
+  if (product.value.szlProductVideo && product.value.szlProductVideo.hwUrl) {
+    szlProductVideo.value = product.value.szlProductVideo
+    if (xgPlayer.value) {
+      xgPlayer.value.productVideo(product.value.szlProductVideo)
+    }
+  }
+  if (data.productSpecificationCount != 0) {
+    getListSpecification()
+  } else {
+    productCard.value.mountedClick(2, product.value)
+    Card.value.mountedClick(2, product.value)
+  }
 };
+// 规格
+const getListSpecification = async () => {
+  const res = await listSpecification({
+    productId: productId,
+    userId: userStore.userId,
+  });
+  if (res.status == 0) {
+    specificationList.value = res.data;
+    let data = specificationList.value.reduce((minItem: any, item: any) => {
+      return (item.specificationPrice < minItem.specificationPrice) ? item : minItem;
+    }, { specificationPrice: Infinity });
+    productCard.value.mountedClick(1, data)
+    Card.value.mountedClick(1, data)
+  }
+}
+// 规格点击同步
+const specificationChange = (item: any) => {
+  productCard.value.mountedClick(1, item)
+  Card.value.mountedClick(1, item)
+}
+// 数量同步
+const countChange = (count: number) => {
+  productCard.value.countNum(count)
+  Card.value.countNum(count)
+}
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -86,29 +136,35 @@ onUnmounted(() => {
   padding-bottom: 30px;
   box-sizing: border-box;
 }
+
 .breadcrumb-cont {
   padding: 15px 0;
   box-sizing: border-box;
 }
+
 .product-content {
   padding: 30px;
   background: #ffffff;
   box-sizing: border-box;
   border-radius: 10px;
 }
+
 .product-img {
   width: 600px;
   height: 600px;
   overflow: hidden;
   background-color: util.$ThemeColors;
 }
+
 .product-img img {
   width: 100%;
   height: 100%;
 }
+
 :deep(.product-card) {
   margin-left: 20px;
 }
+
 .product-info-box {
   width: 100%;
   padding: 30px;
@@ -118,21 +174,25 @@ onUnmounted(() => {
   padding-bottom: 30px;
   box-sizing: border-box;
 }
+
 .product-html-cont {
   width: 750px;
   // background-color: util.$ThemeColors;
   min-height: 800px;
 }
-:deep(.product-html-cont p){
+
+:deep(.product-html-cont p) {
   margin: 0 !important;
   padding: 0 !important;
   margin-block-start: 0 !important;
   margin-block-end: 0 !important;
 }
-:deep(.product-html-cont img){
-  width: 100%!important;
-  height: auto!important
+
+:deep(.product-html-cont img) {
+  width: 100% !important;
+  height: auto !important
 }
+
 /* 定义进入和离开过渡的活动状态，设置过渡的属性、时间和缓动函数 */
 .slide-fade-enter-active,
 .slide-fade-leave-active {

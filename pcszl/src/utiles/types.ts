@@ -116,7 +116,8 @@ export interface ProductType {
     realSalesVolume?: number;
     bdCostPrice?: number;
     isShow?: number;
-    description?:string
+    description?:string,
+    productSpecificationCount:number;
 }
 /**
  * 地址类型       

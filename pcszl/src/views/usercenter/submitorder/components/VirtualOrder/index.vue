@@ -14,7 +14,12 @@
         <div class="product-img f-shrink0">
           <img :src="data.img" />
         </div>
-        <div class="product-name u-lin-2">{{ data.name }}</div>
+        <div>
+          <div class="product-name u-lin-2">{{ data.name }}</div>
+          <div class="specificationName">
+            {{ data.specificationName }}
+          </div>
+        </div>
       </div>
       <div class="price-info f-ac" style="flex: 5">
         <div class="before-price" style="flex: 3.3">
@@ -64,9 +69,6 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 
-const num = ref(1);
-const textarea = ref("");
-
 const emits = defineEmits<{
   (event: "productchange", {}): void;
 }>();
@@ -86,7 +88,13 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  count:{
+    type: Number,
+    default: 1,
+  }
 });
+const num = ref(props.count);
+const textarea = ref("");
 console.log(props.data);
 const handleChange = (value: number | undefined) => {
   console.log(value);
@@ -186,5 +194,11 @@ defineExpose({
 }
 .Delivery-price {
   color: #fb2b1e;
+}
+.specificationName{
+  color: #999999;
+  font-size: 16px;
+  margin-left: 30px;
+  margin-top: 10px;
 }
 </style>

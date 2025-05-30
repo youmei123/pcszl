@@ -17,3 +17,11 @@ export const listproduct = (data?: any) => {
 export const singleproduct = (data?: any) => {
     return request.get<any>('/api/szl/single/product',data);
 };
+// 商品分类
+export const listClassification = (data?: any) => {
+    return request.get<any>('/api/szl/listClassification',data);
+};
+// 商品规格
+export const listSpecification = (data?: any) => {
+    return request.get<any>('/api/szl/listSpecification',data);
+};

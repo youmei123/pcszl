@@ -8,8 +8,16 @@
     <div class="hot-bar f-jb-ac">
       <div>
         <div class="f-ae last-time-bar">
-          <div class="affter-price" ><span>￥</span>{{ data.price }}</div>
-          <div class="before-price" >￥{{ data.originalPrice }}</div>
+          <div class="affter-price" v-if="Specification.specificationPrice">
+            <span>￥</span>
+            {{ Specification.specificationPrice }}
+          </div>
+          <div class="affter-price" v-else>
+            <span>￥</span>
+            {{ data.price }}
+          </div>
+          <div class="before-price" v-if="Specification.specificationOriginalPrice">￥{{ Specification.specificationOriginalPrice }}</div>
+          <div class="before-price" v-else>￥{{ data.originalPrice }}</div>
         </div>
         <div class="f-ac">
           <div class="rob-count">
@@ -25,19 +33,37 @@
     </div>
     <div class="Label-bar f-ac">
       <div class="double-Label f-ac">
-        <div class="discount" v-if="calculateDiscount(data.originalPrice, data.price)">
-          大促享{{ calculateDiscount(data.originalPrice, data.price) }}
+        <div class="discount" v-if="calculateDiscount()">
+          大促享{{ calculateDiscount() }}
         </div>
         <div class="remainder-time">快要抢光</div>
       </div>
-      <div class="Label-item" style="border-radius: 4px;" v-if="data.originalPrice != data.price">
-        立省{{ (data.originalPrice - data.price).toFixed(2) }}
+      <div class="Label-item" style="border-radius: 4px;" v-if="savePric()!=0">
+        立省{{ savePric() }}
       </div>
     </div>
     <div class="tags-bar f-ac" v-if="data.labels">
       <div class="tag-item f-shrink0" v-for="item in data.labels.split(',')">
         {{ item }}
       </div>
+    </div>
+    <div class="specification-box f-ac" v-if="specificationList.length!=0">
+      <div>
+        规格：
+      </div>
+      <div class="f-w f-ac">
+        <div class="specificationItem" v-for="item in specificationList" 
+          @click="specificationClick(item)" :class="{'specificationActive':Specification.id==item.id}" >
+          {{ item.name }}
+        </div>
+      </div>
+    </div>
+    <div class="specification-box f-ac" v-if="specificationList.length!=0">
+      <div>
+        数量：
+      </div>
+        <el-input-number v-if="data.isEntity==1" v-model="count" :min="1" @change="countChange"/>
+        <div  v-else>1</div>
     </div>
     <div class="commitment-cont">
       <div class="commitment-item f-ac">
@@ -53,7 +79,7 @@
         <div>新人专区 官方补贴 超低折扣</div>
       </div>
     </div>
-    <div class="buy-btn pointer" @click="toBuy">立即购买￥{{ data.price }}</div>
+    <div class="buy-btn pointer" @click="toBuy">立即购买￥{{ (minPrice * count).toFixed(2) }}</div>
   </div>
 </template>
 
@@ -63,8 +89,10 @@ import { useRouter } from "vue-router";
 import { transNumberToShort } from "@/utiles/public";
 import { useUserStore } from "@/store/userStore";
 import { useModalStore } from "@/store/loginStore";
-
+const userStore = useUserStore();
+const router = useRouter();
 const modalStore = useModalStore();
+const emit = defineEmits([ "specificationChange","countChange" ]);
 const props = defineProps({
   isSticky: {
     type: Boolean,
@@ -74,36 +102,109 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  specificationList: {
+    type: Array,
+    default: [],
+  }
 });
-
-const calculateDiscount = (originalPrice: number, discountedPrice: number) => {
-  if (originalPrice == discountedPrice) {
-    return "";
+const minPrice=ref(0)
+const Specification =ref(<any>{})
+const count = ref(1)
+// 计算折扣
+const calculateDiscount = () => {
+  let originalPrice=0
+  let discountedPrice=0
+  if(Specification.value && Specification.value.specificationPrice){
+    originalPrice=Specification.value.specificationOriginalPrice
+    discountedPrice=Specification.value.specificationPrice
+  }else{
+    originalPrice=props.data.originalPrice
+    discountedPrice=props.data.price
+  }
+  if((!originalPrice || !discountedPrice) || originalPrice==discountedPrice){
+    return ''
   }
   const discount = (discountedPrice / originalPrice) * 10;
   return discount.toFixed(1) + "折"; // 返回几折，保留1位小数
 };
-const userStore = useUserStore();
-const router = useRouter();
+// 立省
+const savePric =()=>{
+  let originalPrice=0
+  let discountedPrice=0
+  if(Specification.value && Specification.value.specificationPrice){
+    originalPrice=Specification.value.specificationOriginalPrice
+    discountedPrice=Specification.value.specificationPrice
+  }else{
+    originalPrice=props.data.originalPrice
+    discountedPrice=props.data.price
+  }
+  if(originalPrice!=discountedPrice && originalPrice>discountedPrice){
+    return (originalPrice-discountedPrice).toFixed(2)
+  }else{
+    return 0
+  }
+}
+// 规格点击
+const specificationClick=(item:any)=>{
+  if(Specification.value.id != item.id){
+  }
+  minPrice.value=item.specificationPrice
+  Specification.value=item
+  emit('specificationChange',item)
+}
+const countChange=()=>{
+  emit('countChange',count.value)
+}
+
 const toBuy = () => {
   console.log("立即购买");
   if (!userStore.token) {
     modalStore.showLoginModal();
     return;
   }
+  let price=''
+  if(Specification.value && Specification.value.id){
+    price=Specification.value.specificationPrice
+  }else{
+    price=props.data.price
+  }
   router.push({
     path: "/submitorder",
     query: {
       types: 7,
       productId: props.data.id,
+      price:price,
+      specificationId:Specification.value.id,
+      specificationName:Specification.value.name,
+      count:count.value,
     },
   });
 };
+const mountedClick=(type:number,item:any)=>{
+  let specification=<any>{}
+  let data=<any>{}
+  if(type==1){
+    specification=item
+  }else{
+    data=item
+  }
+  if(data.productSpecificationCount!=0){
+    if(item && item.id){
+      minPrice.value=specification.specificationPrice
+      Specification.value=specification
+    }
+  }else{
+    minPrice.value=data.price;
+  }
+}
+const countNum = (num:number) => {
+  count.value=num
+}
+defineExpose({mountedClick,countNum})
 </script>
 
 <style lang="scss" scoped>
 .product-card {
-  height: 600px;
   width: 520px;
   position: relative;
   transition: all 0.3s ease;
@@ -339,4 +440,23 @@ const toBuy = () => {
   font-size: 16px;
   text-decoration: line-through
 }
+.specification-box{
+  margin-top:15px ;
+}
+.specificationItem{
+		padding: 5px 10px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #dddddd;
+    color: #212930;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+	}
+	.specificationActive{
+		border: 1px solid #FB2B1E;
+		background-color: #FFF6F5;
+		color:#FB2B1E ;
+	}
 </style>
