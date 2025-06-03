@@ -26,7 +26,6 @@
             :data="product"
             :specificationList="specificationList"
             @specificationChange="specificationChange"
-            @countChange="countChange"
           />
         </div>
         <div class="product-info-box f-as">
@@ -44,7 +43,6 @@
                 :isSticky="isSticky"
                 :specificationList="specificationList"
                 @specificationChange="specificationChange"
-                @countChange="countChange"
               />
             </el-affix>
           </Transition>
@@ -120,7 +118,11 @@ const getListSpecification = async () => {
     specificationList.value = res.data;
     let data = specificationList.value.reduce(
       (minItem: any, item: any) => {
-        return item.specificationPrice < minItem.specificationPrice ? item : minItem;
+        if(item.specificationPrice && item.isDefault==1){
+          return item;
+        }else{
+          return item.specificationPrice < minItem.specificationPrice ? item : minItem;
+        }
       },
       { specificationPrice: Infinity }
     );
@@ -133,12 +135,6 @@ const specificationChange = (item: any) => {
   productCard.value.mountedClick(1, item);
   Card.value.mountedClick(1, item);
 };
-// 数量同步
-const countChange = (count: number) => {
-  productCard.value.countNum(count);
-  Card.value.countNum(count);
-};
-
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   getSingleProduct();

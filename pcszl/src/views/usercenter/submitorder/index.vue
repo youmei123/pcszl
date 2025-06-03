@@ -27,7 +27,6 @@
               ref="virtualOrder"
               :type="isEntity"
               :data="Commodity"
-              :count="count"
               :freightcharges="freightcharges"
               @productchange="productchange"
             />
@@ -133,7 +132,6 @@ const paycount = ref(1);
 const freightcharges = ref(0);
 const address = ref<AddressType>();
 const specificationName=ref(route.query.specificationName)
-const count=ref(Number(route.query.count))
 console.log(types);
 
 onMounted(() => {

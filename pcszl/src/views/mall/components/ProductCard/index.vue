@@ -53,17 +53,10 @@
       </div>
       <div class="f-w f-ac">
         <div class="specificationItem" v-for="item in specificationList" 
-          @click="specificationClick(item)" :class="{'specificationActive':Specification.id==item.id}" >
+          @click="specificationClick(item)" :class="{'specificationActive' : Specification.id==item.id} " >
           {{ item.name }}
         </div>
       </div>
-    </div>
-    <div class="specification-box f-ac" v-if="specificationList.length!=0">
-      <div>
-        数量：
-      </div>
-        <el-input-number v-if="data.isEntity==1" v-model="count" :min="1" @change="countChange"/>
-        <div  v-else>1</div>
     </div>
     <div class="commitment-cont">
       <div class="commitment-item f-ac">
@@ -79,7 +72,7 @@
         <div>新人专区 官方补贴 超低折扣</div>
       </div>
     </div>
-    <div class="buy-btn pointer" @click="toBuy">立即购买￥{{ (minPrice * count).toFixed(2) }}</div>
+    <div class="buy-btn pointer" @click="toBuy">立即购买￥{{ minPrice }}</div>
   </div>
 </template>
 
@@ -92,7 +85,7 @@ import { useModalStore } from "@/store/loginStore";
 const userStore = useUserStore();
 const router = useRouter();
 const modalStore = useModalStore();
-const emit = defineEmits([ "specificationChange","countChange" ]);
+const emit = defineEmits([ "specificationChange" ]);
 const props = defineProps({
   isSticky: {
     type: Boolean,
@@ -109,7 +102,6 @@ const props = defineProps({
 });
 const minPrice=ref(0)
 const Specification =ref(<any>{})
-const count = ref(1)
 // 计算折扣
 const calculateDiscount = () => {
   let originalPrice=0
@@ -152,10 +144,6 @@ const specificationClick=(item:any)=>{
   Specification.value=item
   emit('specificationChange',item)
 }
-const countChange=()=>{
-  emit('countChange',count.value)
-}
-
 const toBuy = () => {
   console.log("立即购买");
   if (!userStore.token) {
@@ -176,7 +164,6 @@ const toBuy = () => {
       price:price,
       specificationId:Specification.value.id,
       specificationName:Specification.value.name,
-      count:count.value,
     },
   });
 };
@@ -197,10 +184,7 @@ const mountedClick=(type:number,item:any)=>{
     minPrice.value=data.price;
   }
 }
-const countNum = (num:number) => {
-  count.value=num
-}
-defineExpose({mountedClick,countNum})
+defineExpose({mountedClick})
 </script>
 
 <style lang="scss" scoped>
@@ -453,6 +437,7 @@ defineExpose({mountedClick,countNum})
     font-size: 16px;
     margin-right: 10px;
     cursor: pointer;
+    margin-bottom: 10px;
 	}
 	.specificationActive{
 		border: 1px solid #FB2B1E;
