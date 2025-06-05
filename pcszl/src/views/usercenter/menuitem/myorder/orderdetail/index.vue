@@ -40,7 +40,10 @@
                 <img :src="order.productImg" />
               </div>
             </div>
-            <div class="product-name">{{ order.productName }}</div>
+           <div>
+              <div class="product-name">{{ order.productName }}</div>
+              <div class="product-name order-product-SpecificationName" v-if="order.productSpecificationName">{{ order.productSpecificationName }}</div>
+            </div> 
           </div>
           <div class="f-ac">
             <div class="product-price">￥{{ order.productPrice }}</div>
@@ -502,6 +505,11 @@ onMounted(() => {
 
 .product-name {
   margin-left: 30px;
+}
+.order-product-SpecificationName{
+  font-size: 14px;
+  color: #999999;
+  margin-top: 3px;
 }
 
 .product-price {
