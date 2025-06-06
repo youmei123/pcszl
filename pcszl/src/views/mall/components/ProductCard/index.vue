@@ -47,8 +47,8 @@
         {{ item }}
       </div>
     </div>
-    <div class="specification-box f-ac" v-if="specificationList.length!=0">
-      <div>
+    <div class="specification-box f" v-if="specificationList.length!=0">
+      <div style="margin-top:5px;" :class="{'specificationWidth':isSticky}">
         规格：
       </div>
       <div class="f-w f-ac">
@@ -444,4 +444,7 @@ defineExpose({mountedClick})
 		background-color: #FFF6F5;
 		color:#FB2B1E ;
 	}
+  .specificationWidth{
+    width: 55px;
+  }
 </style>
