@@ -91,10 +91,12 @@ const isloading = ref(false);
 const getListClassification = async () => {
   const { data, count } = await listClassification({});
   tablist.splice(0, tablist.length, ...(data || []));
-  tablist.unshift({
-    id: "",
-    name: "全部",
-  });
+  if(tablist.length>0){
+     tablist.unshift({
+      id: "",
+      name: "全部",
+    });
+  }
   getProductList();
   console.log(tablist);
 };
