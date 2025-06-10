@@ -88,12 +88,8 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  count:{
-    type: Number,
-    default: 1,
-  }
 });
-const num = ref(props.count);
+const num = ref(1);
 const textarea = ref("");
 console.log(props.data);
 const handleChange = (value: number | undefined) => {

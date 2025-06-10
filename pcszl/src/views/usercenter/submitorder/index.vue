@@ -27,7 +27,6 @@
               ref="virtualOrder"
               :type="isEntity"
               :data="Commodity"
-              :count="count"
               :freightcharges="freightcharges"
               @productchange="productchange"
             />
@@ -133,7 +132,6 @@ const paycount = ref(1);
 const freightcharges = ref(0);
 const address = ref<AddressType>();
 const specificationName=ref(route.query.specificationName)
-const count=ref(Number(route.query.count))
 console.log(types);
 
 onMounted(() => {
@@ -166,11 +164,14 @@ const getSingleProduct = async () => {
     userId: userStore.userId,
   });
   product.value = data as ProductType;
+  if(Number(route.query.price)){
+    product.value.price=Number(route.query.price)
+  }
   isEntity.value = product.value?.isEntity || 0;
   Commodity.value = {
     id: product.value?.id,
     name: product.value?.name,
-    price: Number(route.query.price) || product.value?.price,
+    price: product.value?.price,
     img: product.value?.img,
     specificationName:specificationName.value
   };
@@ -215,19 +216,18 @@ const submitorder = async () => {
     params.truePrice = course.value?.coursePrice;
   }
   if (types == 7) {
+    if(route.query.specificationId){
+        params.productSpecificationId = route.query.specificationId;
+        params.productSpecificationName=specificationName.value
+      }
     if (isEntity.value == 1) {
       params.truePrice =
-        Number(((product.value?.price || 0) * paycount.value).toFixed(2)) +
-        Number(freightcharges.value);
+        Number(((product.value?.price || 0) * paycount.value).toFixed(2))
       params.productId = product.value?.id;
       params.consignee = address.value?.name || "";
       params.consigneeMobile = address.value?.mobile || "";
       params.consigneeAddress =
         (address.value?.area || "") + (address.value?.address || "");
-      if(route.query.specificationId){
-        params.productSpecificationId = route.query.specificationId;
-        params.productSpecificationName=specificationName.value
-      }
     } else {
       params.truePrice = (product.value?.price || 0) * paycount.value;
       params.productId = product.value?.id;

@@ -9,7 +9,10 @@
               <img :src="order.productImg" />
             </div>
             <div class="product-info f-ja fd-c">
+            <div>
               <div class="u-line-1">{{order.productName}}</div>
+              <div class="u-line-1 order-product-SpecificationName" v-if="order.productSpecificationName">{{order.productSpecificationName}}</div>
+            </div>
               <div class="f-ac">
                 <div style="margin-right: 20px">￥{{order.productPrice}}</div>
                 <div>X{{order.count}}</div>
@@ -77,6 +80,11 @@ const props = defineProps({
   padding: 30px;
   box-sizing: border-box;
   margin-top: 20px;
+}
+.order-product-SpecificationName{
+  font-size: 14px;
+  color: #999999;
+  margin-top: 3px;
 }
 .product-info {
   margin-left: 10px;

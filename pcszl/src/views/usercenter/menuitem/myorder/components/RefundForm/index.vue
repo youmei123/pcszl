@@ -8,7 +8,10 @@
             <img :src="order.productImg" />
           </div>
           <div class="product-info">
-            <div class="u-line-1">{{order.productName}}</div>
+            <div>
+              <div class="u-line-1">{{order.productName}}</div>
+              <div class="u-line-1 order-product-SpecificationName" v-if="order.productSpecificationName">{{order.productSpecificationName}}</div>
+            </div>
             <div class="f-ac">
               <div style="margin-right: 20px">￥{{order.productPrice}}</div>
               <div>X{{order.count}}</div>
@@ -175,6 +178,11 @@ defineExpose({onMountedClick})
 <style lang="scss" scoped>
 .product-info {
   margin-left: 10px;
+}
+.order-product-SpecificationName{
+  font-size: 14px;
+  color: #999999;
+  margin-top: 3px;
 }
 .product-img-box {
   width: 60px;

@@ -43,8 +43,13 @@
             <div class="order-product-img">
               <img v-if="item.productImg" :src="item.productImg" />
             </div>
-            <div class="order-product-name u-line-2">
-              {{ item.productName }}
+            <div>
+              <div class="order-product-name u-line-2">
+                {{ item.productName }}
+              </div>
+              <div class="order-product-name order-product-SpecificationName" v-if="item.productSpecificationName">
+                {{ item.productSpecificationName }}
+              </div>
             </div>
           </div>
           <div class="order-count-cont">
@@ -336,6 +341,11 @@ const isOverOneMonth = (payTime: any) => {
   color: #212930;
   width: 250px;
   margin-left: 15px;
+}
+.order-product-SpecificationName{
+  font-size: 14px;
+  color: #999999;
+  margin-top: 3px;
 }
 
 .order-count-cont {

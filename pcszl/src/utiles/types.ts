@@ -177,6 +177,7 @@ export interface ordersType {
     courseId: string;
     payPrice: number;
     deliveryPostage: number;
+    productSpecificationName: string;
 }
 // 售后类型
 export interface aftersale {
