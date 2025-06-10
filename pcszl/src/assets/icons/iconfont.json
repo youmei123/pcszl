@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10715457",
+      "name": "眼睛-睁眼",
+      "font_class": "yanjing-zhengyan",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "827978",
+      "name": "我的医生",
+      "font_class": "wodeyisheng",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "34890228",
+      "name": "叶子",
+      "font_class": "yezi",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
       "icon_id": "6151262",
       "name": "play circle",
       "font_class": "playcircle",

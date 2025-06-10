@@ -24,6 +24,7 @@ declare module 'vue' {
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElOption: typeof import('element-plus/es')['ElOption']
@@ -46,5 +47,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SerachBar: typeof import('./src/components/SerachBar/index.vue')['default']
     ShrinkRect: typeof import('./src/components/loading/loaders/shrink-rect.vue')['default']
+    UserPopup: typeof import('./src/components/UserPopup/index.vue')['default']
   }
 }

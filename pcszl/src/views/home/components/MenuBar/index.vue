@@ -1,3 +1,11 @@
+<!--
+ * @Author: Lzx 924807479@qq.com
+ * @Date: 2025-05-06 09:38:40
+ * @LastEditors: Lzx 924807479@qq.com
+ * @LastEditTime: 2025-06-03 13:52:13
+ * @FilePath: \pcszl\src\views\home\components\MenuBar\index.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <div class="home-main-cont">
     <div class="menu-list f-jb-ac">
@@ -18,6 +26,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { HomeMenuList } from "@/utiles/staticdata";
 const router = useRouter();
 
 interface menuItem {
@@ -26,65 +35,15 @@ interface menuItem {
   id: string;
 }
 
-const menuBarList = reactive([
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/2197420638247659067/menu1.png",
-    name: "针灸",
-    id: "rFKwCKLPSemtdt4vqEE2ag",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/5950198688186327326/menu2.png",
-    name: "推拿正骨",
-    id: "9x9keDO0QyyAqv3uc3Qkrg",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/6595341156466738813/menu3.png",
-    name: "经典经方",
-    id: "EPG7cTKOR3SNhm--YuFztA",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/7304042390437673174/menu4.png",
-    name: "辩证论证",
-    id: "r1LdlA76Tj6I1MMkpNY54w",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/5831443570271046801/menu5.png",
-    name: "养生",
-    id: "xkOClhIDTp-2l7Z5bYPfHA",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/8827289048460756305/menuimg.png",
-    name: "门诊运营",
-    id: "YSeZqRvISiugwSkiAPV_ow",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/5348321836512636398/menu9.png",
-    name: "特色疗法",
-    id: "",
-  },
-  {
-    img:
-      "https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/4/10/5187121458019833523/menu8.png",
-    name: "更多课程",
-    id: "",
-  },
-]);
+const menuBarList = HomeMenuList as menuItem[];
 
 const handlemenuitemclick = (item: menuItem) => {
   console.log(item.id);
-  if(item.name=='特色疗法'){
-    router.push({ path: "/FeatureZone"});   
-  }else{
+  if (item.name == "特色疗法") {
+    router.push({ path: "/FeatureZone" });
+  } else {
     router.push({ path: "/course", query: { id: item.id } });
   }
-  
 };
 </script>
 
@@ -105,7 +64,7 @@ const handlemenuitemclick = (item: menuItem) => {
   color: #212930;
   font-size: 18px;
 }
-.menu-item:hover .menu-text{
+.menu-item:hover .menu-text {
   color: #ce9433 !important;
 }
 </style>
