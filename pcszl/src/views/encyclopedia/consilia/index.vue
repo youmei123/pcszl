@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-06-04 15:02:13
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-06-10 14:55:11
+ * @LastEditTime: 2025-06-16 09:41:31
  * @FilePath: \pcszl\src\views\encyclopedia\consilia\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,6 +12,7 @@
       <div class="breadcrumb-cont">
         <el-breadcrumb :separator-icon="DArrowRight">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/encyclopedia' }">百科</el-breadcrumb-item>
           <el-breadcrumb-item>名家医案</el-breadcrumb-item>
         </el-breadcrumb>
       </div>

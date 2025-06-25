@@ -2,13 +2,13 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-06-10 14:15:47
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-06-10 14:44:56
+ * @LastEditTime: 2025-06-10 17:10:30
  * @FilePath: \pcszl\src\views\encyclopedia\consilia\components\ConsiliaItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div>
-    <div class="consilia-item fd-c f-jb pointer">
+    <div class="consilia-item fd-c f-jb pointer" @click="linkdetail">
       <div class="consilia-item-title">{{ data.name }}</div>
       <div class="consilia-item-tags f-ac">
         <div class="tags-item f-shrink0 f-jc-ac" v-for="val in data.symptom.split(' ')">
@@ -35,12 +35,19 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from "vue";
 import { timeFormat } from "@/utiles/public";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const props = defineProps({
   data: {
     type: Object,
     default: {},
   },
 });
+
+const linkdetail = () => {
+  router.push({ path: "/consiliadetail", query: { id: props.data.id } });
+};
+
 </script>
 
 <style lang="scss" scoped>
