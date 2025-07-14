@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-07 11:24:18
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-17 13:44:22
+ * @LastEditTime: 2025-06-25 08:58:39
  * @FilePath: \pcszl\src\components\Footer\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -27,7 +27,7 @@
           <div class="IOS-qrcode">
             <div class="qrcode-box">
               <img
-                src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/15/6347604969721539459/222.png"
+                src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/6/25/9206473220625989541/777.png"
               />
             </div>
             <div class="qrcode-text">【苹果app】</div>
@@ -35,7 +35,7 @@
           <div class="and-qrocde">
             <div class="qrcode-box">
               <img
-                src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/5/15/504056196420083585/11.png"
+                src="https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/6/25/9206473220625989541/777.png"
               />
             </div>
             <div class="qrcode-text">【安卓app】</div>
