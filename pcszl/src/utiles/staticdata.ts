@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-06-03 11:29:39
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-06-04 15:11:41
+ * @LastEditTime: 2025-07-18 16:23:08
  * @FilePath: \pcszl\src\views\encyclopedia\components\data.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -22,31 +22,31 @@ export const EncyclopediaMenuList = [{
     title: '中医方剂',
     desc: '中医经典方剂',
     bg: 'https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2024/9/3/4231733660949860299/menu3.png',
-    path: '',
+    path: '/medicinal?type=1',
 },
 {
     title: '常用中药',
     desc: '中医常用药',
     bg: 'https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2024/9/3/7704422309972354100/menu4.png',
-    path: '',
+    path: '/medicinal?type=2',
 },
 {
     title: '中成药',
     desc: '经典中成药',
     bg: 'https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2024/9/3/6501512054030472034/menu5.png',
-    path: '',
+    path: '/herbaldiet?type=1',
 },
 {
     title: '中医药膳',
     desc: '中医食疗文化',
     bg: 'https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2024/9/3/3855946661435656749/menu6.png',
-    path: '',
+    path: '/herbaldiet?type=2',
 },
 {
     title: '民间特色疗法专区',
     desc: '医脉相传特色疗法，杏林妙手传授秘技！',
     bg: 'https://shijizhongshi-image.obs.cn-north-4.myhuaweicloud.com/2025/6/3/6658282282584943425/menu.png',
-    path: '',
+    path: '/FeatureZone',
 }
 ]
 

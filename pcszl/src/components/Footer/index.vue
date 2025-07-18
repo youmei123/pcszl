@@ -65,6 +65,10 @@
 <script setup lang="ts"></script>
 
 <style lang="scss" scoped>
+.footer{
+  position: relative;
+  z-index: 99;
+}
 .footer-content {
   height: 250px;
   width: 100%;

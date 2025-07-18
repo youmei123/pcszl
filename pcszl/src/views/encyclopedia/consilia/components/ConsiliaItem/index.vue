@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-06-10 14:15:47
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-06-10 17:10:30
+ * @LastEditTime: 2025-07-14 15:50:44
  * @FilePath: \pcszl\src\views\encyclopedia\consilia\components\ConsiliaItem\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -33,10 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from "vue";
 import { timeFormat } from "@/utiles/public";
-import { useRouter } from "vue-router";
-const router = useRouter();
 const props = defineProps({
   data: {
     type: Object,
@@ -44,8 +41,12 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits<{
+  (e: "linkdetail", event: object): void;
+}>();
+
 const linkdetail = () => {
-  router.push({ path: "/consiliadetail", query: { id: props.data.id } });
+  emit("linkdetail", { id: props.data.id })
 };
 
 </script>

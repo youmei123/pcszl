@@ -101,7 +101,6 @@ import { CourseListType } from "@/utiles/types";
 import { ProductType } from "@/utiles/types";
 import { ref, onMounted } from "vue";
 import { singleproduct } from "@/api/mall";
-import { ElMessage } from "element-plus";
 import QrcodeVue from "qrcode.vue";
 import { AddressType } from "@/utiles/types";
 import { ElLoading } from "element-plus";

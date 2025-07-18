@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-04-11 16:03:51
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-05-30 10:51:43
+ * @LastEditTime: 2025-07-16 10:44:57
  * @FilePath: \pcszl\src\views\course\components\Video\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -34,6 +34,18 @@ import "./Plugins/logo/index.css";
 import AutoPlayMask from "./Plugins/AutoPlayMask/index.js";
 import "./Plugins/AutoPlayMask/index.css";
 
+interface PlayerConfig {
+  id: string;
+  width: string;
+  height: string;
+  lang: string;
+  autoplay: boolean;
+  poster: string;
+  startTime: number;
+  plugins: any[];
+  url?: string; // 添加 url 属性
+}
+
 const userStore = useUserStore();
 const xgplayer = ref<any>();
 const currentVideo = ref<CourseVideoType>();
@@ -60,11 +72,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  src: {
+    type: String,
+    default: "",
+  },
 });
 
 const getInit = () => {
   console.log(props.poster);
-  let config = {
+  let config: PlayerConfig = {
     id: "xgplayer",
     width: "100%",
     height: "100%",
@@ -77,7 +93,10 @@ const getInit = () => {
   if (props.type == 1) {
     config.plugins = [HlsJsPlugin];
   }
-
+  if (props.src) {
+    config.url = props.src;
+    console.log(config.url)
+  }
   xgplayer.value = new Player(config);
 
   console.log(xgplayer.value.plugins);

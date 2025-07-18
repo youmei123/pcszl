@@ -2,7 +2,7 @@
  * @Author: Lzx 924807479@qq.com
  * @Date: 2025-06-04 15:02:13
  * @LastEditors: Lzx 924807479@qq.com
- * @LastEditTime: 2025-06-16 09:41:31
+ * @LastEditTime: 2025-07-14 15:47:10
  * @FilePath: \pcszl\src\views\encyclopedia\consilia\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -23,7 +23,12 @@
               class="course-item-cont f-w f-jb"
               v-if="!loadingstatus && MjyaSecondlist.length > 0"
             >
-              <ConsiliaItem v-for="val in MjyaSecondlist" :data="val" :key="val.id" />
+              <ConsiliaItem
+                v-for="val in MjyaSecondlist"
+                :data="val"
+                :key="val.id"
+                @linkdetail="linkdetail"
+              />
             </div>
             <div v-else style="height: 750px" class="f-jc-ac">
               <loading
@@ -54,6 +59,8 @@ import { DArrowRight } from "@element-plus/icons-vue";
 import { listMjyaFirst, listMjyaSecond } from "@/api/encyclopedia";
 import type { TabsPaneContext } from "element-plus";
 import ConsiliaItem from "./components/ConsiliaItem/index.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 interface ConsiliaType {
   id: number;
@@ -61,7 +68,6 @@ interface ConsiliaType {
   addtime: number;
   orderNum: number;
 }
-
 interface MedicalRecordType {
   id: number;
   name: string;
@@ -70,7 +76,6 @@ interface MedicalRecordType {
   addtime: number;
   viewCount: number;
 }
-
 const loadingstatus = ref(true);
 const page = ref(1);
 const totalcount = ref(1);
@@ -113,6 +118,14 @@ const handlePageChange = (p: number) => {
   console.log(p);
   page.value = p;
   getlistMjyaSecond(activeName.value);
+};
+
+const linkdetail = (e: any) => {
+  console.log(e);
+  router.push({
+    path: "/consiliadetail",
+    query: { id: e.id, page: page.value, firstId: activeName.value },
+  });
 };
 </script>
 
